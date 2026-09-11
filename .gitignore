@@ -1,0 +1,12 @@
+.DS_Store
+node_modules/
+__pycache__/
+*.pyc
+.spatial-cache/
+.venv/
+dist/
+exports/
+modules/space/presentation*.html
+modules/space/presentation.pdf
+modules/space/examples/**/presentation*.html
+modules/space/tests/browser.html

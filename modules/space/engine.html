@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="ja">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Mono Space — 思考を、空間へ。</title>
+  <style>
+    __SPATIAL_CSS__
+  </style>
+  <button id="menu-toggle" class="panel" aria-label="メニューを収納" aria-expanded="true" title="メニュー (H)">⋯</button>
+  <header class="hud panel">
+    <div class="brand">Mono Space</div>
+    <button id="overview" title="全体を表示 (O)">全体</button
+    ><span id="label">領域</span>
+  </header>
+  <div class="hud top-actions panel">
+    <button
+      id="help-toggle"
+      aria-expanded="false"
+      aria-controls="help"
+      aria-label="操作ガイド"
+      title="操作ガイド"
+    >
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <circle cx="12" cy="12" r="9" />
+        <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4" />
+        <path d="M12 16.5h.01" />
+      </svg></button
+    ><button id="fullscreen" aria-label="全画面に切り替える" title="全画面">
+      ⛶
+    </button>
+  </div>
+  <main id="viewport" aria-label="領域">
+    <div id="world">
+      <div class="roots"></div>
+      <svg id="connections" aria-hidden="true"></svg>
+    </div>
+  </main>
+  <div class="hud toolbar panel" role="toolbar" aria-label="領域操作">
+    <button id="zoom-out" aria-label="縮小">−</button
+    ><button id="zoom" title="100%で表示">100%</button
+    ><button id="zoom-in" aria-label="拡大">＋</button
+    ><span class="divider"></span
+    ><button id="prev" aria-label="前の視点">←</button>
+    <div id="section-jump">
+      <button
+        id="section-picker"
+        aria-expanded="false"
+        aria-controls="section-toc"
+        title="インデックス"
+      >
+        目次
+      </button>
+      <nav id="section-toc" class="panel" aria-label="セクション" hidden></nav>
+    </div>
+    <span id="status" aria-live="polite">全体</span
+    ><button id="next" aria-label="次のビュー">→</button>
+  </div>
+  <aside id="map-panel" class="hud panel" hidden>
+    <div class="map-title"><span>CANVAS MAP</span><span>↗</span></div>
+    <svg id="minimap" aria-label="全体マップ。クリックして移動" role="img">
+      <g id="map-nodes"></g>
+      <rect id="map-camera" />
+    </svg>
+  </aside>
+  <div id="help" class="hud panel" hidden>
+    <p><b>全体から、気になる場所へ。</b></p>
+    <p>近い場所へは微小なパン、遠い場所へは短いフェードで移動します。</p>
+    <p>
+      <label><input id="reduce-motion" type="checkbox" /> 動きを抑える</label>
+    </p>
+    文章や図をクリック：クローズアップ<br />ドラッグ／2本指スクロール：移動<br />ピンチ／Ctrl
+    + スクロール：拡大縮小<br /><kbd>←</kbd> <kbd>→</kbd> 説明順に移動<br /><kbd
+      >O</kbd
+    >
+    俯瞰とクローズアップを往復<br /><kbd>0</kbd> 全体表示（1〜9：説明順の1〜9番目へ）<br /><kbd
+      >S</kbd
+    >
+    カーソル位置に一時付箋（上端で移動）<br /><kbd>H</kbd>
+    操作パネルを隠す／表示<br /><kbd>＋</kbd> <kbd>−</kbd> 拡大・縮小
+    <p>
+      <button id="map-toggle" aria-controls="map-panel" aria-pressed="false">
+        ミニマップを表示
+      </button>
+    </p>
+  </div>
+  <script id="data" type="application/json">
+    __SPATIAL_DATA__
+  </script>
+  <script>
+    __SPATIAL_JS__;
+  </script>
+</html>

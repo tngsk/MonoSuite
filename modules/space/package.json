@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "mathjax-full": "3.2.2"
+  },
+  "private": true,
+  "description": "Optional build-time TeX to SVG renderer for Mono Space",
+  "overrides": {
+    "@xmldom/xmldom": "0.9.12"
+  }
+}
