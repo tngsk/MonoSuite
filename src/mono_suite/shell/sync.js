@@ -6,125 +6,27 @@
   const btnSpace = document.getElementById("btn-space");
   const btnDoc = document.getElementById("btn-doc");
   const btnExport = document.getElementById("btn-export");
+  const exportLabel = document.getElementById("export-label");
   const statusDot = document.getElementById("status-dot");
-  const headingDisplay = document.getElementById("current-heading-title");
 
   let currentView = "space";
-  let lastKnownId = null;
 
-  // Spaceビューから現在フォーカスされているセクションIDを取得
-  function getSpaceActiveId() {
-    try {
-      const doc = frameSpace.contentDocument || frameSpace.contentWindow?.document;
-      if (!doc) return null;
-      const currentBtn = doc.querySelector('#section-toc button[aria-current="true"]');
-      if (currentBtn?.dataset.section) {
-        return currentBtn.dataset.section;
-      }
-      // フォールバック: データ属性から最初のID
-      const firstBtn = doc.querySelector('#section-toc button[data-section]');
-      return firstBtn?.dataset.section || null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  // Docビューから現在スクロール上端にある見出しIDを取得
-  function getDocActiveId() {
-    try {
-      const doc = frameDoc.contentDocument || frameDoc.contentWindow?.document;
-      if (!doc) return null;
-      const headings = Array.from(doc.querySelectorAll("h1[id], h2[id], h3[id], h4[id]"));
-      if (headings.length === 0) return null;
-
-      const scrollTop = frameDoc.contentWindow?.scrollY || doc.documentElement.scrollTop || 0;
-      let closestId = headings[0].id;
-
-      for (const h of headings) {
-        const top = h.offsetTop;
-        if (top <= scrollTop + 80) {
-          closestId = h.id;
-        } else {
-          break;
-        }
-      }
-      return closestId;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  // Spaceビューの特定セクションをフォーカス
-  function setSpaceActiveId(id) {
-    if (!id) return;
-    try {
-      const doc = frameSpace.contentDocument || frameSpace.contentWindow?.document;
-      if (!doc) return;
-      const targetBtn = doc.querySelector(`#section-toc button[data-section="${id}"]`);
-      if (targetBtn) {
-        targetBtn.click();
-      }
-    } catch (e) {}
-  }
-
-  // Docビューの特定セクションへスムーズスクロール
-  function setDocActiveId(id) {
-    if (!id) return;
-    try {
-      const doc = frameDoc.contentDocument || frameDoc.contentWindow?.document;
-      if (!doc) return;
-      const el = doc.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    } catch (e) {}
-  }
-
-  // ビューの切り替え実行
+  // ビューの切り替え（位置同期を行わず、純粋な表示切替のみ実施）
   function switchView(target) {
     if (target === currentView) return;
+    currentView = target;
 
-    if (currentView === "space") {
-      // Space -> Doc
-      const activeId = getSpaceActiveId() || lastKnownId;
-      if (activeId) {
-        lastKnownId = activeId;
-        setDocActiveId(activeId);
-      }
-      frameSpace.classList.remove("active");
-      frameSpace.classList.add("hidden");
-      frameDoc.classList.remove("hidden");
-      frameDoc.classList.add("active");
-      btnSpace.classList.remove("active");
-      btnDoc.classList.add("active");
-      currentView = "doc";
-    } else {
-      // Doc -> Space
-      const activeId = getDocActiveId() || lastKnownId;
-      if (activeId) {
-        lastKnownId = activeId;
-        setSpaceActiveId(activeId);
-      }
-      frameDoc.classList.remove("active");
-      frameDoc.classList.add("hidden");
-      frameSpace.classList.remove("hidden");
-      frameSpace.classList.add("active");
+    if (target === "space") {
+      frameDoc.className = "view-frame hidden";
+      frameSpace.className = "view-frame active";
       btnDoc.classList.remove("active");
       btnSpace.classList.add("active");
-      currentView = "space";
+    } else {
+      frameSpace.className = "view-frame hidden";
+      frameDoc.className = "view-frame active";
+      btnSpace.classList.remove("active");
+      btnDoc.classList.add("active");
     }
-    updateHeadingTitle(lastKnownId);
-  }
-
-  function updateHeadingTitle(id) {
-    if (!id) return;
-    try {
-      const doc = frameDoc.contentDocument || frameDoc.contentWindow?.document;
-      const el = doc?.getElementById(id);
-      if (el) {
-        headingDisplay.textContent = el.textContent.trim();
-      }
-    } catch (e) {}
   }
 
   btnSpace.onclick = () => switchView("space");
@@ -133,23 +35,31 @@
   // 完全ビルド（PDF書き出し）
   btnExport.onclick = async () => {
     btnExport.disabled = true;
-    btnExport.textContent = "書き出し中...";
-    statusDot.classList.add("updating");
+    exportLabel.textContent = "Exporting...";
+    statusDot.className = "status-dot syncing";
 
     try {
       const res = await fetch("/api/build", { method: "POST" });
       const data = await res.json();
       if (data.success) {
-        alert("✅ 配布セット（PDF含む）の生成が完了しました！");
+        exportLabel.textContent = "Exported";
+        setTimeout(() => {
+          exportLabel.textContent = "Export PDF";
+        }, 2000);
       } else {
-        alert("❌ ビルドエラー: " + (data.error || "生成に失敗しました"));
+        exportLabel.textContent = "Failed";
+        setTimeout(() => {
+          exportLabel.textContent = "Export PDF";
+        }, 2000);
       }
     } catch (e) {
-      alert("❌ 接続エラー: " + e.message);
+      exportLabel.textContent = "Error";
+      setTimeout(() => {
+        exportLabel.textContent = "Export PDF";
+      }, 2000);
     } finally {
       btnExport.disabled = false;
-      btnExport.textContent = "配布PDF書き出し";
-      statusDot.classList.remove("updating");
+      statusDot.className = "status-dot connected";
     }
   };
 
@@ -158,42 +68,26 @@
     const sse = new EventSource("/events");
 
     sse.onopen = () => {
-      statusDot.classList.remove("updating");
+      statusDot.className = "status-dot connected";
     };
 
     sse.onmessage = (e) => {
       try {
         const payload = JSON.parse(e.data);
         if (payload.event === "reload") {
-          statusDot.classList.add("updating");
-          const activeId = currentView === "space" ? getSpaceActiveId() : getDocActiveId();
-          lastKnownId = activeId || lastKnownId;
-
-          // iframe をリロード
-          frameSpace.src = "/space?t=" + Date.now();
-          frameDoc.src = "/doc?t=" + Date.now();
-
-          // ロード完了後に位置を復元
-          let loadedCount = 0;
-          const onFrameLoad = () => {
-            loadedCount++;
-            if (loadedCount >= 2) {
-              if (currentView === "space") {
-                setSpaceActiveId(lastKnownId);
-              } else {
-                setDocActiveId(lastKnownId);
-              }
-              statusDot.classList.remove("updating");
-            }
-          };
-          frameSpace.onload = onFrameLoad;
-          frameDoc.onload = onFrameLoad;
+          statusDot.className = "status-dot syncing";
+          const timestamp = Date.now();
+          frameSpace.src = "/space?t=" + timestamp;
+          frameDoc.src = "/doc?t=" + timestamp;
+          setTimeout(() => {
+            statusDot.className = "status-dot connected";
+          }, 300);
         }
       } catch (err) {}
     };
 
     sse.onerror = () => {
-      statusDot.classList.add("updating");
+      statusDot.className = "status-dot";
     };
   }
 

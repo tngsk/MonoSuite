@@ -1,5 +1,6 @@
 import argparse
 import sys
+import threading
 import webbrowser
 from pathlib import Path
 
@@ -109,19 +110,28 @@ def run_dev(args: argparse.Namespace) -> int:
         return 1
 
     broadcaster = SSEBroadcaster()
+    build_lock = threading.Lock()
 
     def on_change():
-        print(f"\n原稿の変更を検知しました: {input_path.name}")
+        acquired = build_lock.acquire(blocking=False)
+        if not acquired:
+            print("⚠️ ビルド実行中のため、原稿保存検知をスキップしました")
+            return
+
         try:
+            print(f"\n原稿の変更を検知しました: {input_path.name}")
             pipeline.run()
             broadcaster.broadcast("reload", {"build_id": pipeline.build_id})
             print("✓ プレビューを更新しました")
         except Exception as e:
             print(f"❌ 更新エラー: {e}")
+        finally:
+            build_lock.release()
 
     def on_full_build() -> bool:
-        print(f"\n完全配布セット（PDF含む）の生成を開始します: {input_path.name}")
+        acquired = build_lock.acquire(blocking=True)
         try:
+            print(f"\n完全配布セット（PDF含む）の生成を開始します: {input_path.name}")
             full_pipeline = BuildPipeline(
                 input_path=input_path,
                 output_dir=args.output_dir,
@@ -135,6 +145,8 @@ def run_dev(args: argparse.Namespace) -> int:
         except Exception as e:
             print(f"❌ 完全ビルドエラー: {e}")
             return False
+        finally:
+            build_lock.release()
 
     watcher = FileWatcher(input_path, on_change)
     watcher.start()
@@ -148,7 +160,7 @@ def run_dev(args: argparse.Namespace) -> int:
     )
 
     if not args.no_browser:
-        webbrowser.open(f"http://localhost:{args.port}")
+        webbrowser.open(f"http://localhost:{server.port}")
 
     try:
         server.start(block=True)
@@ -173,7 +185,7 @@ def run_serve(args: argparse.Namespace) -> int:
     )
 
     if not args.no_browser:
-        webbrowser.open(f"http://localhost:{args.port}")
+        webbrowser.open(f"http://localhost:{server.port}")
 
     server.start(block=True)
     return 0
