@@ -49,6 +49,13 @@ uv run --directory modules/doc pytest
 
 注記：`tests/components/test_mono_topic_rail.py` の5件は、トピックライン機能が開発中のため意図的にスキップされています。
 
+### 3.3 Suite 統合契約検証テストスイート
+
+```sh
+# 段階B3 統合契約検証テスト（全7件通過）
+uv run pytest tests/test_stage_b3_contract.py -v
+```
+
 ## 4. 単独CLI変換の確認
 
 リポジトリルートから以下の統一コマンドで実行できます。
