@@ -1,0 +1,50 @@
+.mono-sound-container {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--color-base-200);
+  border: 0.0625rem solid var(--border-color);
+  border-radius: var(--radius-md, 0.25rem);
+  padding: var(--spacing-xs, 0.5rem) var(--spacing-sm, 0.75rem);
+  margin: 0;
+  gap: var(--spacing-sm, 0.75rem);
+  font-family: inherit;
+  box-shadow: var(--shadow-sm);
+}
+
+.mono-sound-play-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-base-content);
+  transition: opacity 0.2s;
+  min-width: 2.75rem; /* 44px min touch target */
+  min-height: 2.75rem;
+}
+
+.mono-sound-play-btn:hover {
+  opacity: 0.7;
+}
+
+.mono-sound-label {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--color-base-content);
+}
+
+/* Hide if empty */
+.mono-sound-label:empty {
+  display: none;
+}
+
+/* Print specific styles */
+@media print {
+  .mono-sound-container {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}

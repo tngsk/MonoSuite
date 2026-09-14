@@ -1,0 +1,24 @@
+mono-score {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+mono-score svg {
+    height: 4em;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+mono-score svg * {
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+/* Print specific styles */
+@media print {
+    :host {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

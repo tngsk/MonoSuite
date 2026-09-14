@@ -1,0 +1,88 @@
+:host {
+    display: block;
+    width: 100%;
+    margin: 0;
+}
+
+.compare-container {
+    display: grid;
+    width: 100%;
+    box-sizing: border-box;
+    gap: var(--compare-custom-gap, var(--space-group, 2.5rem));
+    align-items: stretch;
+}
+
+/* 3段階スペーシング体系 (Spacing Trinity: item, group, flow, none) */
+:host([gap="item"]) .compare-container,
+:host(.gap-item) .compare-container {
+    gap: var(--space-item, 1.25rem);
+}
+
+:host([gap="group"]) .compare-container,
+:host(.gap-group) .compare-container {
+    gap: var(--space-group, 2.5rem);
+}
+
+:host([gap="flow"]) .compare-container,
+:host(.gap-flow) .compare-container {
+    gap: var(--space-flow, 6rem);
+}
+
+:host([gap="none"]) .compare-container,
+:host(.gap-none) .compare-container {
+    gap: 0;
+}
+
+/* 2要素比較モード（1:1 等幅分割・Before & After・二者択一） */
+:host([mode="2"]) .compare-container {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+}
+
+/* 3要素比較モード（1:1:1 等幅並列対比） */
+:host([mode="3"]) .compare-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+}
+
+/* スロットアイテムの共通スタイリング */
+::slotted(*) {
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* モバイル対応（画面幅768px以下では1列垂直スタックにフォールバック） */
+@media (max-width: 768px) {
+    .compare-container {
+        grid-template-columns: 1fr !important;
+        gap: var(--compare-custom-gap, var(--space-group, 2rem)) !important;
+    }
+
+    :host([gap="item"]) .compare-container,
+    :host(.gap-item) .compare-container {
+        gap: var(--space-item, 1rem) !important;
+    }
+
+    :host([gap="flow"]) .compare-container,
+    :host(.gap-flow) .compare-container {
+        gap: var(--space-flow, 3.5rem) !important;
+    }
+
+    :host([gap="none"]) .compare-container,
+    :host(.gap-none) .compare-container {
+        gap: 0 !important;
+    }
+
+}
+
+/* 印刷・PDF出力対応 */
+@media print {
+    :host {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .compare-container {
+        page-break-inside: avoid;
+    }
+}

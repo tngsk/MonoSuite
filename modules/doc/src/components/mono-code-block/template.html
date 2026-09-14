@@ -1,0 +1,15 @@
+<!-- Mono Web Component Template: mono-code-block -->
+<template id="mono-code-block-template">
+    <style>
+        /* CSS is injected dynamically by the Python builder */
+        {COMPONENTS_CSS}
+    </style>
+    <div class="code-block-wrapper">
+        <div class="code-block-header">
+            <span class="code-language" data-ref="languageLabel">CODE</span>
+            <button class="copy-button" data-ref="copyButton" title="コードをコピー">📋 Copy</button>
+        </div>
+        <!-- Light DOM (the original <pre><code> from Markdown) will be slotted here -->
+        <div class="code-content-slot" data-ref="contentSlot"></div>
+    </div>
+</template>

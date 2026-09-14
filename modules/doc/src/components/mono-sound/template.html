@@ -1,0 +1,15 @@
+<template id="mono-sound-template">
+  <style>
+    {COMPONENTS_CSS}
+  </style>
+  <div class="mono-sound-container">
+    <button class="mono-sound-play-btn" aria-label="Play sound">
+      <!-- Google Material Icon (Play Arrow) -->
+      <svg class="mono-sound-icon-play" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor"><path d="M0 0h24v24H0z" fill="none"/><path d="M8 5v14l11-7z"/></svg>
+      <!-- Google Material Icon (Pause) - Initially hidden -->
+      <svg class="mono-sound-icon-pause" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="currentColor" style="display: none;"><path d="M0 0h24v24H0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+    </button>
+    <span class="mono-sound-label"></span>
+    <audio class="mono-sound-audio" preload="none"></audio>
+  </div>
+</template>

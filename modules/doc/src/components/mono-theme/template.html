@@ -1,0 +1,18 @@
+<template id="mono-theme-template">
+  <style>{COMPONENTS_CSS}</style>
+  <div class="theme-switcher-container hidden">
+    <!-- UI Switcher is hidden by default, can be toggled via show-ui attribute -->
+    <label for="theme-select">Theme:</label>
+    <select id="theme-select">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+      <option value="corporate">Corporate</option>
+    </select>
+
+    <div class="font-size-controls">
+      <button type="button" id="font-size-decrease" class="font-size-btn" aria-label="Decrease font size">A-</button>
+      <button type="button" id="font-size-reset" class="font-size-btn" aria-label="Reset font size">100%</button>
+      <button type="button" id="font-size-increase" class="font-size-btn" aria-label="Increase font size">A+</button>
+    </div>
+  </div>
+</template>

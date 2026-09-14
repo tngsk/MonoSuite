@@ -10,3 +10,8 @@ modules/space/presentation*.html
 modules/space/presentation.pdf
 modules/space/examples/**/presentation*.html
 modules/space/tests/browser.html
+.mono-cache/
+.pytest_cache/
+.coverage
+modules/doc/dist/
+

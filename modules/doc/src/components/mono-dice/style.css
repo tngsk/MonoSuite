@@ -1,0 +1,92 @@
+/* Web Components CSS for mono-dice */
+
+:host {
+    display: inline-block;
+    margin: 0;
+    font-family: inherit;
+}
+
+.dice-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs, 0.5rem);
+}
+
+.dice {
+    width: 4rem;
+    height: 4rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    background-color: var(--mono-bg-color, var(--color-base-100));
+    border: 0.125rem solid var(--mono-border-color, var(--color-base-content));
+    border-radius: var(--radius-lg, 0.75rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    user-select: none;
+}
+
+.dice:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.dice:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.dice.rolling {
+    animation: roll 0.4s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.dice-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--mono-text-color, var(--color-base-content));
+}
+
+.dice-message {
+    font-size: 0.9rem;
+    color: var(--mono-text-color, var(--color-base-content-muted));
+    min-height: 1.2rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@keyframes roll {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(15deg) scale(1.1); }
+    50% { transform: rotate(0deg) scale(1.2); }
+    75% { transform: rotate(-15deg) scale(1.1); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+
+/* Print specific styles */
+@media print {
+    .dice-wrapper {
+        border: 0.125rem dashed var(--border-color, #999);
+        padding: var(--padding-sm);
+        background-color: var(--color-base-200, #f9f9f9);
+        border-radius: var(--radius-lg, 0.5rem);
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .dice {
+        display: none !important;
+    }
+    .dice-wrapper::after {
+        content: "🎲 (Interactive Dice Component - Print View)";
+        font-size: 0.9rem;
+        color: var(--color-base-content-muted, #555);
+        display: block;
+        text-align: center;
+    }
+}

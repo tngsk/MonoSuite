@@ -1,0 +1,80 @@
+:host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+:host([display="block"]) {
+    display: flex;
+}
+
+:host([display="inline"]) {
+    display: inline-flex;
+}
+
+.clock-display {
+    font-family: monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: inherit;
+    color: inherit;
+    line-height: 1;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.clock-display.hidden {
+    display: none;
+}
+
+.analog-clock {
+    width: 2em;
+    height: 2em;
+    display: inline-block;
+}
+
+.analog-clock.hidden {
+    display: none;
+}
+
+.analog-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.clock-face {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 4;
+}
+
+.hour-hand {
+    stroke: currentColor;
+    stroke-width: 6;
+    stroke-linecap: round;
+}
+
+.minute-hand {
+    stroke: currentColor;
+    stroke-width: 4;
+    stroke-linecap: round;
+}
+
+.second-hand {
+    stroke: var(--color-error, #ef4444);
+    stroke-width: 2;
+    stroke-linecap: round;
+}
+
+.center-dot {
+    fill: currentColor;
+}
+
+/* Print specific styles */
+@media print {
+    .second-hand {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

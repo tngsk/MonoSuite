@@ -1,0 +1,9 @@
+{
+  "name": "mono-poll",
+  "description": "リアルタイム単一・複数選択アンケート",
+  "category": "interactive",
+  "is_web_component": true,
+  "interactive": true,
+  "always_include": false,
+  "requires_icons": false
+}

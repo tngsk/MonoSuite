@@ -1,0 +1,10 @@
+{
+  "name": "mono-brush",
+  "description": "画面上への蛍光手書き描画・アノテーション（Bキーでトグル、Escで解除）",
+  "status": "active",
+  "category": "presentation",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": false
+}

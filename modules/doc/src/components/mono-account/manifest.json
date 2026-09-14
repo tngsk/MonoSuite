@@ -1,0 +1,9 @@
+{
+  "name": "mono-account",
+  "description": "ユーザー認証およびlocalStorage（mono_auth）管理",
+  "category": "interactive",
+  "is_web_component": true,
+  "interactive": true,
+  "always_include": false,
+  "requires_icons": false
+}

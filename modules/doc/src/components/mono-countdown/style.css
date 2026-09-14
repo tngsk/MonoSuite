@@ -1,0 +1,99 @@
+:host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: var(--countdown-size, 5rem);
+    height: var(--countdown-size, 5rem);
+    font-family: inherit;
+    --countdown-color: var(--color-primary);
+    --countdown-bg-color: var(--color-base-300);
+}
+
+.countdown-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.progress-ring-bg {
+    fill: transparent;
+    stroke: var(--countdown-bg-color);
+    stroke-width: 6;
+}
+
+.progress-ring-circle {
+    fill: transparent;
+    stroke: var(--countdown-color);
+    stroke-width: 6;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear, stroke 0.3s ease;
+}
+
+.time-display {
+    position: relative;
+    z-index: 1;
+    font-size: calc(var(--countdown-size, 5rem) * 0.25);
+    font-weight: bold;
+    color: inherit;
+    user-select: none;
+    -webkit-user-select: none;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
+    line-height: 1.2;
+}
+
+:host(.has-days) .time-display {
+    font-size: calc(var(--countdown-size, 5rem) * 0.15);
+}
+
+:host(.time-up) .progress-ring-circle {
+    stroke: var(--color-error);
+    animation: pulse 1.5s infinite;
+}
+
+:host(.time-up) .time-display {
+    color: var(--color-error);
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Print specific styles */
+@media print {
+    .progress-ring-circle {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        animation: none !important;
+        transition: none !important;
+    }
+    .progress-ring-bg {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    :host(.time-up) .time-display {
+        color: var(--color-error) !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

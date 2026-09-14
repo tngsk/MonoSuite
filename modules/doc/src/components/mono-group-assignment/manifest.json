@@ -1,0 +1,9 @@
+{
+  "name": "mono-group-assignment",
+  "description": "ランダムグループ分けツール",
+  "category": "interactive",
+  "is_web_component": true,
+  "interactive": true,
+  "always_include": false,
+  "requires_icons": false
+}

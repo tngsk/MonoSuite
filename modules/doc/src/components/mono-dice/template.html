@@ -1,0 +1,13 @@
+<!-- Mono Web Component Template: mono-dice -->
+<template id="mono-dice-template">
+    <style>
+        /* CSS is injected dynamically by the Python builder */
+        {COMPONENTS_CSS}
+    </style>
+    <div class="dice-wrapper">
+        <div class="dice" data-ref="dice">
+            <span class="dice-number" data-ref="number">?</span>
+        </div>
+        <div class="dice-message hidden" data-ref="message"></div>
+    </div>
+</template>

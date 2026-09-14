@@ -1,0 +1,382 @@
+<template id="mono-synth-template">
+    <style>
+        {COMPONENTS_CSS}
+    </style>
+    <div class="synth-container">
+        <div class="scope-container">
+            <canvas class="synth-scope" width="800" height="100"></canvas>
+        </div>
+
+        <div class="controls-container">
+            <div class="controls-row">
+                <!-- Oscillator -->
+                <div class="control-group">
+                    <div class="group-label">OSC</div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="oscType"
+                            data-type="enum"
+                            data-options="sine,square,sawtooth,triangle,sample"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Type</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="baseFreq"
+                            data-min="20"
+                            data-max="2000"
+                            data-value="440"
+                            data-scale="log"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Freq</div>
+                    </div>
+                </div>
+                <!-- Pitch Env -->
+                <div class="control-group">
+                    <div class="group-label">PITCH ENV</div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="pitchEnvAmt"
+                            data-min="-2400"
+                            data-max="2400"
+                            data-value="0"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Amt</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="pitchA"
+                            data-min="0.01"
+                            data-max="2"
+                            data-value="0.1"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">A</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="pitchD"
+                            data-min="0"
+                            data-max="2"
+                            data-value="0.2"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">D</div>
+                    </div>
+                </div>
+                <!-- Filter -->
+                <div class="control-group">
+                    <div class="group-label">FILTER</div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="filterFreq"
+                            data-min="20"
+                            data-max="10000"
+                            data-value="2000"
+                            data-scale="log"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Cutoff</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="filterRes"
+                            data-min="0"
+                            data-max="20"
+                            data-value="1"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Res</div>
+                    </div>
+                </div>
+                <!-- Filter Env -->
+                <div class="control-group">
+                    <div class="group-label">FILT ENV</div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="filtEnvAmt"
+                            data-min="-5000"
+                            data-max="5000"
+                            data-value="1000"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Amt</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="filtA"
+                            data-min="0.01"
+                            data-max="2"
+                            data-value="0.1"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">A</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="filtD"
+                            data-min="0"
+                            data-max="2"
+                            data-value="0.2"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">D</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="filtS"
+                            data-min="0"
+                            data-max="1"
+                            data-value="0.5"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">S</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="filtR"
+                            data-min="0.01"
+                            data-max="5"
+                            data-value="1"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">R</div>
+                    </div>
+                </div>
+                <!-- Amp Envelope -->
+                <div class="control-group">
+                    <div class="group-label">AMP ENV</div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="ampA"
+                            data-min="0.01"
+                            data-max="2"
+                            data-value="0.1"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">A</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="ampD"
+                            data-min="0"
+                            data-max="2"
+                            data-value="0.2"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">D</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="ampS"
+                            data-min="0"
+                            data-max="1"
+                            data-value="0.5"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">S</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="ampR"
+                            data-min="0.01"
+                            data-max="5"
+                            data-value="1"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">R</div>
+                    </div>
+                </div>
+
+                <!-- Master -->
+                <div class="control-group">
+                    <div class="group-label">MASTER</div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="volume"
+                            data-min="-60"
+                            data-max="0"
+                            data-value="-12"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Vol</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls-row">
+                <!-- LFO 1 -->
+                <div class="control-group">
+                    <div class="group-label">LFO 1</div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="lfo1Dest"
+                            data-type="enum"
+                            data-options="none,pitch,filter,amp"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Dest</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="lfo1Rate"
+                            data-min="0.1"
+                            data-max="20"
+                            data-value="1"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Rate</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="lfo1Depth"
+                            data-min="0"
+                            data-max="1"
+                            data-value="0"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Depth</div>
+                    </div>
+                </div>
+
+                <!-- LFO 2 -->
+                <div class="control-group">
+                    <div class="group-label">LFO 2</div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="lfo2Dest"
+                            data-type="enum"
+                            data-options="none,pitch,filter,amp"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Dest</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="lfo2Rate"
+                            data-min="0.1"
+                            data-max="20"
+                            data-value="1"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Rate</div>
+                    </div>
+                    <div class="knob-container">
+                        <div
+                            class="knob"
+                            data-param="lfo2Depth"
+                            data-min="0"
+                            data-max="1"
+                            data-value="0"
+                        >
+                            <div class="knob-dial">
+                                <div class="knob-indicator"></div>
+                            </div>
+                        </div>
+                        <div class="knob-label">Depth</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full Width Keyboard -->
+        <div class="keyboard-container">
+            <div class="keyboard-inner"></div>
+        </div>
+
+        <div class="overlay-start">
+            <button class="start-btn">Start Synth</button>
+        </div>
+    </div>
+</template>

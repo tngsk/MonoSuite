@@ -1,0 +1,10 @@
+{
+  "name": "mono-score",
+  "description": "スコア計算および加減算表示（開発保留）",
+  "status": "frozen",
+  "category": "tool",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": false
+}

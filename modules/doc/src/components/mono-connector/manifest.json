@@ -1,0 +1,10 @@
+{
+  "name": "mono-connector",
+  "description": "自由配置可能なベジェ曲線コネクタ",
+  "status": "active",
+  "category": "presentation",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": false
+}

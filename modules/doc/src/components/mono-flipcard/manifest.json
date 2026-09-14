@@ -1,0 +1,10 @@
+{
+  "name": "mono-flipcard",
+  "description": "表裏反転カード表示（開発保留）",
+  "status": "frozen",
+  "category": "presentation",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": false
+}

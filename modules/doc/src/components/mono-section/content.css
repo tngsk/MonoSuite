@@ -1,0 +1,8 @@
+/* Apply Stack pattern to children inside the slot */
+mono-section > * {
+    margin-top: var(--spacing-md);
+}
+
+mono-section > *:first-child {
+    margin-top: 0;
+}

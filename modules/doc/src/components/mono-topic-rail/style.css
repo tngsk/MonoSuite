@@ -1,0 +1,41 @@
+:host {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    grid-column: 1 / -1;
+}
+
+/* スクロールするカラーラインコンテナ（幅2px、コンテンツ左側とブラウザ左端の中間に配置） */
+.topic-scroll-rail-container {
+    position: absolute;
+    top: 0;
+    left: var(--rail-left, 1.5rem);
+    width: 2px;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    transition: left 0.15s ease-out;
+}
+
+/* 各セクション区間のカラーライン（幅2px、ソリッド、不透明度100%） */
+.topic-scroll-segment {
+    position: absolute;
+    left: 0;
+    width: 2px;
+    background-color: var(--segment-color, #eab308);
+    opacity: 1;
+    pointer-events: none;
+    box-sizing: border-box;
+}
+
+/* 印刷・PDF出力時は完全非表示 */
+@media print {
+    :host {
+        display: none !important;
+    }
+}

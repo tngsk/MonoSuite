@@ -1,0 +1,10 @@
+{
+  "name": "mono-dice",
+  "description": "乱数生成およびサイコロ振り（開発保留）",
+  "status": "frozen",
+  "category": "tool",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": false
+}

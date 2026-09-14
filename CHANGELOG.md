@@ -4,6 +4,8 @@
 
 ### 2026-09-14
 
+- 段階B2（Doc独立移行）完了：移行元 `tngsk/Mono`（コミット `e84c459`）からコア資産（src, tests, doc, pyproject.toml, uv.lock, package.json, package-lock.json, main.py, LICENSE）を `modules/doc` へ独立移行。ルートに `uv` ワークスペースを導入して依存関係を一元管理。modules/doc のテスト全271件通過、PlaywrightによるHTML・PDF生成の完全再現、および modules/space の既存テスト全件通過を確認。
+- 統合開発計画文書を `modules/space/docs/planning/` からルート `docs/planning/` へ昇格。共通契約案（`COMMON-CONTRACT-PROPOSAL.md`）および移行受入記録（`STAGE-B2-MIGRATION-REPORT.md`）を策定。
 - 開発計画をB1仕様整理・B2 Doc独立移行・B3契約検証へ具体化。各段階の成果物・完了条件・未決事項を明記し、リリース方針とDoc仕様レビューの現在地を統一。
 
 - Spaceの本体を `src/mono_space/`、テストを `tests/`、文書を `docs/`、生成物を `dist/` に整理。CLI入口 `build.py` は維持し、既定出力を `dist/presentation.html`、ビルドキャッシュを出力先配下へ変更。整理後はPython 54件・Node 13件成功。
