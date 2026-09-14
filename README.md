@@ -2,7 +2,7 @@
 
 同じMarkdown原稿から、Spaceで発表し、Docで配布資料を生成する制作環境を開発しています。
 
-現在利用できるのは **Mono Space** です。Doc統合・PDF配布セット・制作UIは未実装です。
+現在、個別のモジュールとして Mono Space（空間プレゼンテーション）および Mono Doc（ドキュメント・PDF組版）が実行可能です。同一原稿からの共通出力処理（段階C）およびSuite制作UI（段階D）は順次開発中です。
 
 ## ドキュメント体系
 
@@ -28,13 +28,20 @@
 
 ## 試す
 
-Python 3.9以降で実行します。
+初回環境セットアップは [環境セットアップガイド](docs/guides/ENVIRONMENT-SETUP.md) を参照してください。
+
+### Mono Space（プレゼンテーションHTML生成）
 
 ```sh
 cd modules/space
 python3 build.py examples/standard/document.md -o dist/presentation.html --offline
 ```
 
-生成した `dist/presentation.html` をブラウザで開きます。数式の初期設定はSpaceの使い方を参照してください。
+### Mono Doc（ドキュメントHTMLおよびPDF生成）
 
-v0.1.0は開発基準点です。ライセンスと一般公開の条件は未確定です。
+```sh
+uv run --directory modules/doc main.py doc/SPECIFICATION.md -o dist/spec.html --pdf dist/spec.pdf
+```
+
+生成されたHTMLやPDFはブラウザやPDFビューアで直接開いて確認できます。
+
