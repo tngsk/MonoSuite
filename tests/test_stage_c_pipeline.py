@@ -111,3 +111,35 @@ def test_pipeline_duplicate_id_aborts(tmp_path: Path):
     res = run_mono_cli(["build", str(err_doc), "-o", str(out_dir)])
     assert res.returncode == 1
     assert "見出し明示IDが重複しています" in res.stderr
+
+
+def test_pipeline_preamble_before_first_heading_succeeds(tmp_path: Path):
+    """見出しの前にキャッチコピーや情報テキストが存在する原稿でも正常ビルドできることを検証"""
+    doc_file = tmp_path / "lecture.md"
+    doc_file.write_text(
+        "キャッチコピー：次世代Webプログラミング\n"
+        "2026年度版 講義ノート\n\n"
+        "# 第1回 ガイダンス\n"
+        "::layout row\n\n"
+        "本日の講義概要です。\n",
+        encoding="utf-8",
+    )
+    out_dir = tmp_path / "output"
+    res = run_mono_cli(["build", str(doc_file), "-o", str(out_dir), "--no-pdf"])
+    assert res.returncode == 0
+
+    target_pkg = out_dir / "lecture"
+    space_html = target_pkg / "presentation.html"
+    doc_html = target_pkg / "document.html"
+
+    assert space_html.exists()
+    assert doc_html.exists()
+
+    # Space側にキャッチコピーが含まれていること
+    space_text = space_html.read_text(encoding="utf-8")
+    assert "キャッチコピー" in space_text
+    assert "次世代Webプログラミング" in space_text
+
+    # Doc側にもキャッチコピーが含まれていること
+    doc_text = doc_html.read_text(encoding="utf-8")
+    assert "キャッチコピー" in doc_text

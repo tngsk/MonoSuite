@@ -44,14 +44,57 @@ class Preprocessor:
         return processed, headings
 
     @classmethod
+    def merge_preamble_for_space(cls, content: str) -> str:
+        """最初の見出しより前に存在するテキスト（キャッチコピー等）を最初の見出し本文へ合流させる"""
+        lines = content.splitlines(keepends=True)
+        preamble_lines: list[str] = []
+        heading_index = -1
+
+        for i, raw_line in enumerate(lines):
+            line = raw_line.rstrip("\r\n")
+            if cls.HEADING_REGEX.match(line):
+                heading_index = i
+                break
+            preamble_lines.append(raw_line)
+
+        # 見出しが見つからない、またはプリアンブルが実質空（空白行のみ）の場合はそのまま返す
+        if heading_index == -1 or not any(p.strip() for p in preamble_lines):
+            return content
+
+        # 最初の見出しの直後に続くSpaceディレクティブ行（::layout 等）を探す
+        insert_index = heading_index + 1
+        while insert_index < len(lines):
+            stripped = lines[insert_index].strip()
+            if stripped.startswith("::") and not stripped.startswith(":::"):
+                insert_index += 1
+            else:
+                break
+
+        # プリアンブルの実質内容（前後の空行をトリミング）
+        preamble_text = "".join(preamble_lines).strip()
+        if not preamble_text:
+            return content
+
+        # 見出し（＋ディレクティブ）の後にプリアンブルを挿入
+        result_lines = []
+        result_lines.extend(lines[heading_index:insert_index])
+        result_lines.append(f"\n{preamble_text}\n\n")
+        result_lines.extend(lines[insert_index:])
+
+        return "".join(result_lines)
+
+    @classmethod
     def sanitize_for_space(cls, content: str) -> str:
-        """Doc固有の ::: ブロック記法をSpaceパーサーがクラッシュしないようサニタイズする"""
-        # ::: note 等を引用形式または段落に変換
+        """Doc固有の ::: ブロック記法をサニタイズし、見出し前のプリアンブルを先頭見出しに合流させる"""
+        # 1. 最初の見出し前のプリアンブルを先頭見出し本文へ合流
+        merged = cls.merge_preamble_for_space(content)
+
+        # 2. ::: note 等を引用形式または段落に変換
         def start_replacer(match: re.Match) -> str:
             tag = match.group(1)
             return f"> [{tag}]"
 
-        text = cls.DOC_CONTAINER_START.sub(start_replacer, content)
+        text = cls.DOC_CONTAINER_START.sub(start_replacer, merged)
         text = cls.DOC_CONTAINER_END.sub("", text)
         return text
 
