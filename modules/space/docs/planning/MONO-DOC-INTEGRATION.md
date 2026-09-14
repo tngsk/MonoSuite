@@ -1,7 +1,10 @@
 # Mono Doc 仕様レビューとSuite統合方針
 
+> 2026-09-14訂正：別リポジトリのMonoをDoc実装と誤認して調査した。Doc実装の検証結果として扱わない。[訂正記録](INVESTIGATION-CORRECTION.md)を参照。以下の仕様書と取り込み対象のDoc実装との対応も未確認。
+
 確認日：2026-09-11  
-参照：`/Users/ngsklab/Code/Mono/doc/SPECIFICATION.md`  
+参照：旧Monoリポジトリの `doc/SPECIFICATION.md`
+
 参照版SHA-256：`cb2ee2e82ac054eeef6184f4d92d4f70b0943752d3883bd8818bd5f7807a3dcc`
 
 Docの仕様書を読んだレビューであり、Docのソースコード・実行結果は未検証。以下の「Doc仕様」は文書上の記載を示す。参照元は変更していない。Suiteへの統合、記法変換、PDF処理の変更もまだ行っていない。
