@@ -143,3 +143,37 @@ def test_pipeline_preamble_before_first_heading_succeeds(tmp_path: Path):
     # Doc側にもキャッチコピーが含まれていること
     doc_text = doc_html.read_text(encoding="utf-8")
     assert "キャッチコピー" in doc_text
+
+
+def test_pipeline_svg_image_support(tmp_path: Path):
+    """SVGベクター画像を含む原稿がSpaceおよびDocの双方で正常変換されることを検証"""
+    assets_dir = tmp_path / "assets"
+    assets_dir.mkdir(parents=True, exist_ok=True)
+    svg_file = assets_dir / "diagram.svg"
+    svg_file.write_text(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="40"/></svg>',
+        encoding="utf-8",
+    )
+
+    doc_file = tmp_path / "svg_test.md"
+    doc_file.write_text(
+        "# SVG検証\n\n![ダイアグラム](assets/diagram.svg)\n",
+        encoding="utf-8",
+    )
+    out_dir = tmp_path / "output"
+    res = run_mono_cli(["build", str(doc_file), "-o", str(out_dir), "--no-pdf"])
+    assert res.returncode == 0
+
+    target_pkg = out_dir / "svg_test"
+    space_html = target_pkg / "presentation.html"
+    doc_html = target_pkg / "document.html"
+
+    assert space_html.exists()
+    assert doc_html.exists()
+
+    # Space側にSVGのData URLが埋め込まれていること
+    assert "data:image/svg+xml;base64," in space_html.read_text(encoding="utf-8")
+
+    # Doc側にもSVG画像タグまたはインラインSVGが含まれていること
+    doc_content = doc_html.read_text(encoding="utf-8")
+    assert "<svg" in doc_content or "diagram.svg" in doc_content
