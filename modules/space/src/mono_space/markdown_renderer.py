@@ -7,8 +7,8 @@ from .links import render_link, validate_url
 def render_image(image, root, assets):
     path = (root / image['source']).resolve()
     mime = mimetypes.guess_type(path.name)[0]
-    if mime not in ('image/png', 'image/jpeg', 'image/webp', 'image/gif'):
-        raise ValueError('画像はローカルの PNG/JPEG/WebP/GIF を指定してください')
+    if mime not in ('image/png', 'image/jpeg', 'image/webp', 'image/gif', 'image/svg+xml'):
+        raise ValueError('画像はローカルの PNG/JPEG/WebP/GIF/SVG を指定してください')
     raw = path.read_bytes()
     key = hashlib.sha256(raw).hexdigest()
     assets.setdefault(key, f'data:{mime};base64,' + base64.b64encode(raw).decode())

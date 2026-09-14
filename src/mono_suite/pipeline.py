@@ -43,7 +43,9 @@ class BuildPipeline:
         self.publisher = Publisher(self.target_dir, self.build_id)
 
     def _run_doc(self, input_md: Path, html_out: Path, pdf_out: Path | None) -> None:
-        cmd = ["mono-doc", str(input_md), "-o", str(html_out)]
+        venv_mono_doc = Path(sys.executable).parent / "mono-doc"
+        executable = str(venv_mono_doc) if venv_mono_doc.exists() else "mono-doc"
+        cmd = [executable, str(input_md), "-o", str(html_out)]
         if pdf_out and self.generate_pdf:
             cmd.extend(["--pdf", str(pdf_out)])
 
