@@ -1,0 +1,6 @@
+mono-synth {
+  /* Basic reset to avoid inheritance issues */
+  display: block;
+  margin-top: var(--spacing-md, 2rem);
+  margin-bottom: var(--spacing-md, 2rem);
+}

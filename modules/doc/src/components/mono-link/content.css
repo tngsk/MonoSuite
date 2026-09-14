@@ -1,0 +1,4 @@
+/* Light DOM styles for mono-link (empty as it fully uses Shadow DOM) */
+mono-link {
+    display: block;
+}

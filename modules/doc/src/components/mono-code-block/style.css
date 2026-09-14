@@ -1,0 +1,127 @@
+/* Web Components CSS for mono-code-block */
+
+:host {
+    display: block;
+    margin: 0;
+    font-family: var(--mono-font-family, system-ui, -apple-system, sans-serif);
+}
+
+.code-block-wrapper {
+    position: relative;
+    background: var(--mono-code-bg, var(--color-base-300));
+    border-radius: var(--radius-md, 0.25rem);
+    overflow: hidden;
+    /* Optional: shadow and border can be provided via theme variables,
+       but default to the original minimal look without shadow */
+    border: 0.0625rem solid var(--mono-border-color, var(--border-color));
+}
+
+.code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--padding-sm) var(--padding-md);
+    background: var(--mono-code-header-bg, var(--color-base-200));
+    border-bottom: 0.0625rem solid var(--mono-code-header-border, var(--border-color));
+    font-size: 0.85em;
+    color: var(--mono-code-lang-color, var(--color-base-content));
+}
+
+.code-language {
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    /* The user explicitly wanted capitalization and specific font size maintained here */
+    text-transform: capitalize;
+}
+
+.copy-button {
+    padding: 0.4em 0.8em;
+    background: var(--mono-code-btn-bg, var(--color-base-100));
+    color: var(--mono-code-btn-color, var(--color-primary));
+    border: 0.0625rem solid var(--mono-code-btn-border, var(--border-color));
+    border-radius: var(--radius-sm, 0.125rem);
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+}
+
+.copy-button:hover {
+    background: var(--mono-code-btn-hover-bg, var(--color-primary));
+    color: var(--mono-code-btn-hover-color, var(--color-primary-content));
+    border-color: var(--mono-code-btn-hover-border, var(--color-primary));
+}
+
+.copy-button:active {
+    transform: scale(0.98);
+}
+
+.copy-button.copied {
+    background: var(--mono-success-color, var(--color-success));
+    color: var(--mono-success-text, var(--color-success-content));
+    border-color: var(--mono-success-color, var(--color-success));
+}
+
+/* Style the projected/slotted <pre> and <code> content */
+@layer overrides {
+    .code-content-slot pre {
+        margin: 0;
+        padding: var(--padding-md);
+        overflow-x: auto;
+        background: transparent;
+        color: var(--mono-code-text, var(--color-base-content));
+        font-size: var(--font-compact);
+        line-height: var(--lh-snug, 1.75);
+    }
+
+    .code-content-slot code {
+        font-family: Menlo, Consolas, "Liberation Mono", monospace;
+        font-variant-ligatures: none;
+        font-size: 0.95em;
+        line-height: var(--lh-snug, 1.75);
+    }
+}
+
+/* Scrollbar styling for the code block */
+.code-content-slot pre::-webkit-scrollbar {
+    height: 0.5rem;
+    width: 0.5rem;
+}
+
+.code-content-slot pre::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.code-content-slot pre::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm, 0.125rem);
+}
+
+.code-content-slot pre::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Print specific styles */
+@media print {
+    .code-block-wrapper {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    .copy-button {
+        display: none !important;
+    }
+
+    .code-content-slot pre,
+    .code-content-slot code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+        font-size: 14px !important;
+        line-height: 1.45 !important;
+        white-space: pre !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+    }
+}

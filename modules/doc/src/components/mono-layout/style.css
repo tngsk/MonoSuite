@@ -1,0 +1,68 @@
+:host { display: block; width: 100%; margin: 0; }
+.layout-wrapper {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    /* デフォルトで広大な余白 xl を適用（大画面での呼吸感と可読性の確保） */
+    gap: var(--spacing-xl, clamp(3.5rem, 5.5vw, 6rem));
+}
+/* 方向制御 */
+:host([type="hbox"]),
+:host([type="hstack"]) {
+    display: block;
+}
+:host([type="hbox"]) .layout-wrapper,
+:host([type="hstack"]) .layout-wrapper {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+:host([type="vbox"]),
+:host([type="vstack"]) {
+    display: block;
+}
+:host([type="vbox"]) .layout-wrapper,
+:host([type="vstack"]) .layout-wrapper {
+    flex-direction: column;
+}
+
+/* 3段階スペーシング体系 (Spacing Trinity: flow, group, item) */
+.layout-wrapper.center { justify-content: center; align-items: center; }
+.layout-wrapper.start { justify-content: flex-start; align-items: flex-start; }
+.layout-wrapper.end { justify-content: flex-end; align-items: flex-end; }
+
+.layout-wrapper.gap-flow,
+.layout-wrapper.gap-xl {
+    gap: var(--space-flow, var(--spacing-xl, 6rem));
+}
+
+.layout-wrapper.gap-group,
+.layout-wrapper.gap-lg,
+.layout-wrapper.gap-md {
+    gap: var(--space-group, var(--spacing-md, 2.5rem));
+}
+
+.layout-wrapper.gap-item,
+.layout-wrapper.gap-sm,
+.layout-wrapper.gap-xs {
+    gap: var(--space-item, var(--spacing-sm, 1.25rem));
+}
+
+/* モバイルフォールバック */
+@media (max-width: 768px) {
+    :host([type="hbox"]) .layout-wrapper,
+    :host([type="hstack"]) .layout-wrapper {
+        flex-direction: column;
+    }
+}
+
+/* 印刷・PDF対応 */
+@media print {
+    :host {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .layout-wrapper {
+        page-break-inside: avoid;
+    }
+}

@@ -1,0 +1,225 @@
+:host {
+  display: block;
+  width: 100%;
+  font-family: var(--font-family-sans, sans-serif);
+  background-color: var(--color-base-200, #F7F5F2);
+  border: 0.0625rem solid var(--border-color, #E2E0DD);
+  border-radius: var(--radius-md, 0.25rem);
+  overflow: hidden;
+  box-shadow: var(--shadow-md, 0 0.25rem 0.75rem rgba(0,0,0,0.03));
+}
+
+.synth-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: var(--color-base-200, #F7F5F2);
+}
+
+/* Oscilloscope */
+.scope-container {
+  width: 100%;
+  height: 15.625rem; /* Increased height */
+  background: var(--color-base-content, #1A1C1E);
+  border-bottom: 0.0625rem solid var(--border-color, #E2E0DD);
+}
+.synth-scope {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Controls */
+.controls-container {
+  display: flex;
+  flex-direction: column;
+  padding: 16px; /* md spacing */
+  gap: 16px;
+  background: #F7F5F2;
+  color: #1A1C1E;
+}
+
+.controls-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 16px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-bottom: 8px; /* space for scroll */
+}
+.controls-row::-webkit-scrollbar {
+  display: none;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 16px 16px 16px; /* Space for label */
+  background: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #E2E0DD;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.group-label {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 0.65rem;
+  letter-spacing: 0.5px;
+  color: #6C7278; /* Secondary */
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.knob-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 48px; /* Slightly wider */
+  gap: 8px;
+}
+
+.knob {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #F0EDEB;
+  border: 1px solid #D5D2CF;
+  position: relative;
+  cursor: ns-resize;
+  transition: border-color 0.2s;
+}
+
+.knob:hover {
+  border-color: #B8422E;
+}
+
+.knob-dial {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  background: transparent;
+  transform: rotate(-135deg); /* Default position, updated by JS */
+}
+
+.knob-indicator {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  width: 3px;
+  height: 10px;
+  background: #B8422E; /* Tertiary */
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.knob-label {
+  font-size: 0.65rem;
+  color: #1A1C1E; /* Primary */
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.1;
+  font-weight: 500;
+}
+
+/* Keyboard */
+.keyboard-container {
+  background: #E2E0DD; /* darker background behind keyboard for contrast */
+  padding: 16px 16px 0 16px; /* Added padding to align with controls */
+  border-top: 1px solid #D5D2CF;
+}
+
+.keyboard-inner {
+  display: flex;
+  height: 120px; /* Slightly taller */
+  position: relative;
+  width: 100%;
+  border: 1px solid #1A1C1E;
+  border-bottom: none; /* Let keys handle bottom border */
+  border-radius: 4px 4px 0 0;
+  overflow: hidden;
+  background: #1A1C1E; /* Gap color if any */
+}
+
+.key {
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+}
+
+.key-white {
+  flex: 1;
+  height: 100%;
+  background: #FFFFFF;
+  border-right: 1px solid #1A1C1E;
+  border-bottom: 1px solid #1A1C1E;
+  z-index: 1;
+  transition: background-color 0.1s;
+}
+.key-white:last-child {
+  border-right: none;
+}
+.key-white.active {
+  background: #D5D2CF;
+}
+
+.key-black {
+  position: absolute;
+  height: 60%;
+  background: #1A1C1E; /* Primary */
+  border: 1px solid #1A1C1E;
+  border-top: none;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  z-index: 2;
+  transition: background-color 0.1s;
+}
+.key-black.active {
+  background: #B8422E; /* Tertiary */
+}
+
+/* Overlay for AudioContext init */
+.overlay-start {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(247, 245, 242, 0.85); /* Neutral with opacity */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.start-btn {
+  padding: 16px 32px;
+  font-size: 1.2rem;
+  background: #B8422E; /* Tertiary */
+  color: #FFFFFF;
+  border: none;
+  border-radius: 32px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(184, 66, 46, 0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.start-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(184, 66, 46, 0.4);
+}
+.start-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(184, 66, 46, 0.3);
+}
+.overlay-start.hidden {
+  display: none;
+}

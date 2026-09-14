@@ -1,0 +1,128 @@
+/* ==========================================================================
+   Mono Zoom Content CSS (Light DOM & Deep Nested Elements Styling)
+   ========================================================================== */
+
+:root {
+    --zoom-max-width-xl: min(94vw, 1750px);
+    --zoom-max-width-lg: min(94vw, 1700px);
+    --zoom-max-width-md: min(94vw, 1650px);
+
+    --zoom-font-h1: clamp(4.5rem, 9vw, 9rem);
+    --zoom-font-h2: clamp(3.5rem, 7.5vw, 7.5rem);
+    --zoom-font-h3: clamp(2.5rem, 5.5vw, 5.5rem);
+    --zoom-font-body: clamp(1.8rem, 3.2vw, 3.8rem);
+    --zoom-font-quote: clamp(2.2rem, 4.2vw, 4.8rem);
+    --zoom-font-table: clamp(1.5rem, 2.6vw, 3rem);
+    --zoom-font-code: clamp(1.4rem, 2.4vw, 2.8rem);
+
+    --zoom-margin-flow: clamp(1.5rem, 2.5vw, 2.5rem);
+    --zoom-margin-h1-bottom: clamp(2rem, 3.5vw, 4rem);
+    --zoom-margin-h2-top: clamp(1.5rem, 2.5vw, 3rem);
+    --zoom-margin-h2-bottom: clamp(1.5rem, 2.5vw, 2.5rem);
+    --zoom-margin-h3-top: clamp(1.2rem, 2vw, 2.5rem);
+    --zoom-margin-h3-bottom: clamp(1rem, 1.8vw, 2rem);
+}
+
+mono-zoom h1 {
+    font-size: var(--zoom-font-h1) !important;
+    line-height: 1.15 !important;
+    text-align: center !important;
+    margin: 0 auto var(--zoom-margin-h1-bottom) auto !important;
+    width: 100% !important;
+    max-width: var(--zoom-max-width-xl) !important;
+}
+
+mono-zoom h2 {
+    font-size: var(--zoom-font-h2) !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    margin: var(--zoom-margin-h2-top) auto var(--zoom-margin-h2-bottom) auto !important;
+    width: 100% !important;
+    max-width: var(--zoom-max-width-lg) !important;
+}
+
+mono-zoom h3,
+mono-zoom h4 {
+    font-size: var(--zoom-font-h3) !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+    margin: var(--zoom-margin-h3-top) auto var(--zoom-margin-h3-bottom) auto !important;
+    width: 100% !important;
+    max-width: var(--zoom-max-width-md) !important;
+}
+
+mono-zoom p {
+    font-size: var(--zoom-font-body) !important;
+    line-height: 1.75 !important;
+    width: 100% !important;
+    max-width: var(--zoom-max-width-md) !important;
+    margin: 0 auto var(--zoom-margin-flow) auto !important;
+}
+
+mono-zoom ul,
+mono-zoom ol {
+    font-size: var(--zoom-font-body) !important;
+    line-height: 1.85 !important;
+    padding-left: clamp(2rem, 4vw, 4rem) !important;
+    margin: 0 auto var(--zoom-margin-flow) auto !important;
+    width: 100% !important;
+    max-width: var(--zoom-max-width-md) !important;
+}
+
+mono-zoom li + li {
+    margin-top: clamp(0.75rem, 1.2vw, 1.5rem) !important;
+}
+
+mono-zoom table {
+    width: 100% !important;
+    max-width: var(--zoom-max-width-lg) !important;
+    font-size: var(--zoom-font-table) !important;
+    margin: 0 auto var(--zoom-margin-flow) auto !important;
+}
+
+mono-zoom blockquote {
+    font-size: var(--zoom-font-quote) !important;
+    line-height: 1.5 !important;
+    width: 100% !important;
+    max-width: var(--zoom-max-width-md) !important;
+    margin: var(--zoom-margin-flow) auto !important;
+}
+
+mono-zoom pre,
+mono-zoom mono-code-block {
+    font-size: var(--zoom-font-code) !important;
+    width: 100% !important;
+    max-width: var(--zoom-max-width-lg) !important;
+    margin: 0 auto var(--zoom-margin-flow) auto !important;
+}
+
+mono-zoom mono-ab-test {
+    width: min(90vw, 1100px) !important;
+    margin: 0 auto !important;
+}
+
+mono-zoom mono-score {
+    transform: scale(2.0);
+    margin: 3rem auto !important;
+    display: inline-block;
+}
+
+mono-zoom mono-flipcard {
+    width: min(85vw, 850px) !important;
+    min-height: clamp(300px, 45vh, 550px) !important;
+    font-size: clamp(2.2rem, 4.5vw, 4.2rem) !important;
+    margin: 0 auto !important;
+}
+
+mono-zoom .column {
+    width: 100% !important;
+    max-width: var(--zoom-max-width-lg) !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+mono-zoom .column > * + * {
+    margin-top: var(--zoom-margin-flow) !important;
+}

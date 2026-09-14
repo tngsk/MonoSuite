@@ -1,0 +1,9 @@
+{
+  "name": "mono-textfield-input",
+  "description": "自由テキスト入力フォーム",
+  "category": "interactive",
+  "is_web_component": true,
+  "interactive": true,
+  "always_include": false,
+  "requires_icons": false
+}

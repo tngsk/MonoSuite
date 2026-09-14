@@ -1,0 +1,160 @@
+<!-- Mono Web Component Template: mono-ab-test -->
+<template id="mono-ab-test-template">
+    <style>
+        /* CSS is injected dynamically by the Python builder */
+        {COMPONENTS_CSS}
+    </style>
+    <div class="ab-test-wrapper" data-ref="wrapper">
+        <div class="status-led" data-ref="statusLed"></div>
+        <h3 class="ab-test-header" data-ref="title"></h3>
+
+        <!-- Error State -->
+        <div
+            class="ab-test-error hidden"
+            data-ref="errorMessage"
+        >
+            <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+            </svg>
+            <span data-ref="errorText">Error loading media</span>
+        </div>
+
+        <!-- Controls Area -->
+        <div class="controls-container">
+            <!-- Transport Controls -->
+            <div class="transport-group">
+                <button
+                    class="btn btn-transport"
+                    data-ref="playBtn"
+                    title="Play / Pause"
+                    tabindex="-1"
+                    disabled
+                >
+                    <svg
+                        class="icon-play"
+                        data-ref="iconPlay"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                    >
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                    <svg
+                        class="icon-pause hidden"
+                        data-ref="iconPause"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                    >
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                    </svg>
+                </button>
+                <button
+                    class="btn btn-transport"
+                    data-ref="stopBtn"
+                    title="Stop & Reset"
+                    tabindex="-1"
+                    disabled
+                >
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6 6h12v12H6z" />
+                    </svg>
+                </button>
+                <div class="time-display" data-ref="timeDisplay">
+                    00:00 / 00:00
+                </div>
+            </div>
+
+            <!-- A/B Switch Controls (Symmetrical) -->
+            <div class="switch-group">
+                <button
+                    class="btn btn-switch active"
+                    data-ref="switchA"
+                    data-target="A"
+                    tabindex="-1"
+                    disabled
+                >
+                    A
+                </button>
+                <button
+                    class="btn btn-switch"
+                    data-ref="switchB"
+                    data-target="B"
+                    tabindex="-1"
+                    disabled
+                >
+                    B
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container" data-ref="progressContainer">
+            <div class="progress-bar" data-ref="progressBar"></div>
+        </div>
+
+        <!-- Evaluation & Voting Area -->
+        <div class="evaluation-container" data-ref="evaluationContainer">
+            <div class="eval-prompt">
+                どちらが優れていますか？ (Which is better?)
+            </div>
+            <div class="eval-buttons">
+                <button
+                    class="btn btn-vote"
+                    data-ref="voteA"
+                    data-vote="A"
+                    tabindex="-1"
+                >
+                    A
+                </button>
+                <button
+                    class="btn btn-vote btn-neutral"
+                    data-ref="voteNeutral"
+                    data-vote="Equal"
+                    tabindex="-1"
+                >
+                    同等 (Equal)
+                </button>
+                <button
+                    class="btn btn-vote"
+                    data-ref="voteB"
+                    data-vote="B"
+                    tabindex="-1"
+                >
+                    B
+                </button>
+            </div>
+            <div
+                class="voted-message hidden"
+                data-ref="votedMessage"
+            >
+                <svg
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                >
+                    <path
+                        d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"
+                    />
+                </svg>
+                評価を記録しました
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" data-ref="loadingOverlay">
+            <div class="spinner"></div>
+            <span>Decoding Media...</span>
+        </div>
+    </div>
+</template>

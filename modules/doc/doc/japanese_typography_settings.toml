@@ -1,0 +1,65 @@
+# 調査から抽出した比較用データ。Mono config.tomlには未対応・未接続。
+# 数値は規格の指定値ではなく、2026-09-09時点の提案値。
+[metadata]
+date = "2026-09-09"
+status = "research_candidate_not_applied"
+source_commit = "a37721a"
+report = "JAPANESE_TYPOGRAPHY_RESEARCH.md"
+scope = "horizontal_japanese_screen_and_presentation"
+
+[common]
+language = "ja"
+font_feature_settings = "normal"
+letter_spacing = "normal"
+text_align = "start"
+text_align_last = "auto"
+line_break = "strict"
+word_break = "normal"
+overflow_wrap = "break-word"
+text_wrap = "wrap"
+font_delivery = "system_fonts_by_default"
+
+[reading]
+font_size = "1.25rem"
+font_size_comparison_range = ["1.125rem", "1.375rem"]
+line_height = 1.8
+max_inline_size = "min(100%, 38ic)"
+max_inline_size_fallback = "min(100%, 38em)"
+paragraph_gap_candidate = "1em"
+
+[presentation]
+font_size = "var(--font-body)"
+line_height = 1.75
+line_height_comparison_range = [1.65, 1.85]
+max_inline_size = "min(100%, 28ic)"
+max_inline_size_fallback = "min(100%, 28em)"
+paragraph_gap_policy = "retain_existing_space_tokens_for_comparison"
+
+[heading]
+line_height = 1.35
+reading_line_height = 1.4
+word_break = "normal"
+letter_spacing = "normal"
+text_wrap_candidate = "balance"
+palt_policy = "off_by_default_optional_short_heading_comparison"
+
+[progressive_enhancement]
+text_autospace = "normal"
+text_autospace_exclusions = ["code", "pre", "url_or_identifier_token"]
+excluded_text_autospace = "no-autospace"
+text_spacing_trim_candidate = "normal"
+text_spacing_trim_heading_experiment = "trim-start"
+require_css_supports_and_visual_check = true
+
+# 以下はデザインの初期値ではなく、利用者変更時の耐性を確認する条件。
+[accessibility_checks]
+line_height_override = 1.5
+paragraph_spacing_override = "2em"
+letter_spacing_override = "0.12em"
+word_spacing_override = "0.16em"
+word_spacing_note = "Apply only where relevant to language/script; include mixed Latin text."
+text_resize_percent = 200
+reflow_width_css_px = 320
+viewports_css_px = [320, 375, 768, 1280, 1920]
+normal_text_contrast_min = 4.5
+large_text_contrast_min = 3.0

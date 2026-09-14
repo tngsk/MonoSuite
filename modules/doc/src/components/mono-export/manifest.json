@@ -1,0 +1,9 @@
+{
+  "name": "mono-export",
+  "description": "入力データ（localStorage）のJSONL/CSVエクスポート",
+  "category": "interactive",
+  "is_web_component": true,
+  "interactive": true,
+  "always_include": false,
+  "requires_icons": false
+}

@@ -1,0 +1,41 @@
+/* Style the projected/slotted <pre> and <code> content */
+mono-code-block pre {
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    background: transparent;
+    color: var(--mono-code-text, var(--color-base-content));
+    line-height: 1.5;
+    white-space: pre;
+}
+
+mono-code-block code {
+    display: block;
+    padding: var(--padding-md);
+    border-radius: 0 0 var(--radius-md, 0.25rem) var(--radius-md, 0.25rem); /* Matching the container */
+    background: var(--color-base-300);
+    font-family: Menlo, Consolas, "Liberation Mono", monospace;
+    font-variant-ligatures: none;
+    font-size: 0.95em;
+    line-height: 1.5;
+    white-space: pre;
+}
+
+/* Scrollbar styling for the code block */
+mono-code-block pre::-webkit-scrollbar {
+    height: 0.5rem;
+    width: 0.5rem;
+}
+
+mono-code-block pre::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+mono-code-block pre::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm, 0.125rem);
+}
+
+mono-code-block pre::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}

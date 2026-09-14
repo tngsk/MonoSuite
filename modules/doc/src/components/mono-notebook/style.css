@@ -1,0 +1,26 @@
+
+/* Print specific styles */
+@media print {
+    :host {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .notebook-container {
+        border: 0.0625rem solid var(--border-color, #d1d5db);
+        box-shadow: none;
+    }
+    .notebook-textarea {
+        display: none !important;
+    }
+    .notebook-content::after {
+        content: "📝 (Notebook Input Area - Print View)\n\n\n\n";
+        white-space: pre-wrap;
+        display: block;
+        min-height: 6.25rem;
+        color: var(--color-base-content-muted, #9ca3af);
+        font-style: italic;
+    }
+    .notebook-controls {
+        display: none !important;
+    }
+}

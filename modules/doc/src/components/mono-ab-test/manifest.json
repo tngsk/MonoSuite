@@ -1,0 +1,9 @@
+{
+  "name": "mono-ab-test",
+  "description": "A/Bテスト条件分岐提示",
+  "category": "interactive",
+  "is_web_component": true,
+  "interactive": true,
+  "always_include": false,
+  "requires_icons": false
+}

@@ -1,0 +1,906 @@
+/* ベース -------------------------------------------------- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 蛍光マーカー風テキスト選択スタイル */
+::selection {
+    background: var(--selection-bg, var(--mono-highlight-yellow));
+    color: var(--selection-color, inherit);
+}
+
+::-moz-selection {
+    background: var(--selection-bg, var(--mono-highlight-yellow));
+    color: var(--selection-color, inherit);
+}
+
+:root {
+    --content-max-width: min(92vw, 1792px);
+    --font-color: var(--color-base-content, #111827);
+    --font-color-light: var(--color-base-content-muted, #374151);
+    --body-padding-x: clamp(2rem, 7vw, 7rem);
+    --body-padding-y: clamp(3rem, 5vw, 5.5rem);
+    --z-index-overlay: 999;
+    --z-index-modal: 1000;
+
+    /* ========================================================================
+       Mono 3x3 Minimalist Design Tokens (制約による最大の表現力)
+       ======================================================================== */
+
+    /* 1. Spacing Trinity (スペーシング3層体系) */
+    --space-flow: clamp(3.5rem, 6vw, 7rem);      /* 巨視的・トップレベル要素間（約112px） */
+    --space-group: clamp(2.0rem, 3.5vw, 4.0rem);  /* 中間的・コンテナ/カラム間（約48〜64px） */
+    --space-item: clamp(0.75rem, 1.2vw, 1.5rem);  /* 微小・要素内/インライン（約16〜24px） */
+
+    /* 2. Typography Trinity (タイポグラフィ3層体系 + 見出し階層トークン) */
+    --font-display: clamp(2.5rem, 1.8rem + 3.5vw, 5.5rem);     /* 看板・大見出し（モバイル40px〜FHD88px） */
+    --font-title: clamp(2.0rem, 1.5rem + 1.8vw, 3.8rem);       /* セクション見出し・h2 */
+    --font-subtitle: clamp(1.65rem, 1.35rem + 1.2vw, 2.8rem);  /* サブ見出し・h3 */
+    --font-body: clamp(1.5rem, 1.25rem + 0.8vw, 2.4rem);         /* 主旋律・標準本文（モバイル24px〜FHD35.4px） */
+    --font-compact: clamp(1.25rem, 1.05rem + 0.65vw, 2.0rem);   /* 伴奏・box内/注釈（モバイル20px〜FHD29.3px） */
+
+    /* 3. Line-Height Trinity (行間3層体系) */
+    --lh-loose: 2.0;    /* 読解・呼吸: 本文段落（p）、引用（blockquote） */
+    --lh-snug: 1.75;    /* 情報・凝縮: リスト（ul, ol, dl）、テーブル（table）、コード（pre） */
+    --lh-tight: 1.25;   /* 構造・塊: 見出し全般（h1〜h6） */
+
+    /* 後方互換性エイリアス */
+    --spacing-flow: var(--space-flow);
+    --spacing-xl: var(--space-flow);
+    --spacing-lg: var(--space-group);
+    --spacing-md: var(--space-group);
+    --spacing-sm: var(--space-item);
+    --spacing-xs: var(--space-item);
+
+    --padding-lg: var(--space-group);
+    --padding-md: var(--space-group);
+    --padding-sm: var(--space-item);
+
+    /* 4. Dot Grid (16px繊細ドットグリッド体系) */
+    --dot-size: 16px;
+    --dot-color: rgba(100, 116, 139, 0.12);
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    padding-block: var(--body-padding-y);
+    width: 100%;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue",
+        "Segoe UI", "Yu Gothic Medium", "Hiragino Kaku Gothic ProN",
+        "Noto Sans JP", Meiryo, sans-serif;
+    font-size: var(--font-body);
+    line-height: var(--lh-loose);
+    font-feature-settings: "palt" 1;
+    color: var(--font-color);
+    background-color: var(--color-base-200, #f3f4f6);
+    background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+    background-size: var(--dot-size) var(--dot-size);
+    background-position: calc(50% - min(46vw, 896px)) var(--body-padding-y);
+
+    /* CSS Grid Layout: フルスクリーン画面フル活用（min(92vw, 1792px)） */
+    display: grid;
+    grid-template-columns: minmax(var(--body-padding-x), 1fr) minmax(0, var(--content-max-width, 1792px)) minmax(
+            var(--body-padding-x),
+            1fr
+        );
+}
+
+body > * {
+    grid-column: var(--component-grid-column, 2);
+    min-width: 0;
+    container-type: inline-size;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+}
+
+/* 非アクティブスライド要素の穏やかな減光（Ambient Focus） */
+body:not(.mono-flat-mode) > .mono-ambient-dimmed {
+    opacity: 0.22;
+    filter: blur(0.3px);
+}
+
+body:not(.mono-flat-mode) > .mono-ambient-dimmed:hover {
+    opacity: 1.0;
+    filter: none;
+}
+
+/* ==========================================================================
+   モノリシック均一マージンシステム（全要素間完全等間隔・100%均一リズム）
+   ========================================================================== */
+
+/* トップレベル全要素の完全均一・一方向（下部）フロー余白（要素種別に関わらず完全同一） */
+body > * {
+    margin-block-start: 0 !important;
+    margin-block-end: var(--spacing-flow) !important;
+}
+
+/* 最末尾要素のみ下部余白を除去 */
+body > :last-child,
+body > :nth-last-child(1 of :not(script):not(style):not(template)) {
+    margin-block-end: 0 !important;
+}
+
+/* ネストコンテナ内部（カラム・カード等）の均一な垂直フロー・マージン */
+:where(.column, [class*="card"], [class*="preview"], blockquote) > * {
+    margin-block-start: 0 !important;
+    margin-block-end: var(--spacing-md) !important;
+}
+
+:where(.column, [class*="card"], [class*="preview"], blockquote) > :last-child {
+    margin-block-end: 0 !important;
+}
+
+/* 共通コンポーネントパディング属性 (3段階スペーシング体系に完全統合) */
+[padding="flow"] { padding: var(--space-flow) !important; }
+[padding="group"] { padding: var(--space-group) !important; }
+[padding="item"] { padding: var(--space-item) !important; }
+
+[padding="lg"] { padding: var(--space-group) !important; }
+[padding="md"] { padding: var(--space-group) !important; }
+[padding="sm"] { padding: var(--space-item) !important; }
+
+[padding-x="flow"] { padding-left: var(--space-flow) !important; padding-right: var(--space-flow) !important; }
+[padding-x="group"] { padding-left: var(--space-group) !important; padding-right: var(--space-group) !important; }
+[padding-x="item"] { padding-left: var(--space-item) !important; padding-right: var(--space-item) !important; }
+
+[padding-x="lg"] { padding-left: var(--space-group) !important; padding-right: var(--space-group) !important; }
+[padding-x="md"] { padding-left: var(--space-group) !important; padding-right: var(--space-group) !important; }
+[padding-x="sm"] { padding-left: var(--space-item) !important; padding-right: var(--space-item) !important; }
+
+[padding-y="flow"] { padding-top: var(--space-flow) !important; padding-bottom: var(--space-flow) !important; }
+[padding-y="group"] { padding-top: var(--space-group) !important; padding-bottom: var(--space-group) !important; }
+[padding-y="item"] { padding-top: var(--space-item) !important; padding-bottom: var(--space-item) !important; }
+
+[padding-y="lg"] { padding-top: var(--space-group) !important; padding-bottom: var(--space-group) !important; }
+[padding-y="md"] { padding-top: var(--space-group) !important; padding-bottom: var(--space-group) !important; }
+[padding-y="sm"] { padding-top: var(--space-item) !important; padding-bottom: var(--space-item) !important; }
+
+/*
+  Specific exceptional spacing for Mono Section.
+  Since sections are often full-bleed and used to connect different areas,
+  we eliminate the margin between them.
+*/
+mono-section + mono-section {
+    margin-top: 0;
+}
+
+hr {
+    width: 100%;
+    max-width: 20%;
+    margin-block: var(--space-flow) !important;
+    margin-inline: auto;
+    border: none;
+    border-top: 0.125rem dotted var(--border-color, #d1d5db);
+}
+
+/* 見出し -------------------------------------------------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--font-color);
+    letter-spacing: 0.04em;
+    text-wrap: balance;
+    line-break: strict;
+}
+
+h1 {
+    font-size: var(--font-display);
+    font-weight: 800;
+    line-height: var(--lh-tight);
+    scroll-margin-top: 2rem;
+}
+
+h2 {
+    font-size: var(--font-title);
+    font-weight: 700;
+    line-height: var(--lh-tight);
+    scroll-margin-top: 2.5rem;
+}
+
+h3 {
+    font-size: var(--font-subtitle);
+    font-weight: 600;
+    color: var(--font-color-light);
+    line-height: var(--lh-tight);
+    scroll-margin-top: 2rem;
+}
+
+h4,
+h5,
+h6 {
+    font-size: var(--font-compact);
+    font-weight: 600;
+    color: var(--font-color-light);
+    line-height: var(--lh-tight);
+}
+
+/* 段落・テキスト（最適文字数 38〜42文字制御・モダン組版・両端揃え） --------- */
+p {
+    max-width: min(100%, 42em);
+    text-align: justify;
+    text-justify: inter-ideograph;
+    text-align-last: left;
+    text-wrap: pretty;
+    line-break: strict;
+    overflow-wrap: break-word;
+}
+
+strong {
+    font-weight: 600;
+}
+
+em {
+    font-style: normal;
+    position: relative;
+}
+
+em::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.15em;
+    width: 100%;
+    height: 0.2em;
+    background: rgba(129, 140, 248, 0.25);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md, 0.5rem);
+}
+
+/* 図版要素 (figure / figcaption) -------------------------- */
+figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+figcaption {
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-compact);
+    color: var(--font-color-light);
+    line-height: var(--lh-snug);
+}
+
+/* 画像読み込みエラー表示 ------------------------------------ */
+.mono-image-error {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0;
+    border: 1px solid var(--color-error, #ef4444);
+    background-color: var(--color-error-bg, rgba(239, 68, 68, 0.08));
+    border-radius: var(--radius-md, 0.5rem);
+    color: var(--color-error-text, #b91c1c);
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: var(--lh-snug);
+    box-sizing: border-box;
+}
+
+[data-theme="dark"] .mono-image-error {
+    color: #fca5a5;
+    background-color: rgba(239, 68, 68, 0.15);
+    border-color: #ef4444;
+}
+
+.mono-image-error-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.mono-image-error-icon {
+    font-size: 1.125rem;
+}
+
+.mono-image-error-title {
+    font-weight: 600;
+}
+
+.mono-image-error-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.mono-image-error-url {
+    display: inline-block;
+    padding: 0.2rem 0.4rem;
+    background-color: rgba(0, 0, 0, 0.06);
+    border-radius: 0.25rem;
+    word-break: break-all;
+    font-family: var(--font-mono, monospace);
+    font-size: 0.8125rem;
+    color: inherit;
+}
+
+[data-theme="dark"] .mono-image-error-url {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mono-image-error-hint {
+    font-size: 0.75rem;
+    opacity: 0.9;
+}
+
+/* リンク -------------------------------------------------- */
+a {
+    color: var(--color-primary, #2563eb);
+    text-decoration: none;
+    border-bottom: 0.0625rem solid var(--color-primary-light, rgba(37, 99, 235, 0.35));
+    padding-bottom: 0.05em;
+    transition:
+        color 0.15s ease,
+        border-color 0.15s ease;
+}
+
+a:hover {
+    color: var(--color-primary-dark, #1d4ed8);
+    border-bottom-color: var(--color-primary, rgba(37, 99, 235, 0.7));
+}
+
+/* リスト -------------------------------------------------- */
+ul {
+    font-size: var(--font-compact);
+    margin-left: 1.25rem;
+    padding-left: 1.6rem;
+    line-height: var(--lh-snug);
+}
+
+ol {
+    list-style: none;
+    counter-reset: mono-ol-counter;
+    font-size: var(--font-compact);
+    margin-left: 1.25rem;
+    padding-left: 2.2rem;
+    line-height: var(--lh-snug);
+}
+
+ol > li {
+    counter-increment: mono-ol-counter;
+    position: relative;
+}
+
+ol > li::before {
+    content: counter(mono-ol-counter);
+    position: absolute;
+    left: -2.2rem;
+    top: 0.3em;
+    width: 1.55em;
+    height: 1.55em;
+    border: 1px solid var(--border-color, #d1d5db);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72em;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--font-color-light, #4b5563);
+    background: transparent;
+    box-sizing: border-box;
+    line-height: 1;
+}
+
+/* ネストされた順序付きリストは標準の数字階層インデントにフォールバック */
+li > ol {
+    list-style: decimal;
+    counter-reset: none;
+    padding-left: 1.6rem;
+}
+
+li > ol > li {
+    counter-increment: none;
+}
+
+li > ol > li::before {
+    content: none;
+}
+
+li + li {
+    margin-top: var(--spacing-xs);
+}
+
+li {
+    margin-bottom: var(--spacing-xs);
+    max-width: min(100%, 42em);
+    text-align: justify;
+    text-justify: inter-ideograph;
+    text-align-last: left;
+    text-wrap: pretty;
+}
+
+/* ネストされたリストは親リストのオフセットに累積させない */
+li > ul,
+li > ol {
+    margin-left: 0;
+    margin-top: var(--spacing-xs);
+    margin-bottom: var(--spacing-xs);
+}
+
+li > p + p {
+    margin-top: var(--spacing-xs);
+}
+
+li > pre,
+li > blockquote,
+li > table {
+    margin-block: var(--spacing-xs);
+}
+
+/* コード -------------------------------------------------- */
+code {
+    font-family: Menlo, Consolas, "Liberation Mono", monospace;
+    font-variant-ligatures: none;
+    background: var(--color-base-300, #e5e7eb);
+    padding: 0.2em 0.4em;
+    border-radius: var(--radius-sm, 0.25rem);
+    font-size: 0.88em;
+}
+
+pre {
+    padding: 1.2rem;
+    background: #020617;
+    color: #e5e7eb;
+    overflow-x: auto;
+    font-size: var(--font-compact);
+    line-height: var(--lh-snug);
+    border-radius: var(--radius-md, 0.5rem);
+}
+
+pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+}
+
+/* 引用 ---------------------------------------------------- */
+blockquote {
+    padding-left: var(--spacing-md);
+    padding-top: var(--spacing-xs);
+    padding-bottom: var(--spacing-xs);
+    border-left: 0.1875rem solid var(--font-color);
+    color: var(--color-base-content-muted, #4b5563);
+    max-width: min(100%, 42em);
+    line-height: var(--lh-loose);
+    text-wrap: pretty;
+}
+
+/* カラム内およびフル幅指定の例外解除 */
+.column p,
+.column li,
+.column blockquote,
+.full-width,
+.full-width p {
+    max-width: 100%;
+}
+
+/* テーブル ------------------------------------------------ */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: var(--font-compact);
+    line-height: var(--lh-snug);
+}
+
+th,
+td {
+    padding: calc(var(--space-item) * 0.75) var(--space-item);
+    border-bottom: 0.0625rem solid var(--border-color, #e5e7eb);
+}
+
+th {
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 0.125rem solid var(--font-color);
+}
+
+/* 定義リスト ---------------------------------------------- */
+dl {
+    font-size: var(--font-compact);
+    line-height: var(--lh-snug);
+}
+
+dt {
+    font-weight: 600;
+    color: var(--font-color);
+    margin-top: var(--spacing-xs);
+}
+
+dt:first-child {
+    margin-top: 0;
+}
+
+dd {
+    padding-left: var(--spacing-md);
+    margin-top: calc(var(--spacing-xs) * 0.35);
+    margin-bottom: var(--spacing-xs);
+    color: var(--font-color-light);
+    max-width: min(100%, 42em);
+    text-align: justify;
+    text-justify: inter-ideograph;
+    text-align-last: left;
+    text-wrap: pretty;
+}
+
+/* 折りたたみ要素 (details / summary) ----------------------- */
+details {
+    background: var(--color-base-100, #ffffff);
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: var(--radius-md, 0.5rem);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+details[open] {
+    padding-bottom: var(--spacing-sm);
+}
+
+summary {
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    line-height: var(--lh-snug);
+}
+
+summary:hover {
+    color: var(--color-primary, #2563eb);
+}
+
+details[open] > summary {
+    margin-bottom: var(--spacing-xs);
+    border-bottom: 1px solid var(--border-color, #e5e7eb);
+    padding-bottom: calc(var(--spacing-xs) * 0.5);
+}
+
+details[open] > *:not(summary) {
+    margin-block-end: var(--spacing-xs);
+}
+
+details[open] > *:last-child {
+    margin-block-end: 0;
+}
+
+/* ============================================================================ */
+
+.nowrap {
+    white-space: nowrap;
+    display: inline;
+}
+
+/* レイアウト ---------------------------------------------- */
+.column {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    container-type: inline-size;
+}
+
+/* カラム内・レイアウト内のテキスト最適化（--font-compact に完全統合） */
+.column,
+mono-layout,
+:where(.column, [class*="card"], [class*="preview"], blockquote) {
+    font-size: var(--font-compact);
+    line-height: var(--lh-snug);
+}
+
+.column h1 { font-size: calc(var(--font-compact) * 1.6); }
+.column h2 { font-size: calc(var(--font-compact) * 1.35); }
+.column h3 { font-size: calc(var(--font-compact) * 1.18); }
+.column h4,
+.column h5,
+.column h6 { font-size: var(--font-compact); }
+
+.column p,
+.column li,
+mono-layout p,
+mono-layout li {
+    font-size: var(--font-compact);
+}
+
+/* Colab -------------------------------------------------- */
+.colab-badge {
+    vertical-align: middle;
+    margin-right: 0.375rem;
+    height: 1.25rem;
+    width: auto;
+    border-radius: 0;
+}
+
+.colab-link {
+    text-decoration: none;
+}
+
+/* テキストサイズ 3段階体系 (Typography Trinity) ----------------- */
+.text-display,
+.text-hero,
+.text-xlarge {
+    display: block;
+    width: 100%;
+    font-size: var(--font-display);
+    line-height: 1.05;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    text-align: center;
+    overflow-wrap: normal;
+    word-break: keep-all;
+}
+
+.text-body,
+.text-large {
+    font-size: var(--font-body);
+    line-height: var(--lh-loose);
+}
+
+.text-compact,
+.text-small {
+    font-size: var(--font-compact);
+    line-height: var(--lh-snug);
+}
+
+/* テキスト配置ユーティリティ ------------------------------------ */
+.text-left { text-align: left !important; text-align-last: left !important; }
+.text-center { text-align: center !important; text-align-last: center !important; }
+.text-right { text-align: right !important; text-align-last: right !important; }
+.text-justify { text-align: justify !important; text-justify: inter-ideograph !important; text-align-last: left !important; }
+
+/* 蛍光マーカー・アンダーライン・ハイライト強調トークン ------------ */
+:root {
+    /* 共通ハイライトパレット（マーカー・下線・選択範囲で完全共有） */
+    --mono-highlight-yellow: rgba(254, 240, 138, 0.75);
+    --mono-highlight-pink: rgba(251, 207, 232, 0.75);
+    --mono-highlight-green: rgba(187, 247, 208, 0.75);
+    --mono-highlight-cyan: rgba(186, 230, 253, 0.75);
+    --mono-highlight-orange: rgba(254, 215, 170, 0.75);
+    --mono-highlight-ai: rgba(230, 202, 255, 0.75);
+    --mono-highlight-warning: rgba(255, 213, 164, 0.75);
+
+    /* 後方互換性エイリアス */
+    --mono-marker-yellow: var(--mono-highlight-yellow);
+    --mono-marker-pink: var(--mono-highlight-pink);
+    --mono-marker-green: var(--mono-highlight-green);
+    --mono-marker-cyan: var(--mono-highlight-cyan);
+    --mono-marker-orange: var(--mono-highlight-orange);
+    --mono-marker-ai: var(--mono-highlight-ai);
+    --mono-marker-warning: var(--mono-highlight-warning);
+
+    --mono-underline-yellow: var(--mono-highlight-yellow);
+    --mono-underline-pink: var(--mono-highlight-pink);
+    --mono-underline-green: var(--mono-highlight-green);
+    --mono-underline-cyan: var(--mono-highlight-cyan);
+    --mono-underline-orange: var(--mono-highlight-orange);
+    --mono-underline-ai: var(--mono-highlight-ai);
+    --mono-underline-warning: var(--mono-highlight-warning);
+
+    /* Space 3-Tone Heading Markers */
+    --marker-space-normal: #fff272;
+    --marker-space-ai: #e6caff;
+    --marker-space-warning: #ffd5a4;
+}
+
+[data-theme="dark"],
+[data-theme="black"],
+[data-theme="business"],
+[data-theme="night"],
+[data-theme="dracula"] {
+    --mono-highlight-yellow: rgba(234, 179, 8, 0.40);
+    --mono-highlight-pink: rgba(236, 72, 153, 0.40);
+    --mono-highlight-green: rgba(34, 197, 94, 0.40);
+    --mono-highlight-cyan: rgba(14, 165, 233, 0.40);
+    --mono-highlight-orange: rgba(249, 115, 22, 0.40);
+    --mono-highlight-ai: rgba(192, 132, 252, 0.40);
+    --mono-highlight-warning: rgba(249, 115, 22, 0.40);
+
+    --marker-space-normal: rgba(234, 179, 8, 0.42);
+    --marker-space-ai: rgba(192, 132, 252, 0.42);
+    --marker-space-warning: rgba(249, 115, 22, 0.42);
+}
+
+.mono-marker {
+    background: transparent;
+    box-shadow: inset 0 -0.82em 0 0 var(--marker-bg, var(--mono-highlight-yellow));
+    padding: 0.1em 0.25em;
+    margin: 0 0.08em;
+    border-radius: var(--radius-sm, 0.25rem);
+    color: inherit;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.mono-marker-yellow  { --marker-bg: var(--mono-highlight-yellow); }
+.mono-marker-pink    { --marker-bg: var(--mono-highlight-pink); }
+.mono-marker-green   { --marker-bg: var(--mono-highlight-green); }
+.mono-marker-cyan    { --marker-bg: var(--mono-highlight-cyan); }
+.mono-marker-orange  { --marker-bg: var(--mono-highlight-orange); }
+.mono-marker-ai      { --marker-bg: var(--mono-highlight-ai); }
+.mono-marker-warning { --marker-bg: var(--mono-highlight-warning); }
+
+.mono-underline {
+    background: transparent;
+    box-shadow: inset 0 -0.28em 0 0 var(--underline-bg, var(--mono-highlight-yellow));
+    padding: 0 0.15em;
+    margin: 0 0.04em;
+    border-radius: var(--radius-sm, 0.25rem);
+    color: inherit;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}
+
+.mono-underline-yellow  { --underline-bg: var(--mono-highlight-yellow); }
+.mono-underline-pink    { --underline-bg: var(--mono-highlight-pink); }
+.mono-underline-green   { --underline-bg: var(--mono-highlight-green); }
+.mono-underline-cyan    { --underline-bg: var(--mono-highlight-cyan); }
+.mono-underline-orange  { --underline-bg: var(--mono-highlight-orange); }
+.mono-underline-ai      { --underline-bg: var(--mono-highlight-ai); }
+.mono-underline-warning { --underline-bg: var(--mono-highlight-warning); }
+
+/* Space直系 見出しマーカー体系 (Heading Marker) ------------------ */
+/* 見出し本体の背景をリセットし、内部の .heading-highlight にテキスト幅でマーカーを引く */
+.marker,
+.heading-marker,
+[class*="marker-"],
+[class*="heading-marker-"] {
+    --marker-current-color: var(--marker-space-normal);
+}
+
+.heading-highlight,
+.heading-marker-text {
+    /* Skia PDF出力時の透明境界補間による黒フリンジ（黒ボーダー）を根本防止するインセットシャドウ */
+    box-shadow: inset 0 -0.22em 0 0 var(--marker-current-color, var(--marker-space-normal));
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    display: inline;
+    border: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+}
+
+/* 見出し本体の不要な背景と全幅拡張・枠線を抑制 */
+h1.marker, h2.marker, h3.marker, h4.marker, h5.marker, h6.marker,
+h1[class*="marker-"], h2[class*="marker-"], h3[class*="marker-"],
+h4[class*="marker-"], h5[class*="marker-"], h6[class*="marker-"],
+h1.heading-marker, h2.heading-marker, h3.heading-marker,
+h4.heading-marker, h5.heading-marker, h6.heading-marker {
+    background: none !important;
+    border: none !important;
+    outline: none !important;
+}
+
+/* Space 3トーン */
+.marker-normal, .heading-marker-normal   { --marker-current-color: var(--marker-space-normal); }
+.marker-ai, .heading-marker-ai           { --marker-current-color: var(--marker-space-ai); }
+.marker-warning, .heading-marker-warning { --marker-current-color: var(--marker-space-warning); }
+
+/* Doc 5カラー */
+.marker-yellow, .heading-marker-yellow   { --marker-current-color: var(--mono-marker-yellow); }
+.marker-pink, .heading-marker-pink       { --marker-current-color: var(--mono-marker-pink); }
+.marker-green, .heading-marker-green     { --marker-current-color: var(--mono-marker-green); }
+.marker-cyan, .heading-marker-cyan       { --marker-current-color: var(--mono-marker-cyan); }
+.marker-orange, .heading-marker-orange   { --marker-current-color: var(--mono-marker-orange); }
+
+/* 付箋・ノートスタイル (::style note) */
+.mono-note-card {
+    background-color: var(--bg-card, rgba(0, 0, 0, 0.02));
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+    border-left: 0.375rem solid var(--note-accent, var(--marker-space-normal));
+    border-radius: var(--radius-lg, 1rem);
+    padding: var(--space-item) var(--space-group);
+    margin-block: var(--space-group);
+    box-sizing: border-box;
+}
+
+.mono-note-card[data-tone="primary"]   { --note-accent: var(--marker-space-ai); }
+.mono-note-card[data-tone="warning"]   { --note-accent: var(--marker-space-warning); }
+.mono-note-card[data-tone="neutral"]   { --note-accent: var(--marker-space-normal); }
+.mono-note-card[data-tone="info"]      { --note-accent: var(--mono-marker-cyan); }
+.mono-note-card[data-tone="success"]   { --note-accent: var(--mono-marker-green); }
+.mono-note-card[data-tone="error"]     { --note-accent: var(--mono-marker-pink); }
+
+
+/* Print specific global adjustments */
+@media print {
+    :root {
+        /* Typography Trinity & Hierarchy 印刷用中間スケール（画面大判表示とコンパクト表示の中間最適スケール） */
+        --font-display: 3.0rem !important;   /* 約48px (大見出し) */
+        --font-title: 2.25rem !important;    /* 約36px (セクション見出し・h2) */
+        --font-subtitle: 1.7rem !important;  /* 約27.2px (サブ見出し・h3) */
+        --font-body: 1.35rem !important;     /* 約21.6px (本文) */
+        --font-compact: 1.125rem !important; /* 約18px (伴奏・ボックス内) */
+    }
+
+    html {
+        /* PDF出力時の基準フォントサイズ */
+        font-size: 16px !important;
+    }
+
+    body {
+        /* Print background colors */
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        /* PDF書き出し時の巨大な背景ドット画像の生成を抑止 */
+        background-image: none !important;
+        /* macOS ChromiumでのPDFテキスト抽出時のKangxi部首グリフ文字化けを防止する印刷用フォントスタック */
+        font-family: "PlemolJP", "PlemolJP Console", "PlemolJP Console NF", "PlemolJP35", "BIZ UDGothic", "Meiryo", "Arial Unicode MS", "Yu Gothic", "Noto Sans JP", sans-serif !important;
+    }
+
+    .heading-highlight,
+    .heading-marker-text {
+        border: none !important;
+        outline: none !important;
+        text-decoration: none !important;
+    }
+
+    body > * {
+        opacity: 1.0 !important;
+        filter: none !important;
+        transition: none !important;
+    }
+
+    /* テキスト改行位置の紙面幅成り行き化: 42em行長制限およびpretty早期折り返しの解除 */
+    p,
+    li,
+    blockquote {
+        max-width: 100% !important;
+        text-wrap: wrap !important;
+    }
+
+    /* コードブロックの印刷最適化: 18px（var(--font-compact)）、アンダースコアの分裂・重複や不要な改行を防止 */
+    pre,
+    pre code,
+    mono-code-block pre,
+    mono-code-block code {
+        font-family: "PlemolJP Console", "PlemolJP Console NF", "PlemolJP", "PlemolJP35", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+        font-size: var(--font-compact) !important;
+        line-height: 1.45 !important;
+        white-space: pre !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+    }
+
+    /* インラインコードの印刷スタイル: 本文フォントサイズと同一化 (inherit) */
+    :not(pre) > code {
+        font-family: "PlemolJP Console", "PlemolJP Console NF", "PlemolJP", "PlemolJP35", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace !important;
+        font-size: inherit !important;
+    }
+
+    /* 印刷時の折りたたみ要素（details）常時展開: コンテンツ欠落を防止 */
+    details {
+        display: block !important;
+    }
+
+    details > * {
+        display: block !important;
+    }
+}
+
+/* Accessibility: 視覚運動軽減設定への配慮 */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    body > * {
+        transition: none !important;
+    }
+}

@@ -1,0 +1,33 @@
+[security]
+connect-src = "http://localhost:8000"
+cors-allowed-origins = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "null"
+]
+
+[security.csp-additions]
+img-src = ["https://placehold.co"]
+
+[profiles]
+default = "standard"
+
+[profiles.minimal]
+description = "完全静的ドキュメント（JavaScriptゼロ出力）"
+components = []
+
+[profiles.standard]
+description = "標準モード（Markdown内のタグを自動検出して必要アセットのみ注入）"
+components = []
+
+[profiles.presentation]
+description = "プレゼンテーションモード（自動ズーム、手書きブラシを常時有効化）"
+components = ["mono-zoom", "mono-brush"]
+
+[profiles.interactive]
+description = "インタラクティブ講義モード（教育・セッション系コンポーネントパッケージを一括有効化）"
+components = ["@interactive"]
+
+[profiles.all]
+description = "フルモード（全コンポーネントを有効化）"
+components = ["*"]

@@ -1,0 +1,9 @@
+{
+  "name": "mono-reaction",
+  "description": "絵文字リアクションボタン",
+  "category": "interactive",
+  "is_web_component": true,
+  "interactive": true,
+  "always_include": false,
+  "requires_icons": false
+}

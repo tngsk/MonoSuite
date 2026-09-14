@@ -1,0 +1,10 @@
+{
+  "name": "mono-zoom",
+  "description": "クリックで要素を全画面モーダル拡大するプレゼンテーション機能",
+  "status": "active",
+  "category": "presentation",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": true
+}

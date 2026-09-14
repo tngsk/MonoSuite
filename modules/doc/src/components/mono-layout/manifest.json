@@ -1,0 +1,10 @@
+{
+  "name": "mono-layout",
+  "description": "水平（hbox）および垂直（vbox）フレックスボックス配置",
+  "status": "active",
+  "category": "layout",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": false
+}

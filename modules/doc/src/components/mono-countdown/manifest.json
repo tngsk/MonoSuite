@@ -1,0 +1,10 @@
+{
+  "name": "mono-countdown",
+  "description": "プレゼンテーション用カウントダウンタイマー（開発保留）",
+  "status": "frozen",
+  "category": "tool",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": false
+}

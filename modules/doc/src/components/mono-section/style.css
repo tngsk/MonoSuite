@@ -1,0 +1,57 @@
+:host {
+    display: block;
+    /* Span entire grid width */
+    --component-grid-column: 1 / -1;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+
+    overflow: hidden;
+    /* Default to base theme color if no color or image is specified */
+    background-color: var(--section-bg-color, var(--color-base-100, transparent));
+    background-image: var(--section-bg-image, none);
+    background-size: var(--section-bg-mode, cover);
+    background-position: center;
+    background-repeat: no-repeat;
+    /* Default to content color */
+    color: var(--section-text-color, var(--color-base-content, inherit));
+
+    /* Override global font color variable so light DOM elements (like h2) inherit it */
+    --font-color: var(--section-text-color, var(--color-base-content, inherit));
+    --font-color-light: var(--section-text-color, var(--color-base-content-muted, inherit));
+}
+
+:host([width="fit"]) {
+    --component-grid-column: 2;
+    border-radius: var(--radius-lg, 0.5rem);
+}
+
+.section-container {
+    width: 100%;
+    /* Allow custom height, default to auto */
+    min-height: var(--section-height, auto);
+    display: grid;
+    grid-template-columns: minmax(var(--body-padding-x, 2rem), 1fr) minmax(0, var(--content-max-width, 1792px)) minmax(
+            var(--body-padding-x, 2rem),
+            1fr
+        );
+    background-size: cover; /* Default */
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-top: var(--space-flow, var(--padding-lg));
+    padding-bottom: var(--space-flow, var(--padding-lg));
+    box-sizing: border-box;
+}
+
+.section-content {
+    grid-column: 2;
+    width: 100%;
+    z-index: 1;
+}
+
+@media print {
+    :host {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

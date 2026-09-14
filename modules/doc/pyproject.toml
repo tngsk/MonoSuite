@@ -1,0 +1,35 @@
+[project]
+name = "Mono"
+title = "Mono - Markdown to Monolithic Document"
+version = "2.0.0"
+description = "Markdownファイルを、画像（Base64）やCSSが埋め込まれた単一の自己完結型HTMLファイルに変換するCLIツールです。ローカルでの配布や共有に最適です。"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "aiofiles>=25.1.0",
+    "beautifulsoup4>=4.14.3",
+    "fastapi>=0.135.3",
+    "markdown>=3.10.2",
+    "pillow>=12.2.0",
+    "playwright>=1.58.0",
+    "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
+    "requests>=2.33.1",
+    "uvicorn>=0.44.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest-asyncio>=1.3.0",
+]
+
+[project.scripts]
+mono = "src.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]

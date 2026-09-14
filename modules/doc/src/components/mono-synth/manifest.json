@@ -1,0 +1,10 @@
+{
+  "name": "mono-synth",
+  "description": "Web Audio APIシンセサイザー音源（開発保留）",
+  "status": "frozen",
+  "category": "tool",
+  "is_web_component": true,
+  "interactive": true,
+  "always_include": false,
+  "requires_icons": false
+}

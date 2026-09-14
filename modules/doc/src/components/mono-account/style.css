@@ -1,0 +1,50 @@
+:host {
+    display: inline-block;
+    font-family: var(--font-family-base, sans-serif);
+}
+
+.mono-account-container {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: var(--padding-sm) var(--padding-md);
+    border: 0.0625rem solid var(--color-base-300, #d1d5db);
+    border-radius: var(--radius-md, 0.25rem);
+    background-color: var(--color-base-100, #fff);
+}
+
+.mono-account-status {
+    font-size: 0.9em;
+    color: var(--color-base-content, #333);
+}
+
+.mono-account-btn {
+    padding: var(--padding-xs, 0.25rem) var(--padding-sm);
+    border: none;
+    border-radius: var(--radius-sm, 0.125rem);
+    background-color: var(--color-primary, #007bff);
+    color: var(--color-primary-content, #fff);
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+.mono-account-btn:hover {
+    background-color: var(--color-primary-focus, #0056b3);
+}
+
+.mono-account-btn:disabled {
+    background-color: var(--color-base-300, #d1d5db);
+    cursor: not-allowed;
+}
+
+/* Print specific styles */
+@media print {
+    :host {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .account-container, .mono-account-container {
+        display: none !important;
+    }
+}

@@ -1,0 +1,39 @@
+:host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
+
+:host([display="block"]) {
+    display: flex;
+}
+
+:host([display="inline"]) {
+    display: inline-flex;
+}
+
+.material-symbols-outlined {
+    font-size: inherit;
+    color: inherit;
+    /* Prevent selection of the icon text itself */
+    user-select: none;
+    -webkit-user-select: none;
+    line-height: 1;
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+@media print {
+    .material-symbols-outlined {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}

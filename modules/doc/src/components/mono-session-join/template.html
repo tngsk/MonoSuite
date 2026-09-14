@@ -1,0 +1,20 @@
+<template id="mono-session-join-template">
+  <style>
+    {COMPONENTS_CSS}
+  </style>
+  <div class="mono-session-join-container">
+    <div id="join-view">
+      <div class="mono-session-join-title" id="join-title">セッション参加</div>
+      <div class="mono-session-join-form">
+        <input type="text" id="session-id-input" placeholder="セッションIDを入力 (英数字・ハイフン)" class="mono-session-input" />
+        <button id="join-btn" class="mono-session-btn">参加</button>
+      </div>
+      <div id="error-msg" class="mono-session-error" style="display: none;">無効な形式です</div>
+    </div>
+
+    <div id="joined-view" style="display: none;">
+      <div class="mono-session-join-title">参加済みセッション: <span id="current-session-id" class="mono-session-highlight"></span></div>
+      <button id="leave-btn" class="mono-session-btn-secondary">変更</button>
+    </div>
+  </div>
+</template>

@@ -1,0 +1,16 @@
+<!-- Mono Web Component Template: mono-export -->
+<template id="mono-export-template">
+    <style>
+        /* CSS is injected dynamically by the Python builder */
+        {COMPONENTS_CSS}
+    </style>
+    <div class="mono-export-container">
+        <button id="mono-export-fab" class="fab" title="Export Data">
+            <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        </button>
+        <div id="mono-export-menu" class="menu hidden">
+            <button id="mono-export-download">Download JSON</button>
+            <button id="mono-export-sync">Sync to Server</button>
+        </div>
+    </div>
+</template>

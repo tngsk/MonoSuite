@@ -1,0 +1,10 @@
+{
+  "name": "mono-sound",
+  "description": "効果音再生トリガー（開発保留）",
+  "status": "frozen",
+  "category": "tool",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": false
+}

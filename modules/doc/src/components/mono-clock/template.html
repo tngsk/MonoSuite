@@ -1,0 +1,15 @@
+<template id="mono-clock-template">
+    <style>
+        {COMPONENTS_CSS}
+    </style>
+    <div class="clock-display digital" part="clock"></div>
+    <div class="analog-clock hidden" part="analog-clock">
+        <svg viewBox="0 0 100 100" class="analog-svg">
+            <circle cx="50" cy="50" r="48" class="clock-face" />
+            <line x1="50" y1="50" x2="50" y2="25" class="hour-hand" />
+            <line x1="50" y1="50" x2="50" y2="15" class="minute-hand" />
+            <line x1="50" y1="50" x2="50" y2="10" class="second-hand" />
+            <circle cx="50" cy="50" r="3" class="center-dot" />
+        </svg>
+    </div>
+</template>

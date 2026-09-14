@@ -1,0 +1,10 @@
+{
+  "name": "mono-badge",
+  "description": "ステータスやカテゴリを示すインラインバッジ",
+  "status": "active",
+  "category": "presentation",
+  "is_web_component": true,
+  "interactive": false,
+  "always_include": false,
+  "requires_icons": false
+}

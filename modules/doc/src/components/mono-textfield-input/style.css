@@ -1,0 +1,63 @@
+.mono-textfield-container {
+  margin: 0;
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  max-width: 25rem;
+}
+.mono-textfield-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  color: var(--color-base-content, #333);
+}
+.mono-textfield {
+  padding: var(--padding-sm);
+  border: 0.0625rem solid var(--border-color, #d1d5db);
+  border-radius: var(--radius-md, 0.25rem);
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--color-base-100, #fff);
+  color: var(--color-base-content, #333);
+}
+.mono-textfield:focus {
+  outline: none;
+  border-color: var(--color-primary, #0066cc);
+  box-shadow: 0 0 0 0.125rem var(--color-primary-light, rgba(0, 102, 204, 0.2));
+}
+.status-indicator {
+  position: absolute;
+  right: 0.625rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  color: var(--color-success, #4CAF50);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.status-indicator.visible {
+  opacity: 1;
+}
+.status-indicator.error {
+  color: var(--color-error, #F44336);
+}
+
+/* Print specific styles */
+@media print {
+    :host {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    input[type="text"] {
+        display: none !important;
+    }
+    .textfield-container::after, .mono-textfield-container::after {
+        content: "___ (Text Input)";
+        color: var(--color-base-content-muted, #9ca3af);
+        display: inline-block;
+        padding: var(--padding-sm);
+    }
+}

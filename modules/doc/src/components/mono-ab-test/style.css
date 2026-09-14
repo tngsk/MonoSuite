@@ -1,0 +1,356 @@
+/* Web Components CSS for Mono: mono-ab-test */
+
+:host {
+    display: block;
+    height: 100%;
+    margin: 0;
+    font-family: var(--mono-font-family, system-ui, -apple-system, sans-serif);
+    outline: none;
+}
+
+:host(:focus-visible) .ab-test-wrapper,
+:host(:focus-within) .ab-test-wrapper {
+    border-color: var(--mono-primary-color, var(--color-primary));
+    box-shadow:
+        0 0 0 1px var(--mono-primary-color, var(--color-primary)),
+        inset 0 0 12px var(--color-primary-light, rgba(0, 255, 204, 0.1));
+}
+
+.ab-test-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
+    background: var(--mono-ab-bg, var(--color-base-100));
+    border-radius: var(--radius-lg, 0.5rem);
+    padding: var(--padding-md);
+    color: var(--mono-ab-text, var(--color-base-content));
+    box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));
+    border: 0.0625rem solid var(--mono-ab-border, var(--border-color));
+    overflow: hidden;
+    user-select: none; /* Prevent accidental text selection during fast clicks */
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
+}
+
+.status-led {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--color-base-300, #4b5563);
+    box-shadow: inset 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.5);
+    transition:
+        background 0.2s,
+        box-shadow 0.2s;
+}
+
+.status-led::after {
+    content: "READY";
+    position: absolute;
+    right: 0.875rem;
+    top: -0.1875rem;
+    font-size: 0.625rem;
+    color: var(--color-base-content-muted, #6b7280);
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+}
+
+:host(:focus-within) .status-led,
+:host(:focus-visible) .status-led {
+    background: var(--mono-primary-color, var(--color-primary));
+    box-shadow:
+        0 0 0.5rem var(--mono-primary-color, var(--color-primary)),
+        inset 0 0 0.125rem var(--color-base-100, #fff);
+}
+
+:host(:focus-within) .status-led::after,
+:host(:focus-visible) .status-led::after {
+    color: var(--mono-primary-color, var(--color-primary));
+    opacity: 1;
+}
+
+.ab-test-header {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--mono-ab-title, var(--color-base-content));
+    letter-spacing: 0.05em;
+    border-bottom: 0.0625rem solid var(--mono-ab-border, var(--border-color));
+    padding-bottom: 0.75rem;
+    padding-right: 4rem; /* Make room for LED */
+}
+
+.ab-test-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: var(--padding-sm);
+    background: var(--color-error, rgba(239, 68, 68, 0.1));
+    border: 0.0625rem solid var(--color-error, rgba(239, 68, 68, 0.3));
+    color: var(--color-error-content, #ef4444);
+    border-radius: var(--radius-md, 0.25rem);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+/* ============================================================================
+ * Controls Area
+ * ============================================================================ */
+
+.controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--mono-ab-controls-bg, var(--color-base-300));
+    padding: var(--padding-md);
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.transport-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.switch-group {
+    display: flex;
+    align-items: center;
+    background: var(--color-base-content, #111827);
+    padding: 0.25rem;
+    border-radius: var(--radius-md, 0.25rem);
+    box-shadow: inset 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.5);
+}
+
+.time-display {
+    font-family: monospace;
+    font-size: 0.9rem;
+    color: var(--color-base-content-muted, #9ca3af);
+    margin-left: 1rem;
+    min-width: 5.625rem;
+    text-align: center;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.1s step-end; /* Lab-gear snap transition */
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Transport Buttons (Play/Stop) */
+.btn-transport {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--color-base-200, #374151);
+    color: var(--color-base-content, #e5e7eb);
+    box-shadow: var(--shadow-sm, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+
+.btn-transport:hover:not(:disabled) {
+    background: var(--color-base-300, #4b5563);
+    color: var(--color-base-content, #ffffff);
+}
+
+.btn-transport:active:not(:disabled) {
+    transform: translateY(0.0625rem);
+    box-shadow: 0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
+}
+
+.btn-transport svg {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* Switch Buttons (A/B) */
+.btn-switch {
+    width: 3rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm, 0.125rem);
+    background: transparent;
+    color: var(--color-base-content-muted, #9ca3af);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.btn-switch.active {
+    background: var(--mono-primary-color, var(--color-primary));
+    color: var(--color-primary-content, #ffffff);
+    box-shadow: 0 0 0.625rem var(--color-primary-light, rgba(59, 130, 246, 0.4));
+}
+
+/* ============================================================================
+ * Progress Bar
+ * ============================================================================ */
+
+.progress-container {
+    width: 100%;
+    height: 0.5rem;
+    background: var(--color-base-300, #374151);
+    border-radius: var(--radius-sm, 0.125rem);
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--mono-primary-color, var(--color-primary));
+    border-radius: var(--radius-sm, 0.125rem);
+    transition: width 0.1s linear;
+}
+
+/* ============================================================================
+ * Evaluation Area
+ * ============================================================================ */
+
+.evaluation-container {
+    background: var(--color-base-200, rgba(0, 0, 0, 0.05));
+    border: 0.0625rem dashed var(--border-color, #d1d5db);
+    border-radius: var(--radius-md, 0.25rem);
+    padding: var(--padding-md);
+    text-align: center;
+    margin-top: auto;
+}
+
+.eval-prompt {
+    font-size: 0.95rem;
+    color: var(--color-base-content-muted, #d1d5db);
+    margin-bottom: 1rem;
+}
+
+.eval-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.btn-vote {
+    padding: var(--padding-sm) var(--padding-md);
+    background: var(--color-base-200, #374151);
+    color: var(--color-base-content, #f9fafb);
+    border-radius: var(--radius-sm, 0.125rem);
+    font-size: 1rem;
+    font-weight: 600;
+    min-width: 5rem;
+    border: 0.0625rem solid var(--border-color, #4b5563);
+}
+
+.btn-vote:hover:not(:disabled) {
+    background: var(--color-base-300, #4b5563);
+    border-color: var(--border-color, #6b7280);
+}
+
+.btn-vote:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.btn-vote.selected {
+    background: var(--mono-success-color, var(--color-success));
+    border-color: var(--mono-success-color, var(--color-success));
+    color: var(--color-success-content, #ffffff);
+}
+
+.btn-neutral {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-base-content-muted, #9ca3af);
+    background: transparent;
+    border-color: var(--border-color, #4b5563);
+}
+
+.voted-message {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: var(--mono-success-color, var(--color-success));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* ============================================================================
+ * Loading State
+ * ============================================================================ */
+
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-base-100, rgba(255, 255, 255, 0.9));
+    opacity: 0.9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    border-radius: var(--radius-lg, 0.5rem);
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+}
+
+.loading-overlay.is-loading {
+    opacity: 0.9;
+    visibility: visible;
+}
+
+.spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 0.1875rem solid var(--border-color, rgba(0, 0, 0, 0.1));
+    border-radius: 50%;
+    border-top-color: var(--mono-primary-color, var(--color-primary));
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Print specific styles */
+@media print {
+    :host {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    .ab-test-controls, .vote-results {
+        display: none !important;
+    }
+    .ab-test-container::after {
+        content: "⚖️ (A/B Test - Print View)";
+        display: block;
+        margin-top: 1rem;
+        text-align: center;
+        color: var(--color-base-content-muted, #6b7280);
+        font-style: italic;
+    }
+}
