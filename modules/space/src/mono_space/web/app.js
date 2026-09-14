@@ -498,7 +498,6 @@
     closeToc();
     nav.focus(id);
     renderNavigation();
-    setMenuCollapsed(true);
     move(focusCamera(id));
   }
   function focusId(id) {
@@ -512,7 +511,6 @@
     focusedElement = null;
     closeToc();
     nav.overview();
-    setMenuCollapsed(false);
     renderNavigation();
     if (!world.offsetWidth || !world.offsetHeight) {
       SpatialLayout.apply(world);
