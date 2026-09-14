@@ -247,3 +247,47 @@ def test_dev_server_threading_concurrent_sse_and_requests(tmp_path: Path):
     finally:
         server.stop()
 
+
+def test_space_overview_menu_recovery_after_focus(tmp_path: Path):
+    """スライドフォーカス後に全体表示へ戻した際、quietモードが解除されメニューが正常展開されることを検証"""
+    from playwright.sync_api import sync_playwright
+
+    out_dir = tmp_path / "output"
+    pipeline = BuildPipeline(STANDARD_DOC, out_dir, generate_pdf=False, offline=True)
+    target_dir = pipeline.run()
+
+    server = DevServer(target_dir, "document.md", port=8999)
+    server.start(block=False)
+
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1280, "height": 800})
+            page.goto(f"http://127.0.0.1:{server.port}/presentation.html")
+            page.wait_for_selector("#world")
+
+            # 1. 初期状態：quietはついていない
+            initial_quiet = page.evaluate("() => document.body.classList.contains('quiet')")
+            assert initial_quiet is False
+
+            # 2. スライドをクリックしてフォーカス：quietが付く
+            page.locator(".node").first.click()
+            page.wait_for_timeout(300)
+            focused_quiet = page.evaluate("() => document.body.classList.contains('quiet')")
+            assert focused_quiet is True
+
+            # 3. 全体表示（#overviewクリック）を実行：quietが解除されメニューが展開されること
+            page.evaluate("() => document.querySelector('#overview').click()")
+            page.wait_for_timeout(300)
+            after_all_quiet = page.evaluate("() => document.body.classList.contains('quiet')")
+            assert after_all_quiet is False
+
+            # ヘッダーのラベルが「キャンバス全体」に更新されていること
+            label = page.evaluate("() => document.querySelector('#label').textContent")
+            assert "キャンバス全体" in label
+
+            browser.close()
+    finally:
+        server.stop()
+
+
