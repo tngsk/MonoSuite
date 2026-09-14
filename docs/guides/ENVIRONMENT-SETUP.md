@@ -115,7 +115,32 @@ uv run mono-space modules/space/examples/standard/document.md -o dist/presentati
 uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/spec.html --pdf dist/spec.pdf
 ```
 
-## 5. トラブルシューティング
+## 5. VS Code タスク連携（エディター統合仕様）
+
+Mono Suite は、Visual Studio Code を用いた執筆・開発を円滑化するため、`.vscode/tasks.json` を標準の開発仕様として配備しています。エディター上でコマンドラインを手動入力することなく、ショートカットやコマンドパレットから各処理を直接呼び出すことができます。
+
+### 5.1 登録タスク一覧
+
+| タスク名 | コマンド | 種別 | 役割・用途 |
+|---|---|---|---|
+| MonoSuite: Build (Active File) | `uv run mono build "${file}"` | build (既定) | 開いているMarkdown原稿を一括ビルド（PDF含む完全配布セット生成） |
+| MonoSuite: Build Standard Example | `uv run mono build examples/standard/document.md` | build | 公式標準サンプル原稿の一括ビルド |
+| MonoSuite: Build Standard Example (No PDF) | `uv run mono build examples/standard/document.md --no-pdf` | build | PDF生成を省略した標準サンプルの高速プレビュービルド |
+| MonoSuite: Dev Server (Active File) | `uv run mono dev "${file}"` | バックグラウンド | 開いている原稿を対象に保存監視・リアルタイム開発サーバーを起動 |
+| MonoSuite: Dev Server Standard Example | `uv run mono dev examples/standard/document.md` | バックグラウンド | 標準サンプル原稿を対象に開発サーバーを起動 |
+| MonoSuite: Serve Output | `uv run mono serve dist/document/` | バックグラウンド | 生成された配布セットディレクトリの静的配信サーバーを起動 |
+| MonoSuite: Run Tests | `uv run pytest` | test | テストスイート（pytest）の一括実行 |
+
+### 5.2 操作方法
+
+1. 既定のビルド実行：
+   対象の原稿ファイルを開いた状態で、キーボードショートカット `Cmd+Shift+B`（macOS）または `Ctrl+Shift+B`（Windows/Linux）を押下すると、`MonoSuite: Build (Active File)` が直ちに実行されます。
+2. その他のタスク実行：
+   `Cmd+Shift+P`（macOS）または `Ctrl+Shift+P` から `Tasks: Run Task`（タスクの実行）を選択し、一覧から目的のタスク名を選択して実行します。
+3. npm / package.json 連携：
+   ルートの `package.json` にも同等のスクリプト（`npm run mono:build`、`npm run mono:dev` 等）が登録されており、VS Code のタスク検出機能や外部スクリプトランナーからも同一の操作系を利用できます。
+
+## 6. トラブルシューティング
 
 - `MODULE_NOT_FOUND`（MathJax関連）：ルートで `npm install` が完了しているか確認してください。
 - `NameError: name 'Dict' is not defined`：Python 3.11/3.12 環境下では `typing.Dict` の明示的インポートが必要です（適用済み）。

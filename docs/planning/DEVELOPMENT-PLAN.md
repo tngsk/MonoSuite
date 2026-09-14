@@ -9,7 +9,7 @@
 - Docは `modules/doc` に独立移行完了。Python 3.11〜3.14 でpytest 271件通過（5件スキップ）。mono-space および mono-doc の個別CLIが稼働中。
 - 段階B3（契約検証）が完了。[B3検証レポート](STAGE-B3-VERIFICATION-REPORT.md) および [共通契約仕様書](COMMON-CONTRACT-PROPOSAL.md) を確定。
 - 段階C（共通CLIおよび配布セット生成）が完了。統合CLI `mono build input.md`（src/mono_suite/）を実装し、同一入力版から発表用Space HTML、閲覧用Doc HTML、配布用Doc PDF、および build-manifest.json をアトミックに生成・公開。失敗時のロールバック保護と見出しID自動補完を実証して [段階Cリリース受入記録](STAGE-C-RELEASE-REPORT.md) を確定。
-- 段階D（制作環境の試用版）が完了。[段階Dリリース受入記録](STAGE-D-RELEASE-REPORT.md) を確定。mono dev による外部エディター保存監視と0.4秒台高速リビルド、Monoコンセプトに準拠した繊細でさりげない全画面統合シェルUI（Space/Doc純粋切り替え、位置同期は保留）、空きポート自動探索、完全ビルド実行中の保存スキップ排他制御、ワンクリック配布PDF書き出しAPI、および mono serve による完成配布セットの静的プレビュー配信を実装・整流化し、全356件のテスト通過を確認。
+- 段階D（制作環境の試用版）が完了。[段階Dリリース受入記録](STAGE-D-RELEASE-REPORT.md) を確定。mono dev による外部エディター保存監視と0.4秒台高速リビルド、Monoコンセプトに準拠した繊細でさりげない全画面統合シェルUI（Space/Doc純粋切り替え、位置同期は保留）、空きポート自動探索、完全ビルド実行中の保存スキップ排他制御、ワンクリック配布PDF書き出しAPI、mono serve による完成配布セットの静的プレビュー配信、ならびにエディター統合としてのVS Codeタスク構成（.vscode/tasks.json）を正式仕様として配備・整流化し、全356件のテスト通過を確認。
 - 次の目標は段階E（品質検証と実用化）。代表作例の整備、実践的原稿による網羅的検証、配布パッケージングの整備を進める。
 
 ## 1. 機能を加えるタイミング
