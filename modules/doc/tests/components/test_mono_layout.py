@@ -3,9 +3,11 @@ import importlib.util
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.insert(0, ROOT_DIR)
 
-spec = importlib.util.spec_from_file_location("mono_layout_parser", "src/components/mono-layout/parser.py")
+parser_path = os.path.join(ROOT_DIR, "src/components/mono-layout/parser.py")
+spec = importlib.util.spec_from_file_location("mono_layout_parser", parser_path)
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 Parser = module.Parser

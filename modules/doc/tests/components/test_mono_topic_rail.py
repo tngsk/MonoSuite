@@ -2,11 +2,13 @@ import sys
 import os
 import importlib.util
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.insert(0, ROOT_DIR)
 
 import pytest
 
-spec = importlib.util.spec_from_file_location("mono_topic_rail_parser", "src/components/mono-topic-rail/parser.py")
+parser_path = os.path.join(ROOT_DIR, "src/components/mono-topic-rail/parser.py")
+spec = importlib.util.spec_from_file_location("mono_topic_rail_parser", parser_path)
 mono_topic_rail_parser = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mono_topic_rail_parser)
 Parser = mono_topic_rail_parser.Parser

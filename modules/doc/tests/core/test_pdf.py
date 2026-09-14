@@ -26,17 +26,18 @@ def test_pdf_processor_export_html_to_pdf_no_playwright(tmp_path, monkeypatch):
     # アサーション（ImportErrorをキャッチしてFalseを返すはず）
     assert result is False
 
-def test_config_resolve_pdf_output_file():
+def test_config_resolve_pdf_output_file(tmp_path):
+    input_file = tmp_path / "test.md"
     config = ConversionConfig(
-        input_file=Path("test.md"),
+        input_file=input_file,
         output_file=None,
         css_files=None,
         pdf_output=True
     )
-    assert config.resolve_pdf_output_file() == Path("test.pdf")
+    assert config.resolve_pdf_output_file() == tmp_path / "test.pdf"
 
     config2 = ConversionConfig(
-        input_file=Path("test.md"),
+        input_file=input_file,
         output_file=None,
         css_files=None,
         pdf_output=Path("custom.pdf")
@@ -44,7 +45,7 @@ def test_config_resolve_pdf_output_file():
     assert config2.resolve_pdf_output_file() == Path("custom.pdf")
 
     config3 = ConversionConfig(
-        input_file=Path("test.md"),
+        input_file=input_file,
         output_file=None,
         css_files=None,
         pdf_output=None
@@ -53,7 +54,7 @@ def test_config_resolve_pdf_output_file():
 
 
 def test_base_css_print_styles():
-    css_path = Path("src/templates/core/base.css")
+    css_path = Path(__file__).resolve().parents[2] / "src/templates/core/base.css"
     content = css_path.read_text(encoding="utf-8")
     assert "@media print" in content
     assert "background-image: none !important;" in content
