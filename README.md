@@ -8,10 +8,11 @@
 
 ### Suite統合・設計（正本）
 - [Suite開発計画](docs/planning/DEVELOPMENT-PLAN.md)：段階B〜Fのロードマップと完了条件
-- [共通契約案（段階B1）](docs/planning/COMMON-CONTRACT-PROPOSAL.md)：本文・素材・数式・比較等の対応表案と診断規則
+- [共通契約仕様書（段階B3確定）](docs/planning/COMMON-CONTRACT-PROPOSAL.md)：本文・素材・数式・比較等の確定対応表と診断規則
+- [段階B3契約検証レポート](docs/planning/STAGE-B3-VERIFICATION-REPORT.md)：位置マッピング、診断差分、互換性の実証結果と合格判定
+- [Doc独立移行受入記録（段階B2）](docs/planning/STAGE-B2-MIGRATION-REPORT.md)：移行元コミット、検証結果、受入判定
 - [開発・リリース方針](docs/planning/RELEASE-STRATEGY.md)：製品位置づけ、モジュール責務、受入判定基準
 - [Doc仕様レビュー](docs/planning/MONO-DOC-INTEGRATION.md)：Doc統合前の照合候補と未決事項
-- [Doc独立移行受入記録（段階B2）](docs/planning/STAGE-B2-MIGRATION-REPORT.md)：移行元コミット、検証結果、受入判定
 - [環境セットアップガイド](docs/guides/ENVIRONMENT-SETUP.md)：Python・Node依存同期とテスト実行手順
 - [調査対象の訂正記録](docs/planning/INVESTIGATION-CORRECTION.md)：以前の調査誤認に関する経緯記録
 
@@ -59,4 +60,11 @@ uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/doc-spec.html --pdf dis
 
 生成されたHTMLやPDFはブラウザやPDFビューアで直接開いて確認できます。
 
+## テスト・契約検証
 
+```sh
+# 段階B3 統合契約検証テストスイート（全7件）
+uv run pytest tests/test_stage_b3_contract.py -v
+
+# モジュール個別テストの実行手順は 環境セットアップガイド を参照してください。
+```

@@ -1,16 +1,14 @@
 # Mono Suite 実装順序と事前設計
 
-更新日：2026-09-14。A完了、B未着手。現在の調査対象はMonoSuite内の実装と文書。
+更新日：2026-09-14。A完了、B（B1, B2, B3）完了、C着手準備完了。現在の調査対象はMonoSuite内の実装と文書。
 
 ## 現在地と確定した前提
 
 - Spaceは `modules/space` に実装済み。基準コミット `a7cc6be` とローカルタグ `v0.1.0` を保存し、その後のファイル整理・検証修正・文書整備をコミット済み。
 - Spaceの本体は `src/mono_space/`、テストは `tests/`、作例は `examples/`、文書は `docs/`、生成物は `dist/`。Python 54件・Node 13件・Chromiumブラウザ回帰8項目が成功。通常・数式の生成も確認済み。
-- このリポジトリにDoc・Lib・Suite制作UIはない。Docは別プロジェクトから `modules/doc` へ独立移行する。新規エンジンへの置き換えは計画しない。
-- 移行対象Docの既存CLI・Playwright PDFを維持する。初期はDocとSpaceの解析器を別々に保つ。
-- 移行対象の場所・版と、参照仕様書との対応は未確認。以前の別プログラムの実行結果はDocの検証に使わない。[調査訂正記録](INVESTIGATION-CORRECTION.md)は経緯の記録であり、開発順序は本書を正とする。
-
-中心目標は、同じ原稿からSpaceで発表し、DocのHTML・PDFを配布できること。既存エンジンを維持したまま、原稿の二重管理と新しい記法を増やさず実現する。
+- Docは `modules/doc` に独立移行完了。Python 3.11〜3.14 でpytest 271件通過（5件スキップ）。mono-space および mono-doc の統一CLIが稼働中。
+- 段階B3（契約検証）が完了。統合契約テスト（`tests/test_stage_b3_contract.py`）全7件が通過し、位置マッピング（明示ID一致および暗黙ID連番対応）、診断差分、ディレクティブ互換性を実証して [B3検証レポート](STAGE-B3-VERIFICATION-REPORT.md) および [共通契約仕様書](COMMON-CONTRACT-PROPOSAL.md) を確定。
+- 次の目標は段階C（共通CLIおよび配布セット生成）。同じ原稿からSpaceで発表し、DocのHTML・PDFを配布できるアトミック生成処理を実装する。
 
 ## 1. 機能を加えるタイミング
 
