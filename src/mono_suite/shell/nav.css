@@ -61,59 +61,81 @@
 }
 
 .mono-nav-group {
-  display: inline-flex;
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  border-radius: 9999px;
-  padding: 2px;
-  gap: 2px;
+  display: inline-flex !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  border-radius: 9999px !important;
+  padding: 2px !important;
+  gap: 2px !important;
 }
 
+#mono-floating-nav a.mono-nav-btn,
 .mono-nav-btn {
-  display: inline-block;
-  color: #a1a1aa;
-  text-decoration: none;
-  padding: 3px 10px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 400;
-  transition: all 0.15s ease;
-  line-height: 1.2;
+  display: inline-block !important;
+  color: #a1a1aa !important;
+  text-decoration: none !important;
+  border: none !important;
+  border-bottom: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  padding: 3px 10px !important;
+  border-radius: 9999px !important;
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  transition: all 0.15s ease !important;
+  line-height: 1.2 !important;
 }
 
+#mono-floating-nav a.mono-nav-btn:hover,
 .mono-nav-btn:hover {
-  color: #f4f4f5;
-  background: rgba(255, 255, 255, 0.08);
+  color: #f4f4f5 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: none !important;
+  border-bottom: none !important;
+  text-decoration: none !important;
 }
 
+#mono-floating-nav a.mono-nav-btn.active,
 .mono-nav-btn.active {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.18);
-  font-weight: 500;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  font-weight: 500 !important;
+  border: none !important;
+  border-bottom: none !important;
+  text-decoration: none !important;
 }
 
 .mono-nav-right {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
 }
 
+#mono-floating-nav .mono-nav-export-btn,
 .mono-nav-export-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: none;
-  border-radius: 9999px;
-  color: #a1a1aa;
-  padding: 3px 10px;
-  font-size: 10px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  line-height: 1.2;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: none !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border-radius: 9999px !important;
+  color: #a1a1aa !important;
+  padding: 3px 10px !important;
+  font-size: 10px !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+  line-height: 1.2 !important;
 }
 
+#mono-floating-nav .mono-nav-export-btn:hover:not(:disabled),
 .mono-nav-export-btn:hover:not(:disabled) {
-  color: #f4f4f5;
-  background: rgba(255, 255, 255, 0.16);
+  color: #f4f4f5 !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  border: none !important;
+  border-bottom: none !important;
 }
 
 .mono-nav-export-btn:disabled {
