@@ -94,10 +94,17 @@ uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/doc-spec.html --pdf dis
 
 生成されたHTMLやPDFはブラウザやPDFビューアで直接開いて確認できます。
 
+### Visual Studio Code での利用
+
+リポジトリ直下の `.vscode/tasks.json` により、エディターから直接ビルドやプレビューを起動できます。
+
+- 既定のビルド：原稿ファイルを開いた状態で `Cmd+Shift+B`（macOS）または `Ctrl+Shift+B`（Windows/Linux）を押下すると、アクティブ原稿の完全配布セットが一括生成されます。
+- プレビュー起動：`Cmd+Shift+P` > `Tasks: Run Task` から `MonoSuite: Dev Server (Active File)` を選択すると、リアルタイム制作サーバーがバックグラウンドで起動します。
+
 ## テスト・契約検証
 
 ```sh
-# 段階D 制作環境統合テストスイート（全4件）
+# 段階D 制作環境統合テストスイート（全6件）
 uv run pytest tests/test_stage_d_authoring.py -v
 
 # 段階C 配布パイプライン回帰テストスイート（全5件）
