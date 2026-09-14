@@ -12,6 +12,7 @@
 - [開発・リリース方針](docs/planning/RELEASE-STRATEGY.md)：製品位置づけ、モジュール責務、受入判定基準
 - [Doc仕様レビュー](docs/planning/MONO-DOC-INTEGRATION.md)：Doc統合前の照合候補と未決事項
 - [Doc独立移行受入記録（段階B2）](docs/planning/STAGE-B2-MIGRATION-REPORT.md)：移行元コミット、検証結果、受入判定
+- [環境セットアップガイド](docs/guides/ENVIRONMENT-SETUP.md)：Python・Node依存同期とテスト実行手順
 - [調査対象の訂正記録](docs/planning/INVESTIGATION-CORRECTION.md)：以前の調査誤認に関する経緯記録
 
 ### モジュール
