@@ -39,8 +39,11 @@ def test_server_endpoints_and_shell_ui(tmp_path: Path):
         # 2. 静的CSSおよびJS
         with urllib.request.urlopen(f"{base_url}/shell/style.css") as res:
             assert res.status == 200
+            assert "no-cache" in res.headers.get("Cache-Control", "")
             css_content = res.read().decode("utf-8")
             assert "header-height" in css_content
+            assert "position: fixed" in css_content
+            assert "z-index: 9999" in css_content
             assert "visibility: hidden" in css_content
             assert "pointer-events: none" in css_content
 

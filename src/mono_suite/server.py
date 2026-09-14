@@ -3,6 +3,7 @@ import mimetypes
 import queue
 import sys
 import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Callable
@@ -64,8 +65,16 @@ def create_handler(
 
                 html = (SHELL_DIR / "index.html").read_text(encoding="utf-8")
                 html = html.replace("document.md", source_name)
+                ts = str(int(time.time() * 1000))
+                html = html.replace('/shell/style.css', f'/shell/style.css?t={ts}')
+                html = html.replace('/shell/sync.js', f'/shell/sync.js?t={ts}')
+                html = html.replace('src="/space"', f'src="/space?t={ts}"')
+                html = html.replace('src="/doc"', f'src="/doc?t={ts}"')
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+                self.send_header("Pragma", "no-cache")
+                self.send_header("Expires", "0")
                 self.end_headers()
                 self.wfile.write(html.encode("utf-8"))
                 return
@@ -74,6 +83,9 @@ def create_handler(
                 css = (SHELL_DIR / "style.css").read_text(encoding="utf-8")
                 self.send_response(200)
                 self.send_header("Content-Type", "text/css; charset=utf-8")
+                self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+                self.send_header("Pragma", "no-cache")
+                self.send_header("Expires", "0")
                 self.end_headers()
                 self.wfile.write(css.encode("utf-8"))
                 return
@@ -82,6 +94,9 @@ def create_handler(
                 js = (SHELL_DIR / "sync.js").read_text(encoding="utf-8")
                 self.send_response(200)
                 self.send_header("Content-Type", "application/javascript; charset=utf-8")
+                self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+                self.send_header("Pragma", "no-cache")
+                self.send_header("Expires", "0")
                 self.end_headers()
                 self.wfile.write(js.encode("utf-8"))
                 return
@@ -157,6 +172,9 @@ def create_handler(
             self.send_response(200)
             self.send_header("Content-Type", content_type)
             self.send_header("Content-Length", str(len(content)))
+            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
             self.end_headers()
             self.wfile.write(content)
 
