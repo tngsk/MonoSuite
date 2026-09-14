@@ -47,12 +47,12 @@
  select('compare');
  assert(win.getComputedStyle(doc.querySelector('[data-id="maker"] > .content')).opacity==='1','Subtree child faded');
  results.push('PASS: 25% context and nested focus visibility');
- win.dispatchEvent(new win.KeyboardEvent('keydown',{key:'0',bubbles:true}));assert(picker.dataset.selected==='','0 key failed');
- win.dispatchEvent(new win.KeyboardEvent('keydown',{key:'1',bubbles:true}));assert(picker.dataset.selected===data.route[0],'1 key failed');
+ viewport.dispatchEvent(new win.KeyboardEvent('keydown',{key:'0',bubbles:true}));assert(picker.dataset.selected==='','0 key failed');
+ viewport.dispatchEvent(new win.KeyboardEvent('keydown',{key:'1',bubbles:true}));assert(picker.dataset.selected===data.route[0],'1 key failed');
  const transform=world.style.transform;
  viewport.dispatchEvent(new win.WheelEvent('wheel',{deltaY:60,bubbles:true,cancelable:true}));
  assert(picker.dataset.selected==='','Free exploration left stale picker');assert(!doc.querySelector('.context-muted'),'Exploration did not restore opacity');assert(world.style.transform!==transform,'Wheel pan failed');
- win.dispatchEvent(new win.KeyboardEvent('keydown',{key:'o'}));assert(doc.querySelector('#status').textContent==='全体','Overview failed');
+ viewport.dispatchEvent(new win.KeyboardEvent('keydown',{key:'o',bubbles:true}));assert(doc.querySelector('#status').textContent==='全体','Overview failed');
  results.push('PASS: 0 key, free mode, overview');
  assert([...doc.images].every(i=>i.complete&&i.naturalWidth>0),'Image decoding failed');
  select('image-close');const img=doc.querySelector('[data-id="image-close"] img').getBoundingClientRect();
