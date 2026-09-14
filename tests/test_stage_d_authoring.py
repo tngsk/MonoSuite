@@ -266,17 +266,17 @@ def test_space_overview_menu_recovery_after_focus(tmp_path: Path):
             page.goto(f"http://127.0.0.1:{server.port}/presentation.html")
             page.wait_for_selector("#world")
 
-            # 1. 初期状態：quietはついていない
+            # 1. 初期状態：メニューは常時表示（quietは付かない）
             initial_quiet = page.evaluate("() => document.body.classList.contains('quiet')")
             assert initial_quiet is False
 
-            # 2. スライドをクリックしてフォーカス：quietが付く
+            # 2. スライドをクリックしてフォーカス：メニューは消さずに常時表示を維持
             page.locator(".node").first.click()
             page.wait_for_timeout(300)
             focused_quiet = page.evaluate("() => document.body.classList.contains('quiet')")
-            assert focused_quiet is True
+            assert focused_quiet is False
 
-            # 3. 全体表示（#overviewクリック）を実行：quietが解除されメニューが展開されること
+            # 3. 全体表示（#overviewクリック）を実行：メニューは常時表示のまま維持
             page.evaluate("() => document.querySelector('#overview').click()")
             page.wait_for_timeout(300)
             after_all_quiet = page.evaluate("() => document.body.classList.contains('quiet')")
