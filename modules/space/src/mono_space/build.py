@@ -59,3 +59,7 @@ def main():
     except (ValueError, OSError) as error:
         cli.exit(1, f'生成エラー: {error}\n')
     print(f'{args.output}: {len(result["nodes"])} nodes, {len(result["edges"])} connections')
+
+
+if __name__ == '__main__':
+    main()
