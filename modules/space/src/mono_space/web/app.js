@@ -370,9 +370,11 @@
     paint();
   }
   function fit(box, close = false) {
+    const w = viewport.clientWidth || window.innerWidth;
+    const h = viewport.clientHeight || window.innerHeight;
     return fitCamera(
       box,
-      { w: viewport.clientWidth, h: viewport.clientHeight },
+      { w: Math.max(1, w), h: Math.max(1, h) },
       close,
     );
   }
@@ -644,6 +646,7 @@
   window.addEventListener("resize", () => {
     clearTimeout(resize);
     resize = setTimeout(() => {
+      if (!viewport || !viewport.clientWidth || !viewport.clientHeight) return;
       SpatialLayout.apply(world);
       draw();
       drawMap();

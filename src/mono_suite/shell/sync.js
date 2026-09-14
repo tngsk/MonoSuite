@@ -16,6 +16,8 @@
     if (target === currentView) return;
     currentView = target;
 
+    const activeFrame = target === "space" ? frameSpace : frameDoc;
+
     if (target === "space") {
       frameDoc.className = "view-frame hidden";
       frameSpace.className = "view-frame active";
@@ -27,6 +29,13 @@
       btnSpace.classList.remove("active");
       btnDoc.classList.add("active");
     }
+
+    // 表示切り替え直後にフレーム内部のレイアウトとカメラを確実に再計算
+    requestAnimationFrame(() => {
+      try {
+        activeFrame.contentWindow?.dispatchEvent(new Event("resize"));
+      } catch (e) {}
+    });
   }
 
   btnSpace.onclick = () => switchView("space");
