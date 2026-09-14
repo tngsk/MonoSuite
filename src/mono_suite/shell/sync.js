@@ -31,12 +31,19 @@
     }
 
     // 表示切り替え直後にフレーム内部のレイアウトとカメラを確実に再計算
+    window.scrollTo(0, 0);
     requestAnimationFrame(() => {
       try {
         activeFrame.contentWindow?.dispatchEvent(new Event("resize"));
       } catch (e) {}
     });
   }
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollX !== 0 || window.scrollY !== 0) {
+      window.scrollTo(0, 0);
+    }
+  });
 
   btnSpace.onclick = () => switchView("space");
   btnDoc.onclick = () => switchView("doc");

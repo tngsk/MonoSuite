@@ -31,6 +31,10 @@ body, html {
 }
 
 #header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: var(--header-height);
   background-color: var(--bg-header);
   border-bottom: 1px solid var(--border-hairline);
@@ -39,6 +43,7 @@ body, html {
   justify-content: space-between;
   padding: 0 14px;
   user-select: none;
+  z-index: 9999;
 }
 
 .header-left {
@@ -159,9 +164,11 @@ body, html {
 }
 
 #viewport {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
   width: 100%;
   height: calc(100% - var(--header-height));
-  position: relative;
   background-color: var(--bg-app);
 }
 

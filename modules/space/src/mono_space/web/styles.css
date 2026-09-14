@@ -381,8 +381,8 @@ header {
   font: 11px monospace;
 }
 .quiet .hud {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .hint {
@@ -680,7 +680,7 @@ header {
 .node[data-level="2"] > .content > h2 { font-size:var(--chapter-size); }
 .node p { font-size:var(--body-size); line-height:var(--body-leading); }
 .top-actions { right:64px; }
-.quiet .hud,.quiet .hud:focus-within { opacity:0; pointer-events:none; }
+.quiet .hud,.quiet .hud:focus-within { opacity:1; pointer-events:auto; }
 .node > .content > h2,.node > .content > div > :not(.markdown-table) { width:100%; max-width:100%; box-sizing:border-box; }
 .node > .content > div > p,.node > .content > div > .markdown-list,.node > .content > div > .markdown-quote { max-width:var(--node-width,512px); }
 .image-gallery { display:grid; grid-template-columns:repeat(var(--columns),minmax(0,1fr)); gap:32px; margin:24px 0; }
