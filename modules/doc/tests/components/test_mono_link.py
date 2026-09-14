@@ -2,9 +2,11 @@ import sys
 import os
 import importlib.util
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.insert(0, ROOT_DIR)
 
-spec = importlib.util.spec_from_file_location("mono_link_parser", "src/components/mono-link/parser.py")
+parser_path = os.path.join(ROOT_DIR, "src/components/mono-link/parser.py")
+spec = importlib.util.spec_from_file_location("mono_link_parser", parser_path)
 mono_link_parser = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mono_link_parser)
 Parser = mono_link_parser.Parser
@@ -185,8 +187,8 @@ def test_ogp_cache_ttl_stale_fallback_on_network_error(tmp_path, monkeypatch):
 
 def test_mono_link_placeholder_template_and_style():
     from pathlib import Path
-    template_path = Path("src/components/mono-link/template.html")
-    style_path = Path("src/components/mono-link/style.css")
+    template_path = Path(ROOT_DIR) / "src/components/mono-link/template.html"
+    style_path = Path(ROOT_DIR) / "src/components/mono-link/style.css"
 
     template_content = template_path.read_text(encoding="utf-8")
     style_content = style_path.read_text(encoding="utf-8")

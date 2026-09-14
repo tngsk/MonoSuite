@@ -5,9 +5,11 @@ import logging
 from src.converter import MarkdownToHTMLConverter
 from src.config import ConversionConfig
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.insert(0, ROOT_DIR)
 
-spec = importlib.util.spec_from_file_location("mono_connector_parser", "src/components/mono-connector/parser.py")
+parser_path = os.path.join(ROOT_DIR, "src/components/mono-connector/parser.py")
+spec = importlib.util.spec_from_file_location("mono_connector_parser", parser_path)
 mono_connector_parser = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mono_connector_parser)
 Parser = mono_connector_parser.Parser

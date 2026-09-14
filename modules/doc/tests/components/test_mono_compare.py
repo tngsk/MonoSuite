@@ -2,9 +2,11 @@ import sys
 import os
 import importlib.util
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+sys.path.insert(0, ROOT_DIR)
 
-spec = importlib.util.spec_from_file_location("mono_compare_parser", "src/components/mono-compare/parser.py")
+parser_path = os.path.join(ROOT_DIR, "src/components/mono-compare/parser.py")
+spec = importlib.util.spec_from_file_location("mono_compare_parser", parser_path)
 mono_compare_parser = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(mono_compare_parser)
 Parser = mono_compare_parser.Parser
