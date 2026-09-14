@@ -1,0 +1,57 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "MonoSuite: Build (Active File)",
+      "type": "shell",
+      "command": "uv run mono build \"${file}\"",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "MonoSuite: Build Standard Example",
+      "type": "shell",
+      "command": "uv run mono build examples/standard/document.md",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "MonoSuite: Build Standard Example (No PDF)",
+      "type": "shell",
+      "command": "uv run mono build examples/standard/document.md --no-pdf",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "MonoSuite: Dev Server (Active File)",
+      "type": "shell",
+      "command": "uv run mono dev \"${file}\"",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "MonoSuite: Dev Server Standard Example",
+      "type": "shell",
+      "command": "uv run mono dev examples/standard/document.md",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "MonoSuite: Serve Output",
+      "type": "shell",
+      "command": "uv run mono serve dist/document/",
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "MonoSuite: Run Tests",
+      "type": "shell",
+      "command": "uv run pytest",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}
