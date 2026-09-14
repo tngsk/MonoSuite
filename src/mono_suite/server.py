@@ -51,36 +51,61 @@ def create_handler(
             # デバッグログの過剰出力を抑止
             pass
 
+        def _inject_nav(self, html: str, active_view: str) -> str:
+            nav_template = (SHELL_DIR / "nav.html").read_text(encoding="utf-8")
+            nav_css = (SHELL_DIR / "nav.css").read_text(encoding="utf-8")
+            nav_js = (SHELL_DIR / "nav.js").read_text(encoding="utf-8")
+
+            nav_html = nav_template.replace("__SOURCE_NAME__", source_name)
+            nav_html = nav_html.replace("__ACTIVE_SPACE__", "active" if active_view == "space" else "")
+            nav_html = nav_html.replace("__ACTIVE_DOC__", "active" if active_view == "doc" else "")
+            if not on_full_build:
+                nav_html = nav_html.replace('id="mono-export-btn"', 'id="mono-export-btn" style="display:none;"')
+
+            snippet = f"<style>\n{nav_css}\n</style>\n{nav_html}\n<script>\n{nav_js}\n</script>"
+
+            if "</body>" in html:
+                return html.replace("</body>", f"{snippet}\n</body>", 1)
+            return html + f"\n{snippet}"
+
+        def _serve_view(self, file_path: Path, active_view: str):
+            if not file_path.exists():
+                self.send_error(404, f"File not found: {file_path.name}")
+                return
+            html = file_path.read_text(encoding="utf-8")
+            html = self._inject_nav(html, active_view)
+            content = html.encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(content)))
+            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+            self.end_headers()
+            self.wfile.write(content)
+
         def do_GET(self):
             parsed = urlparse(self.path)
             path = parsed.path
 
             if path == "/":
-                # 配布ディレクトリ直接プレビュー（serve）かつ presentation.html のみ存在する場合はリダイレクト
-                if not broadcaster and (target_dir / "presentation.html").exists():
-                    self.send_response(302)
-                    self.send_header("Location", "/presentation.html")
-                    self.end_headers()
-                    return
-
-                html = (SHELL_DIR / "index.html").read_text(encoding="utf-8")
-                html = html.replace("document.md", source_name)
-                ts = str(int(time.time() * 1000))
-                html = html.replace('/shell/style.css', f'/shell/style.css?t={ts}')
-                html = html.replace('/shell/sync.js', f'/shell/sync.js?t={ts}')
-                html = html.replace('src="/space"', f'src="/space?t={ts}"')
-                html = html.replace('src="/doc"', f'src="/doc?t={ts}"')
-                self.send_response(200)
-                self.send_header("Content-Type", "text/html; charset=utf-8")
+                default_target = "/space" if (target_dir / "presentation.html").exists() else "/doc"
+                self.send_response(302)
+                self.send_header("Location", default_target)
                 self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
-                self.send_header("Pragma", "no-cache")
-                self.send_header("Expires", "0")
                 self.end_headers()
-                self.wfile.write(html.encode("utf-8"))
                 return
 
-            if path == "/shell/style.css":
-                css = (SHELL_DIR / "style.css").read_text(encoding="utf-8")
+            if path in ("/space", "/presentation.html"):
+                self._serve_view(target_dir / "presentation.html", "space")
+                return
+
+            if path in ("/doc", "/document.html"):
+                self._serve_view(target_dir / "document.html", "doc")
+                return
+
+            if path in ("/shell/nav.css", "/shell/style.css"):
+                css = (SHELL_DIR / "nav.css").read_text(encoding="utf-8")
                 self.send_response(200)
                 self.send_header("Content-Type", "text/css; charset=utf-8")
                 self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -90,8 +115,8 @@ def create_handler(
                 self.wfile.write(css.encode("utf-8"))
                 return
 
-            if path == "/shell/sync.js":
-                js = (SHELL_DIR / "sync.js").read_text(encoding="utf-8")
+            if path in ("/shell/nav.js", "/shell/sync.js"):
+                js = (SHELL_DIR / "nav.js").read_text(encoding="utf-8")
                 self.send_response(200)
                 self.send_header("Content-Type", "application/javascript; charset=utf-8")
                 self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -99,16 +124,6 @@ def create_handler(
                 self.send_header("Expires", "0")
                 self.end_headers()
                 self.wfile.write(js.encode("utf-8"))
-                return
-
-            if path == "/space":
-                file_path = target_dir / "presentation.html"
-                self._serve_file(file_path, "text/html; charset=utf-8")
-                return
-
-            if path == "/doc":
-                file_path = target_dir / "document.html"
-                self._serve_file(file_path, "text/html; charset=utf-8")
                 return
 
             if path == "/manifest":

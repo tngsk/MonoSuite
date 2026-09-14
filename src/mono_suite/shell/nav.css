@@ -1,0 +1,147 @@
+#mono-floating-nav {
+  position: fixed !important;
+  top: 12px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  z-index: 99999 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 4px 12px 4px 14px !important;
+  margin: 0 !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  max-width: none !important;
+  white-space: nowrap !important;
+  grid-column: auto !important;
+  container-type: normal !important;
+  background: rgba(13, 13, 16, 0.9) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  font-size: 11px !important;
+  color: #f4f4f5 !important;
+  user-select: none !important;
+  pointer-events: auto !important;
+  line-height: 1 !important;
+}
+
+.mono-nav-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mono-nav-brand {
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #f4f4f5;
+}
+
+.mono-nav-sep {
+  color: #52525b;
+}
+
+.mono-nav-filename {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  color: #a1a1aa;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mono-nav-center {
+  display: inline-flex;
+  align-items: center;
+}
+
+.mono-nav-group {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mono-nav-btn {
+  display: inline-block;
+  color: #a1a1aa;
+  text-decoration: none;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 400;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+
+.mono-nav-btn:hover {
+  color: #f4f4f5;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mono-nav-btn.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.18);
+  font-weight: 500;
+}
+
+.mono-nav-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mono-nav-export-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  color: #a1a1aa;
+  padding: 3px 9px;
+  font-size: 10px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+
+.mono-nav-export-btn:hover:not(:disabled) {
+  color: #f4f4f5;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mono-nav-export-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.mono-nav-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #52525b;
+  display: inline-block;
+  transition: background-color 0.2s ease;
+}
+
+.mono-nav-dot.connected {
+  background-color: #10b981;
+}
+
+.mono-nav-dot.syncing {
+  background-color: #f59e0b;
+  animation: mono-subtle-pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes mono-subtle-pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
