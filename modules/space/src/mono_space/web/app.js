@@ -401,6 +401,14 @@
     if (nav.mode === "focus") {
       state.camera = focusCamera(nav.selectedId);
       paint();
+    } else if (nav.mode === "overview") {
+      state.camera = fit({
+        x: 0,
+        y: 0,
+        w: Math.max(100, world.offsetWidth),
+        h: Math.max(100, world.offsetHeight),
+      });
+      paint();
     }
   }
   motionToggle.addEventListener("change", syncMotion);
@@ -504,8 +512,16 @@
     focusedElement = null;
     closeToc();
     nav.overview();
+    setMenuCollapsed(false);
     renderNavigation();
-    move(fit({ x: 0, y: 0, w: world.offsetWidth, h: world.offsetHeight }));
+    if (!world.offsetWidth || !world.offsetHeight) {
+      SpatialLayout.apply(world);
+      draw();
+      drawMap();
+    }
+    const w = Math.max(100, world.offsetWidth);
+    const h = Math.max(100, world.offsetHeight);
+    move(fit({ x: 0, y: 0, w, h }));
   }
   function toggleOverview() {
     nav.mode === "overview" ? show(nav.selectedId) : all();
