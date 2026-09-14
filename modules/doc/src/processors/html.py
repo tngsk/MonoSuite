@@ -10,7 +10,7 @@ import logging
 import re
 from pathlib import Path
 from html.parser import HTMLParser
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from src.config import ConversionError
 from src.constants import (
