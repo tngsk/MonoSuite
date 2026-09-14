@@ -1,5 +1,5 @@
 import unittest
-from build import parse
+from mono_space.build import parse
 
 class Tables(unittest.TestCase):
     def render(self, text):

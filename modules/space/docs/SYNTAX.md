@@ -1,6 +1,6 @@
 # Mono Space Markdown 記法ガイド
 
-更新日：2026-09-10。操作と表示仕様は [README](README.md)、開発状況は [DEVELOPMENT](DEVELOPMENT.md) を参照してください。
+更新日：2026-09-10。操作と表示仕様は [README](../README.md)、開発状況は [DEVELOPMENT](DEVELOPMENT.md) を参照してください。
 
 現在のエンジンで使える記法の一覧です。標準Markdownの一部と、Mono Space専用の `::` 指定に対応します。既存Monoの `@[…]` コンポーネントとは別の記法です。Mono文書は `--from mono` で限定的に変換できます（末尾参照）。
 
@@ -23,7 +23,7 @@
 
 通常モードでは `#` は文書タイトル、`##` は横に並ぶ章、`###` は章内で縦に並ぶ話題、`####` 以下は本文内の小見出しです。`::layout` の指定は不要です。段落は空行で区切ります。連続する画像は最大3列で自動表示します。
 
-`::layout` はその場所の子見出し配置だけを変えます。直下の見出しはH4以降でも配置要素になります。幅・段落処理は全ての文書で共通で、互換モードはありません。[document.md](examples/standard/document.md) は配置指定なしの例です。
+`::layout` はその場所の子見出し配置だけを変えます。直下の見出しはH4以降でも配置要素になります。幅・段落処理は全ての文書で共通で、互換モードはありません。[document.md](../examples/standard/document.md) は配置指定なしの例です。
 
 ## 2. 早見表
 
@@ -181,7 +181,7 @@ HTTPの画像URL、SVG、画像サイズやトリミングを指定するMarkdow
 
 ## 10. 寸法と未対応の記法
 
-最上位の導入直下の章は、レイアウト指定にかかわらず横並びになります。章幅は600pxをグリッド単位に切り上げた値（既定では608px）以上で、内容に応じて広がります。同じキャンバス内では最も高い章に高さをそろえます。章間の間隔は既定で128pxです。寸法は `src/layout.js` のグリッド・本文幅・余白密度から決まります。
+最上位の導入直下の章は、レイアウト指定にかかわらず横並びになります。章幅は600pxをグリッド単位に切り上げた値（既定では608px）以上で、内容に応じて広がります。同じキャンバス内では最も高い章に高さをそろえます。章間の間隔は既定で128pxです。寸法は `src/mono_space/web/layout.js` のグリッド・本文幅・余白密度から決まります。
 
 座標、幅、高さ、余白、フォントサイズをMarkdownから直接指定する記法はありません。これらはエンジンのデザイン設定で管理します。
 
@@ -201,7 +201,7 @@ HTMLコメントも非表示コメントにはならず、本文に表示され�
 `spatial` フォルダで実行します。
 
 ```sh
-python3 build.py example.md -o presentation.html
+python3 build.py examples/standard/document.md -o dist/presentation.html
 ```
 
 入力はUTF-8で保存します。Python 3.9以降の標準ライブラリだけで生成でき、完成したHTMLは単体で配布できます。このガイド自体は通常のMarkdown文書なので、生成器への入力にはせず、コード例を別の `.md` にコピーして使用してください。
@@ -227,12 +227,12 @@ python3 build.py example.md -o presentation.html
 
 生成時にOGPタイトル・説明・画像を取得し、画像もHTMLに埋め込みます。HTMLのtitleやdescriptionもフォールバックとして使います。取得失敗時はタイトルまたはURLとドメインを表示し、画像を省略して生成を続けます。通常のテキストリンクではOGPを取得しません。
 
-キャッシュは入力Markdownと同じフォルダの `.spatial-cache/` に保存されます。
+キャッシュは出力HTMLと同じフォルダの `.spatial-cache/` に保存されます。
 
 ```sh
-python3 build.py example.md -o presentation.html
-python3 build.py example.md -o presentation.html --refresh-links
-python3 build.py example.md -o presentation.html --offline
+python3 build.py examples/standard/document.md -o dist/presentation.html
+python3 build.py examples/standard/document.md -o dist/presentation.html --refresh-links
+python3 build.py examples/standard/document.md -o dist/presentation.html --offline
 ```
 
 通常生成ではキャッシュを優先し、`--refresh-links` で再取得します。`--offline` は取得を行わず、キャッシュと手動指定だけで生成します。両方指定した場合はオフラインが優先します。
@@ -321,7 +321,7 @@ python3 build.py example.md -o presentation.html --offline
 
 色は見出しマーカー・付箋背景・接続線の起点・ミニマップに反映されます。本文の文字色は読みやすい標準色を維持します。マーカーの有無は `::marker` の仕様に従い、toneだけでは小見出しのマーカーを有効にしません。
 
-`::style plain` が既定、`::style note` が付箋です。指定はそのセクションにだけ適用されます。パレットは `src/styles.css` の `--color-名前` と `--color-名前-soft` を編集して変更できます。
+`::style plain` が既定、`::style note` が付箋です。指定はそのセクションにだけ適用されます。パレットは `src/mono_space/web/styles.css` の `--color-名前` と `--color-名前-soft` を編集して変更できます。
 
 旧記法は互換入力として受け付けます。`normal` は `neutral`、`ai` は `primary`、`::tone note` は `::style note` と `::tone warning` に変換します。新規文書では上記の意味色を使ってください。
 
@@ -335,7 +335,7 @@ python3 build.py example.md -o presentation.html --offline
 ## 生成
 `--offline` を指定します。
 ```bash
-python3 build.py example.md --offline
+python3 build.py examples/standard/document.md --offline
 ```
 ````
 
@@ -363,7 +363,7 @@ python3 build.py example.md --offline
 ![詳細](assets/close.png)
 ```
 
-2・3段目は `###` から同じ構造を繰り返します。横3枚にする場合は各段に `####` をもう1つ追加します。`example.md` に横2枚×縦3段と横3枚×縦3段の完成例があります。
+2・3段目は `###` から同じ構造を繰り返します。横3枚にする場合は各段に `####` をもう1つ追加します。この構造を使う完成原稿は、利用する画像パスに合わせて作成してください。
 
 画像は元の縦横比を保ちます。各段は上揃えで、高さが最も大きい画像セクションに合わせて次の段を配置します。親・段の `::focus subtree` でまとまり全体、画像の `::focus image` で1枚を拡大できます。
 
@@ -371,7 +371,7 @@ python3 build.py example.md --offline
 ## 18. Mono文書からの変換
 
 ```sh
-python3 build.py input.md --from mono -o presentation.html --offline
+python3 build.py input.md --from mono -o dist/presentation.html --offline
 ```
 
 HTMLに加え、`presentation.space.md`（変換コピー）と `presentation.conversion.json`（原文の行番号・変更内容）を生成します。元Markdownは変更しません。画像の相対パスはコピーの保存先から参照できるように書き換えます。画像はHTMLに埋め込まれますが、変換Markdownの再ビルドには参照元画像が必要です。
@@ -422,7 +422,7 @@ URLエンコードされた日本語・空白・括弧を含む画像参照に�
 ## Decksetの読み込み
 
 ```sh
-python3 build.py "Deckset basics.md" --from deckset -o examples/deckset/presentation.html --offline
+python3 build.py "Deckset basics.md" --from deckset -o dist/imports/deckset/presentation.html --offline
 ```
 
 `---` でスライドを区切り、最初を導入、以降を章にします。コード内の区切りは保護します。スライド内の追加見出しは本文内の小見出しになります。見出しのないスライドには `Slide N` を付けます。

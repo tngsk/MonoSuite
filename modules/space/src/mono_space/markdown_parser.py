@@ -1,7 +1,7 @@
 """Mono Space section and block parsing. No rendering or asset fetching."""
 import re
-from markdown_syntax import fence_open, fence_close, image_line
-from links import validate_url
+from .markdown_syntax import fence_open, fence_close, image_line
+from .links import validate_url
 
 
 def table_cells(line):

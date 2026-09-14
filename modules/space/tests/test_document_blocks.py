@@ -1,5 +1,5 @@
 import unittest
-from build import parse
+from mono_space.build import parse
 
 class DocumentBlocksTests(unittest.TestCase):
     def test_nested_quote_heading_and_list(self):

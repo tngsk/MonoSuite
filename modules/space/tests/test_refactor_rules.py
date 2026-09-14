@@ -1,11 +1,11 @@
 import tempfile
 import unittest
 from pathlib import Path
-from markdown_parser import parse_document
-from markdown_renderer import render_document
-from markdown_syntax import fence_open, fence_close
-from mono_import import convert_mono
-from deckset_import import split_slides
+from mono_space.markdown_parser import parse_document
+from mono_space.markdown_renderer import render_document
+from mono_space.markdown_syntax import fence_open, fence_close
+from mono_space.mono_import import convert_mono
+from mono_space.deckset_import import split_slides
 
 
 class RefactorRulesTests(unittest.TestCase):

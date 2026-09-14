@@ -1,6 +1,6 @@
 import unittest
-from mono_import import convert_mono
-from markdown_parser import parse_document
+from mono_space.mono_import import convert_mono
+from mono_space.markdown_parser import parse_document
 
 class MonoImportTests(unittest.TestCase):
     def test_components_and_hierarchy(self):
@@ -28,7 +28,7 @@ class MonoImportTests(unittest.TestCase):
 
 class UnifiedMonoTests(unittest.TestCase):
     def test_lists_and_breaks_use_common_parser(self):
-        from markdown_parser import parse_document
+        from mono_space.markdown_parser import parse_document
         text, _ = convert_mono('# T\n## Chapter\nOne<br>Two\n\n- A\n- B')
         self.assertNotIn('::layout', text)
         blocks = parse_document(text)['nodes'][1]['blocks']

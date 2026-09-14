@@ -1,9 +1,9 @@
 """Craft TextBundle importer. No Mono components or runtime dependencies."""
 import json
 import re
-from markdown_syntax import fence_open, fence_close, image_line
+from .markdown_syntax import fence_open, fence_close, image_line
 from pathlib import Path
-from import_assets import ImportAssets
+from .import_assets import ImportAssets
 
 
 def import_bundle(bundle, output):

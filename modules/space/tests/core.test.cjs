@@ -1,7 +1,7 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
-const {Navigation,worldRect,fitCamera,zoomCamera,pinchCamera}=require('../src/core.js');
+const {Navigation,worldRect,fitCamera,zoomCamera,pinchCamera}=require('../src/mono_space/web/core.js');
 test('all sections are reachable; overview and free modes preserve return target',()=>{
  const nav=new Navigation(['b','b'],['a','b','c']);assert.deepEqual(nav.route,['b']);
  for(const id of nav.route){nav.focus(id);assert.equal(nav.selectedId,id)}
@@ -35,11 +35,11 @@ test('pinch includes scale and midpoint translation',()=>{
  assert.deepEqual(c,{s:2,x:-70,y:-80});
 });
 test('app delegates animation and tokens have no direct cycles',()=>{
- const app=fs.readFileSync(require.resolve('../src/app.js'),'utf8');assert(!app.includes('requestAnimationFrame'));assert(!app.includes('curves'));
- const css=fs.readFileSync(require.resolve('../src/styles.css'),'utf8');assert(!/(--[\w-]+):\s*var\(\1\)/.test(css));
+ const app=fs.readFileSync(require.resolve('../src/mono_space/web/app.js'),'utf8');assert(!app.includes('requestAnimationFrame'));assert(!app.includes('curves'));
+ const css=fs.readFileSync(require.resolve('../src/mono_space/web/styles.css'),'utf8');assert(!/(--[\w-]+):\s*var\(\1\)/.test(css));
 });
 test('gesture handler continues smoothly from pinch to one finger and ignores duplicate release',()=>{
- global.SpatialCore=require('../src/core.js');const input=require('../src/input.js');
+ global.SpatialCore=require('../src/mono_space/web/core.js');const input=require('../src/mono_space/web/input.js');
  const handlers=new Map();const viewport={clientHeight:800,getBoundingClientRect:()=>({left:10,top:20}),classList:{add(){},remove(){}},setPointerCapture(){},addEventListener:(key,fn)=>handlers.set(key,fn)};
  let camera={x:0,y:0,s:1};const gesture=input.attach(viewport,()=>camera,c=>camera=c,()=>{});
  const send=(type,id,x,y)=>handlers.get(type)({pointerId:id,clientX:x,clientY:y,button:0});
@@ -51,7 +51,7 @@ test('gesture handler continues smoothly from pinch to one finger and ignores du
 });
 
 test('grid settings retain readable width and snap outer geometry',()=>{
- const {metrics,snap}=require('../src/layout.js');
+ const {metrics,snap}=require('../src/mono_space/web/layout.js');
  for(const grid of [16,32,64]){
   const m=metrics({grid,bodyWidth:448,density:'standard'});
   assert.equal(m.body,448);
@@ -61,7 +61,7 @@ test('grid settings retain readable width and snap outer geometry',()=>{
  assert.throws(()=>metrics({grid:24,bodyWidth:448,density:'standard'}));
 });
 test('layout planner is deterministic, non-mutating and grid aligned at every level',()=>{
- const {plan,metrics}=require('../src/layout.js');
+ const {plan,metrics}=require('../src/mono_space/web/layout.js');
  for(const grid of [16,32,64]){
   const m=metrics({grid,bodyWidth:448,density:'standard'});
   const leaf=h=>({w:448,h,layout:'row',children:[]});
@@ -74,21 +74,21 @@ test('layout planner is deterministic, non-mutating and grid aligned at every le
  }
 });
 test('motion limits pan distance and uses fade for scale changes',()=>{
- const {kind}=require('../src/motion.js'),from={x:0,y:0,s:1},view={w:1000,h:800};
+ const {kind}=require('../src/mono_space/web/motion.js'),from={x:0,y:0,s:1},view={w:1000,h:800};
  assert.equal(kind(from,{x:100,y:80,s:1},view),'pan');
  assert.equal(kind(from,{x:751,y:0,s:1},view),'fade');
  assert.equal(kind(from,{x:0,y:0,s:1.84},view),'fade');
 });
 
 test('adjacent section travel pans despite a small fitting scale difference',()=>{
- const {kind}=require('../src/motion.js');
+ const {kind}=require('../src/mono_space/web/motion.js');
  assert.equal(kind({x:0,y:0,s:1.84},{x:0,y:-600,s:1.84},{w:1440,h:900}),'pan');
  assert.equal(kind({x:0,y:0,s:1.84},{x:0,y:-400,s:1.82},{w:1440,h:900}),'pan');
  assert.equal(kind({x:0,y:0,s:1.84},{x:0,y:-1500,s:1.84},{w:1440,h:900}),'fade');
 });
 
 test('two-way comparison is top-aligned; three-way retains centre positioning',()=>{
- const {plan,metrics}=require('../src/layout.js');
+ const {plan,metrics}=require('../src/mono_space/web/layout.js');
  const leaf=h=>({w:448,h,layout:'row',children:[]});
  const pair=plan({w:448,h:64,layout:'compare',children:[leaf(100),leaf(240)]},metrics());
  assert.equal(pair.children[0].y,0);assert.equal(pair.children[1].y,0);

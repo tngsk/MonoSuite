@@ -2,8 +2,8 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from build import parse
-from links import Previews
+from mono_space.build import parse
+from mono_space.links import Previews
 
 class LinkTests(unittest.TestCase):
     def test_text_link_and_unsafe_scheme(self):
@@ -24,7 +24,7 @@ class LinkTests(unittest.TestCase):
             def fetch(url,limit):
                 if url.endswith('.png'):return b'image', 'image/png', 'utf-8',url
                 return page,'text/html','utf-8',url
-            with patch('links.download',side_effect=fetch) as mock:
+            with patch('mono_space.links.download',side_effect=fetch) as mock:
                 first=Previews(folder).get('https://example.com')
                 self.assertEqual(first['title'],'OG title')
                 self.assertIn('base64',first['image'])
@@ -33,10 +33,10 @@ class LinkTests(unittest.TestCase):
                 self.assertEqual(mock.call_count,2)
                 Previews(folder,refresh=True).get('https://example.com')
                 self.assertEqual(mock.call_count,4)
-            with patch('links.download',side_effect=OSError('offline')):
+            with patch('mono_space.links.download',side_effect=OSError('offline')):
                 self.assertEqual(Previews(folder,refresh=True).get('https://example.com'),first)
                 self.assertEqual(Previews(folder).get('https://missing.example'),{})
-            with patch('links.download') as mock:
+            with patch('mono_space.links.download') as mock:
                 self.assertEqual(Previews(folder,offline=True).get('https://new.example'),{})
                 mock.assert_not_called()
 

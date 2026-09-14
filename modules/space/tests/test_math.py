@@ -4,8 +4,8 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from build import parse, build
-from markdown_parser import parse_document
+from mono_space.build import parse, build
+from mono_space.markdown_parser import parse_document
 
 
 class MathTests(unittest.TestCase):
@@ -20,11 +20,11 @@ class MathTests(unittest.TestCase):
             self.assertIn('vertical-align:',result)
             self.assertNotIn('<script',result)
             self.assertEqual(len(list((root/'.spatial-cache/math').glob('*.json'))),2)
-            with patch('math_render.subprocess.run', side_effect=AssertionError('Cache missed')):
+            with patch('mono_space.math_render.subprocess.run', side_effect=AssertionError('Cache missed')):
                 self.assertEqual(parse(source,root)['nodes'][0]['html'],result)
 
     def test_code_and_escaped_currency_do_not_typeset(self):
-        with tempfile.TemporaryDirectory() as folder, patch('math_render.subprocess.run', side_effect=AssertionError('Unexpected rendering')):
+        with tempfile.TemporaryDirectory() as folder, patch('mono_space.math_render.subprocess.run', side_effect=AssertionError('Unexpected rendering')):
             root=Path(folder)
             source='# Code\n`$x$` and \\$5\n\n```sh\n$$\n$HOME\n$$\n```'
             result=parse(source,root)['nodes'][0]['html']
@@ -70,3 +70,18 @@ class MathTests(unittest.TestCase):
                 parse('# T\n`$\\notacommand{x}$`\n\n$\\notacommand{x}$',Path(folder))
             with self.assertRaisesRegex(ValueError, '2行:'):
                 parse('# T\n$$$$',Path(folder))
+
+    def test_build_keeps_generated_files_out_of_source_directory(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            source_dir = root/'source'
+            source_dir.mkdir()
+            source = source_dir/'document.md'
+            source.write_text('# Math\n\n$T=1/f$')
+            output = root/'dist'/'nested'/'presentation.html'
+            first = build(source, output, offline=True)
+            self.assertTrue(output.is_file())
+            self.assertFalse((source_dir/'.spatial-cache').exists())
+            self.assertEqual(len(list((output.parent/'.spatial-cache/math').glob('*.json'))), 1)
+            with patch('mono_space.math_render.subprocess.run', side_effect=AssertionError('Cache missed')):
+                self.assertEqual(first, build(source, output, offline=True))

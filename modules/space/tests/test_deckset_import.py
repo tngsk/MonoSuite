@@ -2,8 +2,8 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from deckset_import import import_document, split_slides
-from build import build
+from mono_space.deckset_import import import_document, split_slides
+from mono_space.build import build
 
 
 class DecksetTests(unittest.TestCase):

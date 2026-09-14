@@ -1,28 +1,39 @@
 # Mono Space
 
-Markdown文書を広いキャンバスへ配置し、話題に近づいて説明するプレゼンテーションです。更新日：2026-09-10。
+Markdown文書を広いキャンバスへ配置し、話題に近づいて説明するプレゼンテーションです。更新日：2026-09-14。
 
-- [記法ガイド](SYNTAX.md)
-- [設計仕様](DESIGN.md)
-- [開発・検証状況](DEVELOPMENT.md)
-- [移行する方はこちら（手順・検証状況・対象ファイル）](docs/MIGRATION.md)
-- [移行後の開発計画](docs/planning/DEVELOPMENT-PLAN.md)
-- [通常Markdownの例](examples/standard/document.md) / [表示](examples/standard/presentation.html)
-- [詳細レイアウトの例](example.md) / [表示](presentation.html)
-- [Craft教材](examples/audacity/presentation.html)
-- [Decksetサンプル](examples/deckset-basics/presentation.html)
+- [記法ガイド](docs/SYNTAX.md)
+- [設計仕様](docs/DESIGN.md)
+- [開発・検証状況](docs/DEVELOPMENT.md)
+- [v0.1の状態・検証結果](docs/MIGRATION.md)
+- [開発計画](docs/planning/DEVELOPMENT-PLAN.md)
+- [通常Markdownの例](examples/standard/document.md)
+- [数式の例](examples/math/document.md)
 
-通常・数式サンプルは移行用の最小構成です。詳細例・Craft教材・Deckset例は現在の開発環境の参考資料で、新規リポジトリへの自動移行対象には含めません。表示HTMLは生成物です。
+表示HTMLは下記のコマンドで生成します。
+
+## ファイル構成
+
+| 場所 | 内容 |
+|---|---|
+| `build.py` | CLIの入口 |
+| `src/mono_space/` | Python生成器・取り込み処理・数式ツール |
+| `src/mono_space/web/` | HTMLテンプレート・JavaScript・CSS |
+| `tests/` | Python／Node／ブラウザテストと固定原稿 |
+| `examples/` | 作例の原稿と元画像 |
+| `docs/` | 記法・設計・開発記録・移行計画 |
+| `dist/` | 生成HTML・ブラウザテストHTML・キャッシュ（Git対象外） |
+| `node_modules/` | npmで復元する依存（Git対象外） |
 
 ## 生成
 
 Python 3.9以降の標準ライブラリで生成します。このフォルダーで実行してください。
 
 ```sh
-python3 build.py examples/standard/document.md -o presentation.html --offline
-python3 build.py "教材.textbundle" --from craft -o examples/craft/presentation.html --offline
-python3 build.py "Deckset basics.md" --from deckset -o examples/deckset/presentation.html --offline
-python3 build.py "Mono教材.md" --from mono -o examples/mono/presentation.html --offline
+python3 build.py examples/standard/document.md -o dist/presentation.html --offline
+python3 build.py "教材.textbundle" --from craft -o dist/imports/craft/presentation.html --offline
+python3 build.py "Deckset basics.md" --from deckset -o dist/imports/deckset/presentation.html --offline
+python3 build.py "Mono教材.md" --from mono -o dist/imports/mono/presentation.html --offline
 ```
 
 生成HTMLにはCSS・JavaScript・画像を埋め込みます。閲覧時のランタイムやサーバーは不要です。PDF出力はありません。
@@ -37,7 +48,7 @@ python3 build.py "Mono教材.md" --from mono -o examples/mono/presentation.html 
 
 `::layout` は指定した場所の子要素配置だけを変更します。直下の見出しは配置要素となりますが、本文幅・段落・文書全体の見出しルールは変えません。互換モードはありません。
 
-現時点のテーマはStandard相当の一種類です。幅・グリッド・密度は `src/layout.js`、文字・色・余白は `src/styles.css` が管理します。テーマ切り替えUIは追加していません。
+現時点のテーマはStandard相当の一種類です。幅・グリッド・密度は `src/mono_space/web/layout.js`、文字・色・余白は `src/mono_space/web/styles.css` が管理します。テーマ切り替えUIは追加していません。
 
 ## 操作
 
@@ -71,15 +82,29 @@ Craft / Decksetでは変換Markdown、ローカル画像のコピー、変換レ
 
 ## 数式（生成時SVG）
 
-本文中は `$T=1/f$`、独立した数式は `$$式$$` または独立行の `$$` で囲みます。[数式デモ](examples/math/presentation.html) / [入力Markdown](examples/math/document.md)。
+本文中は `$T=1/f$`、独立した数式は `$$式$$` または独立行の `$$` で囲みます。[入力Markdown](examples/math/document.md)。
 
 数式を初めて生成する環境ではNode.jsと次の初期設定が必要です。数式のない文書には不要です。
 
 ```sh
 npm ci --ignore-scripts
-python3 build.py examples/math/document.md -o examples/math/presentation.html --offline
+python3 build.py examples/math/document.md -o dist/examples/math/presentation.html --offline
 ```
 
-MathJax 3.2.2のbase・AMS機能でSVGを生成し、TeX・表示形式・描画バージョンをキーとして入力フォルダーの `.spatial-cache/math/` に保存します。同一数式は再利用します。`--offline` でもインストール済みのエンジンで数式を生成できます。依存パッケージの取得は初期設定時のみ必要です。
+MathJax 3.2.2のbase・AMS機能でSVGを生成し、TeX・表示形式・描画バージョンをキーとして出力フォルダーの `.spatial-cache/math/` に保存します。同一数式は再利用します。`--offline` でもインストール済みのエンジンで数式を生成できます。依存パッケージの取得は初期設定時のみ必要です。
 
 生成HTMLはSVGと元のTeXを含み、閲覧時にNode.js・MathJax・外部フォントは不要です。数式をクリックするとTeXをコピーします。クリップボードが使えない場合は選択可能なTeXを表示します。エラー時は行番号と元の式を報告し、既存の出力HTMLを置き換えません。
+
+## 開発テスト
+
+このフォルダーで実行します。
+
+```sh
+PYTHONPATH=src python3 -m unittest discover -s tests
+node --test tests/core.test.cjs
+python3 tests/build_browser_test.py
+```
+
+ブラウザ回帰は `dist/tests/browser.html` を開き、全項目のPASSを確認します。
+既定の生成先は `dist/presentation.html`。`-o` で任意の出力先を指定できます。
+CLIの画像・数式・リンクの読み取りと表示仕様は維持し、キャッシュは出力先の `.spatial-cache/` に保存します。

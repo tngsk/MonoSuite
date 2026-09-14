@@ -1,6 +1,6 @@
 """Explicit, lossy Mono import. Never executes component attributes or changes input."""
 import re
-from markdown_syntax import fence_open, fence_close, image_line
+from .markdown_syntax import fence_open, fence_close, image_line
 
 COMPONENT = re.compile(r'@\[([^\]]+)\](?:\((?:"[^"\n]*"|[^)"\n])*\))?')
 

@@ -6,7 +6,7 @@ import re
 import subprocess
 from pathlib import Path
 import xml.etree.ElementTree as ET
-from markdown_syntax import fence_open, fence_close
+from .markdown_syntax import fence_open, fence_close
 
 VERSION = 'mathjax-3.2.2-base-ams-v1'
 
@@ -17,25 +17,25 @@ class MathError(ValueError):
         super().__init__(f'数式 {tex!r}: {message}')
 
 
-def render_math(tex, display, root):
+def render_math(tex, display, root, cache_root=None):
     if not tex.strip():
         raise MathError(tex, '空の数式です')
     if len(tex) > 10000:
         raise MathError(tex, '数式は10000文字以内にしてください')
     key = hashlib.sha256((VERSION + str(display) + tex).encode()).hexdigest()
-    cache = Path(root) / '.spatial-cache' / 'math' / (key + '.json')
+    cache = (Path(cache_root) if cache_root is not None else Path(root) / '.spatial-cache') / 'math' / (key + '.json')
     try:
         data = json.loads(cache.read_text())
     except (OSError, ValueError):
         try:
-            result = subprocess.run(['node', str(Path(__file__).parent/'tools/math-svg.cjs')],
+            result = subprocess.run(['node', str(Path(__file__).parent/'math-svg.cjs')],
                 input=json.dumps(dict(tex=tex, display=display)), text=True, capture_output=True, timeout=20)
         except (OSError, subprocess.TimeoutExpired) as error:
             raise MathError(tex, 'Node.jsが必要です。数式生成の初期設定はREADMEを参照してください') from error
         if result.returncode:
             message = result.stderr.strip()
             if 'Cannot find module' in message:
-                message = '数式用依存がありません。spatialで npm ci --ignore-scripts を実行してください'
+                message = '数式用依存がありません。modules/spaceで npm ci --ignore-scripts を実行してください'
             raise MathError(tex, message)
         data = json.loads(result.stdout)
         cache.parent.mkdir(parents=True, exist_ok=True)

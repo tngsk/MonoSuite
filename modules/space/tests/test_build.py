@@ -4,7 +4,7 @@ import re
 import tempfile
 import unittest
 from pathlib import Path
-from build import parse, build
+from mono_space.build import parse, build
 
 class ParserTests(unittest.TestCase):
     def test_hierarchy_and_route(self):

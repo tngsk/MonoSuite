@@ -1,9 +1,9 @@
 """Deckset slides to standard Mono Space sections; no theme emulation."""
 import json
 import re
-from markdown_syntax import fence_open, fence_close, image_line
+from .markdown_syntax import fence_open, fence_close, image_line
 from pathlib import Path
-from import_assets import ImportAssets
+from .import_assets import ImportAssets
 
 
 def split_slides(text):

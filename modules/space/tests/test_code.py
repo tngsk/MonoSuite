@@ -1,5 +1,5 @@
 import unittest
-from build import parse
+from mono_space.build import parse
 
 class CodeTests(unittest.TestCase):
     def test_literal_code(self):

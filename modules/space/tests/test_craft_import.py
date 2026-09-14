@@ -2,8 +2,8 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from craft_import import import_bundle
-from markdown_parser import parse_document
+from mono_space.craft_import import import_bundle
+from mono_space.markdown_parser import parse_document
 
 class CraftTests(unittest.TestCase):
     def test_assets_and_hierarchy_and_literal_code(self):

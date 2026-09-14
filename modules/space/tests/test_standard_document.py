@@ -1,7 +1,7 @@
 import unittest
 from pathlib import Path
-from markdown_parser import parse_document
-from markdown_renderer import render_document
+from mono_space.markdown_parser import parse_document
+from mono_space.markdown_renderer import render_document
 
 
 class StandardDocumentTests(unittest.TestCase):

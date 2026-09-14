@@ -1,43 +1,45 @@
 # Mono Space 開発・検証状況
 
-更新日：2026-09-11。
+更新日：2026-09-14。
+
+## Suite移行後のファイル整理（2026-09-14）
+
+本体を `src/mono_space/`、ブラウザ資産を `src/mono_space/web/`、テストを `tests/`、仕様・記録を `docs/` に集約。作例は原稿と元画像のみとし、生成HTMLは `dist/` へ移動した。既存の未コミット変更は保持している。
+
+CLI入口 `build.py` は維持。既定出力は `dist/presentation.html`、ビルドの数式・OGPキャッシュは出力先の `.spatial-cache/` に変更した。任意の `-o` 指定と原稿相対の画像参照は維持する。
+
+整理後：Python 54件・Node 13件成功、通常8ノード・数式7ノード生成成功。追加のPythonテストで、出力先ディレクトリ作成・入力側キャッシュ非生成・数式キャッシュ再利用を確認。ブラウザ資産とHTMLテンプレートは基準コミットとバイト単位で一致する。
+
+## 最新確認（2026-09-14）
+
+独立リポジトリ・基準コミット・ローカルv0.1.0タグは作成済み。Python 53件・Node 13件、Chromiumのブラウザ回帰8項目が成功。通常・数式の俯瞰／フォーカスを目視確認し、空のnpmキャッシュから依存取得したコピー先でも生成に成功した。
+
+ブラウザテストは `tests/fixtures/browser.md` から毎回生成する。旧デモの不在と、windowを送信元にした合成キーイベントの不整合を修正した。アプリケーション本体の動作変更はない。
+
+Docの実装検証は未実施。別リポジトリのMonoをDocと誤認して実行した結果は、[調査対象の訂正記録](planning/INVESTIGATION-CORRECTION.md)に分離する。v0.1移行ガイドは現在の構成へ更新済み。以下は開発当時の記録で、古いテスト件数・未実施の記述を含む。
 
 ## Mono Suite統合の前提（2026-09-11）
 
-追加5案のタイミングを[開発計画](docs/planning/DEVELOPMENT-PLAN.md)に整理。v0.1保存後に原稿位置・診断・入力版の契約を決め、共通出力と配布セット生成を検証する。試用版で位置保持切り替え→保存時プレビュー→配布セットUIを追加し、作例UIと公開リンクは後続とする。機能実装は未着手。
+追加5案のタイミングを[開発計画](planning/DEVELOPMENT-PLAN.md)に整理。v0.1保存後に原稿位置・診断・入力版の契約を決め、共通出力と配布セット生成を検証する。試用版で位置保持切り替え→保存時プレビュー→配布セットUIを追加し、作例UIと公開リンクは後続とする。機能実装は未着手。
 
-別途開発中のMono Docの最新仕様書を確認した。Docの実装検証は未実施。既存DocのPlaywright PDFとCLIを維持して独立移行し、初期はSpaceと解析器を共有しない。現在のMonoインポーターは旧記法を主対象としており、最新Docの`:::`構文の完全対応は未実装。[仕様レビュー・確認事項](docs/planning/MONO-DOC-INTEGRATION.md)に差分と統合順序を記録した。今回の変更はドキュメントのみ。
+別途開発中のMono Docの最新仕様書を確認した。Docの実装検証は未実施。既存DocのPlaywright PDFとCLIを維持して独立移行し、初期はSpaceと解析器を共有しない。現在のMonoインポーターは旧記法を主対象としており、最新Docの`:::`構文の完全対応は未実装。[仕様レビュー・確認事項](planning/MONO-DOC-INTEGRATION.md)に差分と統合順序を記録した。今回の変更はドキュメントのみ。
 
 ## 現在の到達点
 
-移行準備として通常サンプルの画像を自作図版へ差し替え、生成済みHTMLに依存するCSSテストを修正。選別コピー先でもPython53件・Node13件と通常／数式生成が成功した。目視確認とクリーン環境の依存取得は未完了。[v0.1状態記録](docs/MIGRATION.md)を参照。
+移行準備として通常サンプルの画像を自作図版へ差し替え、生成済みHTMLに依存するCSSテストを修正。選別コピー先でもPython53件・Node13件と通常／数式生成が成功した。目視確認とクリーン環境の依存取得は未完了。[v0.1状態記録](MIGRATION.md)を参照。
 
-Suiteの統合目標を「同じ原稿からSpaceで発表し、Docで配布」に更新。Space原稿→Doc HTML・PDFを最初の統合成果とし、Docから作り始める経路も維持する。未実装の目標であり、現在の対応範囲は変わらない。詳細は[リリース方針](docs/planning/RELEASE-STRATEGY.md)を参照。
+Suiteの統合目標を「同じ原稿からSpaceで発表し、Docで配布」に更新。Space原稿→Doc HTML・PDFを最初の統合成果とし、Docから作り始める経路も維持する。未実装の目標であり、現在の対応範囲は変わらない。詳細は[リリース方針](planning/RELEASE-STRATEGY.md)を参照。
 
 本開発で合意したキャンバスUI、フォーカス、画像・リンク、グリッド配置、パン／フェードの切り替えを実装済みです。独立したPython生成器と単一HTMLのプレゼンテーションとして利用できます。既存Mono本体への統合は別課題です。
 
-仕様の正本は [README](README.md)、記述方法は [SYNTAX](SYNTAX.md) です。デモ本文は [example.md](example.md) にあります。
+仕様の正本は [README](../README.md)、記述方法は [SYNTAX](SYNTAX.md) です。サンプル本文は [通常例](../examples/standard/document.md) と [数式例](../examples/math/document.md) にあります。
 
 ## ソース構成
 
-| ファイル | 責務 |
-|---|---|
-| `build.py` | 生成パイプライン、互換API、単一HTMLへの結合 |
-| `markdown_parser.py` | 見出し・指定・参照検証、型付きブロックの解析 |
-| `markdown_renderer.py` | ブロックからHTMLへの描画、画像の収集 |
-| `links.py` | URL検証、OGP取得、キャッシュ、リッチリンク生成 |
-| `engine.html` | 固定UIと埋め込み先のHTMLテンプレート |
-| `src/styles.css` | 内容の見た目、自然寸法、固定UI |
-| `src/core.js` | 座標変換、カメラのフィット、提示状態 |
-| `src/layout.js` | グリッド設定、測定、純粋な配置計算、DOMへの反映 |
-| `src/motion.js` | パン／フェードの判定、アニメーション、中断 |
-| `src/input.js` | ドラッグ、ピンチ、ホイール |
-| `src/app.js` | DOM生成、接続線、フォーカス、UIの連携 |
-| `test_build.py` / `test_links.py` | Pythonの生成・リンク処理テスト |
-| `tests/core.test.cjs` | 座標、状態、入力、配置、モーション判定のテスト |
-| `tests/browser.js` | 実DOMを操作する回帰テスト |
+現行のディレクトリは[README](../README.md#ファイル構成)を参照。
+Python本体は `src/mono_space/`、ブラウザ本体はその `web/`、テストは `tests/` に集約した。ルートの `build.py` はCLI起動だけを担当する。以下の過去記録にある短いファイル名は各ディレクトリ内のファイルを指す。
 
-生成物の `presentation.html` を直接編集せず、上記のソースを編集して再生成します。Node.jsは開発テストだけに使用します。
+生成物は `dist/` に保存する。直接編集せず、原稿またはソースから再生成する。
 
 ## 配置の責任分担
 
@@ -66,17 +68,17 @@ CSSは内容の自然幅・文字組み・装飾を定義し、JavaScriptは最�
 
 ## 検証
 
-このフォルダで実行します。
+Spaceルート（`modules/space`）で実行します。
 
 ```sh
-python3 -m unittest discover -s . -v
+PYTHONPATH=src python3 -m unittest discover -s tests -v
 node --test tests/core.test.cjs
 python3 tests/build_browser_test.py
 ```
 
 更新時点の自動テストはPython 9件、Node 11件、合計20件です。OGP取得・キャッシュ更新・通信失敗は模擬通信で検証しています。実サイトからの取得成功を保証するものではありません。
 
-`tests/build_browser_test.py` は最新の生成HTMLを埋め込んだ `tests/browser.html` を作ります。ブラウザで開くと、全セクション移動、目次の開閉、0キー、25%表示、画像、ピンチの合成イベント、グリッド、再配置の安定性を検査します。テストでは「動きを抑える」を有効にするため、通常のアニメーションの見た目は対象外です。
+`tests/build_browser_test.py` は専用fixtureをビルドして埋め込んだ `dist/tests/browser.html` を作ります。ブラウザで開くと、全セクション移動、目次の開閉、0キー、25%表示、画像、ピンチの合成イベント、グリッド、再配置の安定性を検査します。テストでは「動きを抑える」を有効にするため、通常のアニメーションの見た目は対象外です。
 
 ユーザーから、画面レイアウト、画像フォーカス、パン／フェード混在の挙動について確認・採用のフィードバックを受けています。一方、エージェントによるブラウザ回帰テスト実行はURLセキュリティポリシーに阻まれて未実行です。実機タッチ、各ブラウザでの全画面表示、実サイトOGP取得は検証を残しています。
 
@@ -157,7 +159,7 @@ H4以降は原則本文内見出しです。明示的なlayout指定の直下だ
 
 ## 数式SVG（2026-09-10）
 
-`tools/math-svg.cjs` はMathJax 3.2.2をNode上で呼び出し、fontCache:noneでパスを含む独立SVGへ変換します。base・AMS以外の拡張はロードしません。ブラウザへのMathJax埋め込みはありません。[MathJax公式のNode利用説明](https://docs.mathjax.org/en/v3.2/server/direct.html)。依存はpackage-lock.jsonで固定し、MathJaxのライセンスはApache-2.0です。
+`src/mono_space/math-svg.cjs` はMathJax 3.2.2をNode上で呼び出し、fontCache:noneでパスを含む独立SVGへ変換します。base・AMS以外の拡張はロードしません。ブラウザへのMathJax埋め込みはありません。[MathJax公式のNode利用説明](https://docs.mathjax.org/en/v3.2/server/direct.html)。依存はpackage-lock.jsonで固定し、MathJaxのライセンスはApache-2.0です。
 
 `math_render.py` が生成とキャッシュ・寸法・元TeXの保持を担当します。解析器はコードフェンスを先に判定し、独立数式の内容を通常Markdownとして解釈しません。描画器は本文中の数式を変換します。エラーは元の式と行番号を付け、HTML書き込み前に停止します。
 
