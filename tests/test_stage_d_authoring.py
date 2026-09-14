@@ -27,43 +27,48 @@ def test_server_endpoints_and_shell_ui(tmp_path: Path):
     try:
         base_url = f"http://127.0.0.1:{server.port}"
 
-        # 1. ルート（シェルUI）
+        # 1. ルート（/space へ自動リダイレクトされ、フローティングバーが注入されたSpace画面が返る）
         with urllib.request.urlopen(f"{base_url}/") as res:
             assert res.status == 200
+            assert "/space" in res.geturl()
             html = res.read().decode("utf-8")
             assert "Mono" in html
-            assert "btn-space" in html
-            assert "btn-doc" in html
-            assert "sync.js" in html
+            assert "mono-floating-nav" in html
+            assert "Space" in html
+            assert "Doc" in html
 
-        # 2. 静的CSSおよびJS
-        with urllib.request.urlopen(f"{base_url}/shell/style.css") as res:
+        # 2. 静的CSSおよびJS（nav.css, nav.js）
+        with urllib.request.urlopen(f"{base_url}/shell/nav.css") as res:
             assert res.status == 200
             assert "no-cache" in res.headers.get("Cache-Control", "")
             css_content = res.read().decode("utf-8")
-            assert "header-height" in css_content
+            assert "mono-floating-nav" in css_content
             assert "position: fixed" in css_content
-            assert "z-index: 9999" in css_content
-            assert "visibility: hidden" in css_content
-            assert "pointer-events: none" in css_content
 
-        with urllib.request.urlopen(f"{base_url}/shell/sync.js") as res:
+        with urllib.request.urlopen(f"{base_url}/shell/nav.js") as res:
             assert res.status == 200
+            assert "no-cache" in res.headers.get("Cache-Control", "")
             js = res.read().decode("utf-8")
-            assert "switchView" in js
-            assert "btnSpace" in js
+            assert "mono-export-btn" in js
+            assert "EventSource" in js
 
-        # 3. Spaceビュー
+        # 3. Spaceビュー（フローティングバーが注入されていること）
         with urllib.request.urlopen(f"{base_url}/space") as res:
             assert res.status == 200
+            assert "no-cache" in res.headers.get("Cache-Control", "")
             space_html = res.read().decode("utf-8")
             assert 'id="viewport"' in space_html or 'SpatialCore' in space_html
+            assert "mono-floating-nav" in space_html
+            assert "mono-nav-btn active" in space_html
 
-        # 4. Docビュー
+        # 4. Docビュー（フローティングバーが注入されていること）
         with urllib.request.urlopen(f"{base_url}/doc") as res:
             assert res.status == 200
+            assert "no-cache" in res.headers.get("Cache-Control", "")
             doc_html = res.read().decode("utf-8")
             assert "<h1" in doc_html
+            assert "mono-floating-nav" in doc_html
+            assert "mono-nav-btn active" in doc_html
 
         # 5. マニフェスト
         with urllib.request.urlopen(f"{base_url}/manifest") as res:
@@ -269,9 +274,10 @@ def test_space_overview_menu_recovery_after_focus(tmp_path: Path):
             page.goto(f"http://127.0.0.1:{server.port}/presentation.html")
             page.wait_for_selector("#world")
 
-            # 1. 初期状態：メニューは常時表示（quietは付かない）
+            # 1. 初期状態：メニューは常時表示（quietは付かない、フローティングバー常時表示）
             initial_quiet = page.evaluate("() => document.body.classList.contains('quiet')")
             assert initial_quiet is False
+            assert page.locator("#mono-floating-nav").is_visible() is True
 
             # 2. スライドをクリックしてフォーカス：メニューは消さずに常時表示を維持
             page.locator(".node").first.click()
