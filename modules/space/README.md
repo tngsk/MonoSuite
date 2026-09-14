@@ -6,7 +6,7 @@ Markdown文書を広いキャンバスへ配置し、話題に近づいて説明
 - [設計仕様](docs/DESIGN.md)
 - [開発・検証状況](docs/DEVELOPMENT.md)
 - [v0.1の状態・検証結果](docs/MIGRATION.md)
-- [開発計画](docs/planning/DEVELOPMENT-PLAN.md)
+- [Suite開発計画](../../docs/planning/DEVELOPMENT-PLAN.md)
 - [通常Markdownの例](examples/standard/document.md)
 - [数式の例](examples/math/document.md)
 

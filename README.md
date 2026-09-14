@@ -4,10 +4,21 @@
 
 現在利用できるのは **Mono Space** です。Doc統合・PDF配布セット・制作UIは未実装です。
 
-- [Spaceの使い方](modules/space/README.md)
-- [検証状況と既知の問題](modules/space/docs/MIGRATION.md)
-- [開発計画](modules/space/docs/planning/DEVELOPMENT-PLAN.md)
-- [調査対象の訂正記録](modules/space/docs/planning/INVESTIGATION-CORRECTION.md)
+## ドキュメント体系
+
+### Suite統合・設計（正本）
+- [Suite開発計画](docs/planning/DEVELOPMENT-PLAN.md)：段階B〜Fのロードマップと完了条件
+- [共通契約案（段階B1）](docs/planning/COMMON-CONTRACT-PROPOSAL.md)：本文・素材・数式・比較等の対応表案と診断規則
+- [開発・リリース方針](docs/planning/RELEASE-STRATEGY.md)：製品位置づけ、モジュール責務、受入判定基準
+- [Doc仕様レビュー](docs/planning/MONO-DOC-INTEGRATION.md)：Doc統合前の照合候補と未決事項
+- [調査対象の訂正記録](docs/planning/INVESTIGATION-CORRECTION.md)：以前の調査誤認に関する経緯記録
+
+### モジュール
+- [Mono Space（空間プレゼンテーション）](modules/space/README.md)
+  - [記法ガイド](modules/space/docs/SYNTAX.md)
+  - [設計仕様](modules/space/docs/DESIGN.md)
+  - [開発・検証状況](modules/space/docs/DEVELOPMENT.md)
+  - [Space移行記録](modules/space/docs/MIGRATION.md)
 
 ## 試す
 

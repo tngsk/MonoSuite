@@ -86,4 +86,4 @@ PDF受け入れ条件：
 
 配布セット生成の処理は手順4〜5で先に検証する。手順6では位置保持切り替え、保存時プレビュー、配布セットUIの順に加える。作例と公開リンクの時期・受け入れ条件は[開発計画](DEVELOPMENT-PLAN.md)を参照。
 
-関連：[リリース方針](RELEASE-STRATEGY.md)、[移行手順](../MIGRATION.md)。
+関連：[リリース方針](RELEASE-STRATEGY.md)、[Space移行手順](../../modules/space/docs/MIGRATION.md)。

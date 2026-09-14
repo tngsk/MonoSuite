@@ -109,4 +109,4 @@ B1は現リポジトリだけで進められる。外部リポジトリの調査
 
 参考にした既存の設計：Quartoの[変更監視プレビュー](https://quarto.org/docs/cli/preview.html)と[複数出力形式](https://quarto.org/docs/reference/formats/)、RStudioの[Markdownを保持する視覚編集](https://docs.posit.co/ide/user/ide/guide/documents/visual-editor.html)。それらの機能全体を移植する計画ではない。
 
-関連：[リリース方針](RELEASE-STRATEGY.md)、[Doc統合](MONO-DOC-INTEGRATION.md)、[リポジトリ移行](../MIGRATION.md)。
+関連：[共通契約案](COMMON-CONTRACT-PROPOSAL.md)、[リリース方針](RELEASE-STRATEGY.md)、[Doc統合](MONO-DOC-INTEGRATION.md)、[Space移行記録](../../modules/space/docs/MIGRATION.md)。

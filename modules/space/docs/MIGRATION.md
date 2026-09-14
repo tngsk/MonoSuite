@@ -48,4 +48,4 @@ python3 tests/build_browser_test.py
 
 実機タッチ、各ブラウザでの全画面、実サイトのOGP取得、公開ライセンスの決定は残件。v0.1は一般公開品質の宣言ではない。
 
-関連：[開発計画](planning/DEVELOPMENT-PLAN.md)、[リリース方針](planning/RELEASE-STRATEGY.md)、[Doc統合](planning/MONO-DOC-INTEGRATION.md)。
+関連：[Suite開発計画](../../../docs/planning/DEVELOPMENT-PLAN.md)、[リリース方針](../../../docs/planning/RELEASE-STRATEGY.md)、[Doc統合](../../../docs/planning/MONO-DOC-INTEGRATION.md)。
