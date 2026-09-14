@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mono Suite - 制作環境</title>
+  <link rel="stylesheet" href="/shell/style.css">
+</head>
+<body>
+  <header id="header">
+    <div class="header-left">
+      <span class="logo">Mono Suite</span>
+      <span id="file-name" class="file-badge">document.md</span>
+      <span class="current-heading" id="current-heading-title">共通原稿の検証</span>
+    </div>
+
+    <div class="header-center">
+      <div class="toggle-group" role="group" aria-label="ビュー切り替え">
+        <button id="btn-space" class="toggle-btn active" type="button" title="空間プレゼンテーション表示">Space 空間</button>
+        <button id="btn-doc" class="toggle-btn" type="button" title="配布ドキュメント表示">Doc 文章</button>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button id="btn-export" class="action-btn" type="button" title="PDFを含む配布セットを書き出します">
+        <span>配布PDF書き出し</span>
+      </button>
+      <div id="status-dot" class="status-indicator" title="サーバー接続中"></div>
+    </div>
+  </header>
+
+  <main id="viewport-container">
+    <iframe id="frame-space" class="view-frame active" src="/space" title="Mono Space View"></iframe>
+    <iframe id="frame-doc" class="view-frame hidden" src="/doc" title="Mono Doc View"></iframe>
+  </main>
+
+  <script src="/shell/sync.js"></script>
+</body>
+</html>

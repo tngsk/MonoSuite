@@ -57,13 +57,20 @@ uv run pytest tests/test_stage_b3_contract.py -v
 ```
 
 ### 3.4 Suite 配布パイプライン回帰テストスイート
-
+ 
 ```sh
 # 段階C 配布パイプラインテスト（全5件通過）
 uv run pytest tests/test_stage_c_pipeline.py -v
 ```
 
-## 4. CLI変換の確認
+### 3.5 Suite 制作環境テストスイート
+
+```sh
+# 段階D 制作環境統合テスト（全4件通過）
+uv run pytest tests/test_stage_d_authoring.py -v
+```
+
+## 4. CLI変換およびプレビューサーバーの確認
 
 リポジトリルートから以下の統一コマンドで実行できます。
 
@@ -79,13 +86,30 @@ uv run mono build examples/standard/document.md
 uv run mono build examples/standard/document.md --no-pdf
 ```
 
-### 4.2 Space 個別プレゼンテーション生成
+### 4.2 Mono Suite リアルタイム制作プレビュー
+
+外部エディター保存監視、0.4秒台自動リビルド、Space/Doc位置同期UIを起動します。
+
+```sh
+# 開発サーバー起動（ブラウザ自動表示）
+uv run mono dev examples/standard/document.md
+```
+
+### 4.3 配布セット静的プレビュー
+
+完成した配布セットを静的配信します。
+
+```sh
+uv run mono serve dist/document/
+```
+
+### 4.4 Space 個別プレゼンテーション生成
 
 ```sh
 uv run mono-space modules/space/examples/standard/document.md -o dist/presentation.html --offline
 ```
 
-### 4.3 Doc 個別HTMLおよびPDF生成
+### 4.5 Doc 個別HTMLおよびPDF生成
 
 ```sh
 uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/spec.html --pdf dist/spec.pdf
