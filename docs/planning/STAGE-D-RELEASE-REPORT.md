@@ -50,10 +50,12 @@
    DevServerの基盤をシングルスレッドのHTTPServerからThreadingHTTPServerへ置換し、SSE（/events）による永続ストリーム接続維持下でもブラウザからの通常リクエスト（/space, /doc, /manifest）が即座に応答する並行処理性能を確保した。また、ブラウザのリロードやタブ閉鎖に伴い発生するConnectionResetErrorおよびBrokenPipeErrorをhandle_errorにて捕捉・抑止することで、開発コンソールへのスタックトレース漏洩を根絶した。
 9. ビュー切り替え時の寸法保持（visibility遷移）とSpaceリサイズ同期：
    従来のdisplay: noneによるiframe非表示処理は、要素の幅・高さを0px化してメディアクエリの誤判定（モバイル用UI化）やカメラ適合計算（fitCamera）におけるスケール極小化・メニューバーのちらつきを誘発していた。この根本原因を排除するため、非表示スタイルをvisibility: hidden; opacity: 0; pointer-events: none;へと刷新し、非アクティブ時にも実ピクセル寸法を正確に維持させた。さらに、切り替え実行時にrequestAnimationFrameを介して対象フレームのwindowへresizeイベントを能動送出し、Space側でも寸法ゼロ時のフォールバック処理を強化した。
+10. Spaceへの蛍光マーカー（==）およびアンダーライン（++）機能移植：
+   Doc環境でのみサポートされていたインライン強調構文（==重要=={pink} および ++下線++{cyan}）をSpace側へ完全移植した。markdown_renderer.pyにおいて名前付き正規表現グループを用いたインラインパーサーを配備し、mark要素およびspan要素へのHTML変換と色名・エイリアス解決ロジックを実装した。また、web/styles.cssにDocと完全互換のハイライトカラーパレットおよびinset box-shadow定義を追加し、単一原稿における両形式の強調表現の完全一致を確立した。
 
 ## 4. テスト結果と定量的エビデンス
 
-拡充した段階D統合テストスイート（tests/test_stage_d_authoring.py、全7件）および既存の全テストスイートを実行し、全件合格を確認した。
+拡充した段階D統合テストスイート、契約テスト、およびSpaceテストスイートを実行し、全件合格を確認した。
 
 1. 開発シェルUIおよび配信ルーティングテスト（test_server_endpoints_and_shell_ui）：
    mono dev起動時に、ルートURLでMonoデザインのプレビューシェルHTMLが返され、/space, /doc, /manifestがそれぞれのコンテンツを正確に提供することを確認。
@@ -73,8 +75,10 @@
    SVG画像を含む原稿に対し、Space HTMLへのData URL埋め込みおよびDoc HTMLへのインライン展開が正常に行われることを実証。
 9. SSE接続維持下での並行HTTP応答検証（test_dev_server_threading_concurrent_sse_and_requests）：
    /eventsへのSSEストリーム接続が開かれた状態であっても、別スレッドからの/および/manifestへのリクエストが一切ブロックされず即座に応答することを実証。
-10. 全体リグレッション検証：
-   Space単体テスト全67件、Docテスト全271件、段階B3契約テスト全7件、段階Cパイプラインテスト全7件、段階Dテスト全7件の合計359件の全テストが一切のエラーなく合格。
+10. マーカーおよびアンダーライン共通契約検証（test_shared_contract_highlight_and_underline_markup）：
+   同一原稿内の==および++記法が、SpaceとDocの双方で完全に一致するクラス名・色定義のタグ構造へと相互変換されることを実証。
+11. 全体リグレッション検証：
+   Space単体テスト全70件、Docテスト全271件、段階B3契約テスト全8件、段階Cパイプラインテスト全7件、段階Dテスト全7件の合計363件の全テストが一切のエラーなく合格。
 
 ## 5. 段階Eへの引継ぎ事項
 

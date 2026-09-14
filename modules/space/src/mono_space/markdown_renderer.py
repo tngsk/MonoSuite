@@ -15,28 +15,69 @@ def render_image(image, root, assets):
     return f'<img alt="{html.escape(image["alt"], quote=True)}" data-asset="{key}">'
 
 
+VALID_COLORS = {"yellow", "pink", "green", "cyan", "orange", "ai", "warning"}
+COLOR_ALIASES = {
+    "blue": "cyan",
+    "sky": "cyan",
+    "red": "pink",
+    "normal": "yellow",
+    "purple": "ai",
+}
+
+
+def resolve_color(raw_arg: str | None) -> str:
+    """波括弧内の引数から安全に色名を解決する（未指定または不明な場合はyellow）"""
+    if not raw_arg:
+        return "yellow"
+    arg = raw_arg.strip().strip("{}").strip()
+    match = re.search(r"(?:color\s*[:=]\s*['\"]?|\.)?([a-zA-Z]+)", arg)
+    if not match:
+        return "yellow"
+    color = match.group(1).lower()
+    color = COLOR_ALIASES.get(color, color)
+    return color if color in VALID_COLORS else "yellow"
+
+
 def inline(text, root, assets, cache_root=None):
-    pattern = r'!\[([^\]]*)\]\(([^)]+)\)|\*\*([^*]+)\*\*|`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)|__([^_]+)__|(?<!\w)_([^_]+)_(?!\w)|(?<!\*)\*([^*]+)\*(?!\*)|(?<!\\)\$(?!\$)([^\n$]+?)(?<!\\)\$(?!\$)|\\(\$)'
+    pattern = (
+        r'!\[(?P<img_alt>[^\]]*)\]\((?P<img_src>[^)]+)\)'
+        r'|==(?!\s)(?P<marker_text>.+?)(?<!\s)==(?:\{(?P<marker_color>[a-zA-Z0-9_.:=\s"\'-]+)\})?'
+        r'|\+\+(?!\s)(?P<underline_text>.+?)(?<!\s)\+\+(?:\{(?P<underline_color>[a-zA-Z0-9_.:=\s"\'-]+)\})?'
+        r'|\*\*(?P<strong1>[^*]+)\*\*'
+        r'|`(?P<code>[^`]+)`'
+        r'|\[(?P<link_label>[^\]]+)\]\((?P<link_url>[^)]+)\)'
+        r'|__(?P<strong2>[^_]+)__'
+        r'|(?<!\w)_(?P<em1>[^_]+)_(?!\w)'
+        r'|(?<!\*)\*(?P<em2>[^*]+)\*(?!\*)'
+        r'|(?<!\\)\$(?!\$)(?P<math>[^\n$]+?)(?<!\\)\$(?!\$)'
+        r'|\\(?P<dollar>\$)'
+    )
     out, pos = [], 0
     for m in re.finditer(pattern, text):
         out.append(html.escape(text[pos:m.start()]))
-        if m[2] is not None:
-            out.append(render_image(dict(source=m[2], alt=m[1]), root, assets))
-        elif m[3] is not None:
-            out.append('<strong>' + inline(m[3], root, assets, cache_root) + '</strong>')
-        elif m[5] is not None:
-            url = validate_url(m[6])
-            out.append(f'<a href="{html.escape(url, quote=True)}" target="_blank" rel="noopener noreferrer">{html.escape(m[5])}</a>')
-        elif m[7] is not None:
-            out.append('<strong>' + inline(m[7], root, assets, cache_root) + '</strong>')
-        elif m[8] is not None or m[9] is not None:
-            out.append('<em>' + inline(m[8] or m[9], root, assets, cache_root) + '</em>')
-        elif m[10] is not None:
-            out.append(render_math(m[10], False, root, cache_root))
-        elif m[11] is not None:
+        if m.group('img_src') is not None:
+            out.append(render_image(dict(source=m.group('img_src'), alt=m.group('img_alt')), root, assets))
+        elif m.group('marker_text') is not None:
+            color = resolve_color(m.group('marker_color'))
+            out.append(f'<mark class="mono-marker mono-marker-{color}">' + inline(m.group('marker_text'), root, assets, cache_root) + '</mark>')
+        elif m.group('underline_text') is not None:
+            color = resolve_color(m.group('underline_color'))
+            out.append(f'<span class="mono-underline mono-underline-{color}">' + inline(m.group('underline_text'), root, assets, cache_root) + '</span>')
+        elif m.group('strong1') is not None:
+            out.append('<strong>' + inline(m.group('strong1'), root, assets, cache_root) + '</strong>')
+        elif m.group('link_url') is not None:
+            url = validate_url(m.group('link_url'))
+            out.append(f'<a href="{html.escape(url, quote=True)}" target="_blank" rel="noopener noreferrer">{html.escape(m.group("link_label"))}</a>')
+        elif m.group('strong2') is not None:
+            out.append('<strong>' + inline(m.group('strong2'), root, assets, cache_root) + '</strong>')
+        elif m.group('em1') is not None or m.group('em2') is not None:
+            out.append('<em>' + inline(m.group('em1') or m.group('em2'), root, assets, cache_root) + '</em>')
+        elif m.group('math') is not None:
+            out.append(render_math(m.group('math'), False, root, cache_root))
+        elif m.group('dollar') is not None:
             out.append('$')
         else:
-            out.append('<code>' + html.escape(m[4]) + '</code>')
+            out.append('<code>' + html.escape(m.group('code')) + '</code>')
         pos = m.end()
     return ''.join(out) + html.escape(text[pos:])
 
