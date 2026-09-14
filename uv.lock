@@ -563,7 +563,17 @@ source = { editable = "modules/space" }
 [[package]]
 name = "monosuite"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
+dependencies = [
+    { name = "mono" },
+    { name = "mono-space" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "mono", editable = "modules/doc" },
+    { name = "mono-space", editable = "modules/space" },
+]
 
 [[package]]
 name = "packaging"
