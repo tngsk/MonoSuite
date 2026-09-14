@@ -4,5 +4,11 @@
   "private": true,
   "workspaces": [
     "modules/*"
-  ]
+  ],
+  "scripts": {
+    "build": "uv run mono build examples/standard/document.md",
+    "dev": "uv run mono dev examples/standard/document.md",
+    "serve": "uv run mono serve dist/document/",
+    "test": "uv run pytest"
+  }
 }
