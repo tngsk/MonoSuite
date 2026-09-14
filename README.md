@@ -2,14 +2,15 @@
 
 同じMarkdown原稿から、Spaceで発表し、Docで配布資料を生成する制作環境を開発しています。
 
-現在、個別のモジュールとして Mono Space（空間プレゼンテーション）および Mono Doc（ドキュメント・PDF組版）が実行可能です。同一原稿からの共通出力処理（段階C）およびSuite制作UI（段階D）は順次開発中です。
+現在、Mono Suite 統合CLI（mono build）により、単一原稿から発表用Space HTML、閲覧用Doc HTML、配布用Doc PDF、および build-manifest.json をアトミックに一括生成できます。個別のモジュール（mono-space, mono-doc）としての単独実行も可能です。Suite制作UI（段階D）は順次開発中です。
 
 ## ドキュメント体系
 
 ### Suite統合・設計（正本）
 - [Suite開発計画](docs/planning/DEVELOPMENT-PLAN.md)：段階B〜Fのロードマップと完了条件
-- [共通契約仕様書（段階B3確定）](docs/planning/COMMON-CONTRACT-PROPOSAL.md)：本文・素材・数式・比較等の確定対応表と診断規則
+- [段階Cリリース受入記録](docs/planning/STAGE-C-RELEASE-REPORT.md)：共通CLI、アトミック配布セット、マニフェストの実証結果
 - [段階B3契約検証レポート](docs/planning/STAGE-B3-VERIFICATION-REPORT.md)：位置マッピング、診断差分、互換性の実証結果と合格判定
+- [共通契約仕様書（段階B3確定）](docs/planning/COMMON-CONTRACT-PROPOSAL.md)：本文・素材・数式・比較等の確定対応表と診断規則
 - [Doc独立移行受入記録（段階B2）](docs/planning/STAGE-B2-MIGRATION-REPORT.md)：移行元コミット、検証結果、受入判定
 - [開発・リリース方針](docs/planning/RELEASE-STRATEGY.md)：製品位置づけ、モジュール責務、受入判定基準
 - [Doc仕様レビュー](docs/planning/MONO-DOC-INTEGRATION.md)：Doc統合前の照合候補と未決事項
@@ -34,9 +35,21 @@
 
 初回環境セットアップは [環境セットアップガイド](docs/guides/ENVIRONMENT-SETUP.md) を参照してください。
 
-### Suite共通サンプル（Space・Doc両対応）
+### Mono Suite 一括ビルド（標準実行）
 
-同じMarkdown原稿 [examples/standard/document.md](examples/standard/document.md) から、プレゼンテーション用HTML、閲覧用HTML、配布用PDFを生成できます。
+同じMarkdown原稿 [examples/standard/document.md](examples/standard/document.md) から、配布セット（Space HTML、Doc HTML、Doc PDF、および build-manifest.json）をアトミックに一括生成します。
+
+```sh
+# 3形式＋マニフェストの一括生成（dist/document/ 配下に集約）
+uv run mono build examples/standard/document.md
+
+# 高速プレビュー生成（PDF出力をスキップして即座に完了）
+uv run mono build examples/standard/document.md --no-pdf
+```
+
+### モジュール単独実行
+
+各モジュールを個別CLIとして直接呼び出すことも可能です。
 
 ```sh
 # Mono Space（空間プレゼンテーションHTML生成）
@@ -63,6 +76,9 @@ uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/doc-spec.html --pdf dis
 ## テスト・契約検証
 
 ```sh
+# 段階C 配布パイプライン回帰テストスイート（全5件）
+uv run pytest tests/test_stage_c_pipeline.py -v
+
 # 段階B3 統合契約検証テストスイート（全7件）
 uv run pytest tests/test_stage_b3_contract.py -v
 

@@ -56,17 +56,36 @@ uv run --directory modules/doc pytest
 uv run pytest tests/test_stage_b3_contract.py -v
 ```
 
-## 4. 単独CLI変換の確認
+### 3.4 Suite 配布パイプライン回帰テストスイート
+
+```sh
+# 段階C 配布パイプラインテスト（全5件通過）
+uv run pytest tests/test_stage_c_pipeline.py -v
+```
+
+## 4. CLI変換の確認
 
 リポジトリルートから以下の統一コマンドで実行できます。
 
-### 4.1 Space プレゼンテーション生成
+### 4.1 Mono Suite 一括ビルド（標準実行）
+
+単一原稿から配布セット（Space HTML、Doc HTML、Doc PDF、マニフェスト）をアトミック生成します。
+
+```sh
+# 3形式＋マニフェストの一括生成
+uv run mono build examples/standard/document.md
+
+# 高速プレビュー生成（PDF出力をスキップ）
+uv run mono build examples/standard/document.md --no-pdf
+```
+
+### 4.2 Space 個別プレゼンテーション生成
 
 ```sh
 uv run mono-space modules/space/examples/standard/document.md -o dist/presentation.html --offline
 ```
 
-### 4.2 Doc HTMLおよびPDF生成
+### 4.3 Doc 個別HTMLおよびPDF生成
 
 ```sh
 uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/spec.html --pdf dist/spec.pdf
