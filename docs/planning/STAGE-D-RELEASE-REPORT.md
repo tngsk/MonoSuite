@@ -48,6 +48,8 @@
    実務原稿で多用されるSVG画像（image/svg+xml）をSpace画像レンダラーの許可MIMEタイプに追加し、Base64埋め込みを可能とした。また、外部フォルダーやエディタータスクから起動された際にPATH欠落でmono-docが見失われる問題を、sys.executable基準の仮想環境バイナリ優先解決により根本解決した。
 8. 開発サーバーのマルチスレッド並行処理対応と切断例外抑止：
    DevServerの基盤をシングルスレッドのHTTPServerからThreadingHTTPServerへ置換し、SSE（/events）による永続ストリーム接続維持下でもブラウザからの通常リクエスト（/space, /doc, /manifest）が即座に応答する並行処理性能を確保した。また、ブラウザのリロードやタブ閉鎖に伴い発生するConnectionResetErrorおよびBrokenPipeErrorをhandle_errorにて捕捉・抑止することで、開発コンソールへのスタックトレース漏洩を根絶した。
+9. ビュー切り替え時の寸法保持（visibility遷移）とSpaceリサイズ同期：
+   従来のdisplay: noneによるiframe非表示処理は、要素の幅・高さを0px化してメディアクエリの誤判定（モバイル用UI化）やカメラ適合計算（fitCamera）におけるスケール極小化・メニューバーのちらつきを誘発していた。この根本原因を排除するため、非表示スタイルをvisibility: hidden; opacity: 0; pointer-events: none;へと刷新し、非アクティブ時にも実ピクセル寸法を正確に維持させた。さらに、切り替え実行時にrequestAnimationFrameを介して対象フレームのwindowへresizeイベントを能動送出し、Space側でも寸法ゼロ時のフォールバック処理を強化した。
 
 ## 4. テスト結果と定量的エビデンス
 

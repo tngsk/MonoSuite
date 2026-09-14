@@ -39,7 +39,10 @@ def test_server_endpoints_and_shell_ui(tmp_path: Path):
         # 2. 静的CSSおよびJS
         with urllib.request.urlopen(f"{base_url}/shell/style.css") as res:
             assert res.status == 200
-            assert "header-height" in res.read().decode("utf-8")
+            css_content = res.read().decode("utf-8")
+            assert "header-height" in css_content
+            assert "visibility: hidden" in css_content
+            assert "pointer-events: none" in css_content
 
         with urllib.request.urlopen(f"{base_url}/shell/sync.js") as res:
             assert res.status == 200

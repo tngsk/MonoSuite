@@ -173,12 +173,19 @@ body, html {
   height: 100%;
   border: none;
   background-color: transparent;
+  transition: opacity 0.15s ease;
 }
 
 .view-frame.hidden {
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .view-frame.active {
-  display: block;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
 }
