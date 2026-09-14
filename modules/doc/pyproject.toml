@@ -25,7 +25,9 @@ dev = [
 ]
 
 [project.scripts]
+mono-doc = "src.main:main"
 mono = "src.main:main"
+
 
 [build-system]
 requires = ["hatchling"]

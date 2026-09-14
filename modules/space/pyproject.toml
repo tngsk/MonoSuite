@@ -5,6 +5,9 @@ description = "Mono Space - Spatial Markdown Presentation"
 requires-python = ">=3.9"
 dependencies = []
 
+[project.scripts]
+mono-space = "mono_space.build:main"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

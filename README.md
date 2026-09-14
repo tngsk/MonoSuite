@@ -33,14 +33,13 @@
 ### Mono Space（プレゼンテーションHTML生成）
 
 ```sh
-cd modules/space
-python3 build.py examples/standard/document.md -o dist/presentation.html --offline
+uv run mono-space modules/space/examples/standard/document.md -o dist/presentation.html --offline
 ```
 
 ### Mono Doc（ドキュメントHTMLおよびPDF生成）
 
 ```sh
-uv run --directory modules/doc main.py doc/SPECIFICATION.md -o dist/spec.html --pdf dist/spec.pdf
+uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/spec.html --pdf dist/spec.pdf
 ```
 
 生成されたHTMLやPDFはブラウザやPDFビューアで直接開いて確認できます。

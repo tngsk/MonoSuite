@@ -51,17 +51,18 @@ uv run --directory modules/doc pytest
 
 ## 4. 単独CLI変換の確認
 
+リポジトリルートから以下の統一コマンドで実行できます。
+
 ### 4.1 Space プレゼンテーション生成
 
 ```sh
-cd modules/space
-python3 build.py examples/standard/document.md -o dist/presentation.html --offline
+uv run mono-space modules/space/examples/standard/document.md -o dist/presentation.html --offline
 ```
 
 ### 4.2 Doc HTMLおよびPDF生成
 
 ```sh
-uv run --directory modules/doc main.py sample.md -o sample.html --pdf sample.pdf
+uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/spec.html --pdf dist/spec.pdf
 ```
 
 ## 5. トラブルシューティング
