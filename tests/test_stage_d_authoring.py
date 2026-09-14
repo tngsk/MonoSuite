@@ -193,3 +193,54 @@ def test_build_lock_skips_concurrent_watcher_save():
     # ロック解放後
     simulated_on_change()
     assert rebuilt is True
+
+
+def test_dev_server_threading_concurrent_sse_and_requests(tmp_path: Path):
+    """SSE接続を維持した状態でも別リクエストが並行して即座に応答することを検証"""
+    out_dir = tmp_path / "output"
+    pipeline = BuildPipeline(STANDARD_DOC, out_dir, generate_pdf=False, offline=True)
+    target_dir = pipeline.run()
+
+    broadcaster = SSEBroadcaster()
+    port = 8998
+    server = DevServer(target_dir, "document.md", port=port, broadcaster=broadcaster)
+    server.start(block=False)
+
+    try:
+        base_url = f"http://127.0.0.1:{server.port}"
+
+        # 1. SSEストリーム接続を開くスレッド（永続ストリーム待機）
+        sse_connected = threading.Event()
+        sse_stop = threading.Event()
+
+        def keep_sse_connection():
+            req = urllib.request.Request(f"{base_url}/events")
+            with urllib.request.urlopen(req) as resp:
+                sse_connected.set()
+                while not sse_stop.is_set():
+                    # 接続を維持しながらデータを読み出し
+                    line = resp.readline()
+                    if not line:
+                        break
+
+        t = threading.Thread(target=keep_sse_connection, daemon=True)
+        t.start()
+
+        # SSE接続が確立されるのを待つ
+        assert sse_connected.wait(timeout=3.0)
+
+        # 2. SSE接続中の状態で、通常のHTTPリクエスト（/、/manifest）がブロックされずに即座に応答するか検証
+        with urllib.request.urlopen(f"{base_url}/manifest", timeout=2.0) as res:
+            assert res.status == 200
+            manifest = json.loads(res.read().decode("utf-8"))
+            assert "suite_version" in manifest
+
+        with urllib.request.urlopen(f"{base_url}/", timeout=2.0) as res:
+            assert res.status == 200
+            assert "Mono" in res.read().decode("utf-8")
+
+        # 3. SSE接続終了
+        sse_stop.set()
+    finally:
+        server.stop()
+

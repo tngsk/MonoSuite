@@ -1,8 +1,9 @@
 import json
 import mimetypes
 import queue
+import sys
 import threading
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Callable
 from urllib.parse import urlparse
@@ -182,13 +183,21 @@ class DevServer:
 
         handler_cls = create_handler(target_dir, source_name, broadcaster, on_full_build)
 
+        class CustomHTTPServer(ThreadingHTTPServer):
+            allow_reuse_address = True
+            daemon_threads = True
+
+            def handle_error(self, request, client_address):
+                # ブラウザのリロードやタブ閉鎖に伴うクライアント切断例外を抑止
+                exc_type, _, _ = sys.exc_info()
+                if exc_type in (BrokenPipeError, ConnectionResetError, ConnectionAbortedError):
+                    return
+                super().handle_error(request, client_address)
+
         current_port = port
         server = None
         for _ in range(max_port_attempts):
             try:
-                class CustomHTTPServer(HTTPServer):
-                    allow_reuse_address = True
-
                 server = CustomHTTPServer(("127.0.0.1", current_port), handler_cls)
                 break
             except OSError as e:
