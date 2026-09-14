@@ -168,3 +168,38 @@ def test_space_directives_and_connector_in_doc(tmp_path: Path):
     # ::connect が mono-connector 要素として変換されていること
     assert '<mono-connector from="input" to="build"' in doc_text
     assert 'label="同じ入力版"' in doc_text
+
+
+def test_shared_contract_highlight_and_underline_markup(tmp_path: Path):
+    """SpaceおよびDocの両方でマーカー（==）とアンダーライン（++）が互換タグへ変換されることを検証"""
+    test_md = tmp_path / "highlight_test.md"
+    test_md.write_text(
+        "# テスト見出し\n\n"
+        "これは ==黄色マーカー== と ==ピンクマーカー=={pink} です。\n"
+        "そして ++通常下線++ と ++シアン下線++{cyan} です。\n",
+        encoding="utf-8"
+    )
+
+    space_out = tmp_path / "space.html"
+    doc_out = tmp_path / "doc.html"
+
+    res_space = run_command(["uv", "run", "mono-space", str(test_md), "-o", str(space_out), "--offline"])
+    assert res_space.returncode == 0
+    space_text = space_out.read_text(encoding="utf-8")
+
+    res_doc = run_command(["uv", "run", "mono-doc", str(test_md), "-o", str(doc_out)])
+    assert res_doc.returncode == 0
+    doc_text = doc_out.read_text(encoding="utf-8")
+
+    # Spaceの出力検証（JSONエスケープ内またはHTML内）
+    assert "mono-marker mono-marker-yellow" in space_text
+    assert "mono-marker mono-marker-pink" in space_text
+    assert "mono-underline mono-underline-yellow" in space_text
+    assert "mono-underline mono-underline-cyan" in space_text
+
+    # Docの出力検証
+    assert '<mark class="mono-marker mono-marker-yellow">黄色マーカー</mark>' in doc_text
+    assert '<mark class="mono-marker mono-marker-pink">ピンクマーカー</mark>' in doc_text
+    assert '<span class="mono-underline mono-underline-yellow">通常下線</span>' in doc_text
+    assert '<span class="mono-underline mono-underline-cyan">シアン下線</span>' in doc_text
+

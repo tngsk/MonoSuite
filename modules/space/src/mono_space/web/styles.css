@@ -707,3 +707,53 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
 .node .math-source { white-space:pre-wrap; user-select:text; }
 
 .node:focus-visible { outline: none; }
+
+/* Mono Marker & Underline ----------------------------------- */
+:root {
+  --mono-highlight-yellow: rgba(254, 240, 138, 0.75);
+  --mono-highlight-pink: rgba(251, 207, 232, 0.75);
+  --mono-highlight-green: rgba(187, 247, 208, 0.75);
+  --mono-highlight-cyan: rgba(186, 230, 253, 0.75);
+  --mono-highlight-orange: rgba(254, 215, 170, 0.75);
+  --mono-highlight-ai: rgba(230, 202, 255, 0.75);
+  --mono-highlight-warning: rgba(255, 213, 164, 0.75);
+}
+
+.mono-marker {
+  background: transparent;
+  box-shadow: inset 0 -0.82em 0 0 var(--marker-bg, var(--mono-highlight-yellow));
+  padding: 0.1em 0.25em;
+  margin: 0 0.08em;
+  border-radius: 0.25rem;
+  color: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.mono-marker-yellow  { --marker-bg: var(--mono-highlight-yellow); }
+.mono-marker-pink    { --marker-bg: var(--mono-highlight-pink); }
+.mono-marker-green   { --marker-bg: var(--mono-highlight-green); }
+.mono-marker-cyan    { --marker-bg: var(--mono-highlight-cyan); }
+.mono-marker-orange  { --marker-bg: var(--mono-highlight-orange); }
+.mono-marker-ai      { --marker-bg: var(--mono-highlight-ai); }
+.mono-marker-warning { --marker-bg: var(--mono-highlight-warning); }
+
+.mono-underline {
+  background: transparent;
+  box-shadow: inset 0 -0.28em 0 0 var(--underline-bg, var(--mono-highlight-yellow));
+  padding: 0 0.15em;
+  margin: 0 0.04em;
+  border-radius: 0.25rem;
+  color: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.mono-underline-yellow  { --underline-bg: var(--mono-highlight-yellow); }
+.mono-underline-pink    { --underline-bg: var(--mono-highlight-pink); }
+.mono-underline-green   { --underline-bg: var(--mono-highlight-green); }
+.mono-underline-cyan    { --underline-bg: var(--mono-highlight-cyan); }
+.mono-underline-orange  { --underline-bg: var(--mono-highlight-orange); }
+.mono-underline-ai      { --underline-bg: var(--mono-highlight-ai); }
+.mono-underline-warning { --underline-bg: var(--mono-highlight-warning); }
+
