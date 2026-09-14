@@ -7,6 +7,7 @@
 ## ドキュメント体系
 
 ### Suite統合・設計（正本）
+
 - [Suite開発計画](docs/planning/DEVELOPMENT-PLAN.md)：段階B〜Fのロードマップと完了条件
 - [段階Dリリース受入記録](docs/planning/STAGE-D-RELEASE-REPORT.md)：制作環境UI、保存監視、位置同期、静的配信の実証結果
 - [段階Cリリース受入記録](docs/planning/STAGE-C-RELEASE-REPORT.md)：共通CLI、アトミック配布セット、マニフェストの実証結果
@@ -19,9 +20,11 @@
 - [調査対象の訂正記録](docs/planning/INVESTIGATION-CORRECTION.md)：以前の調査誤認に関する経緯記録
 
 ### 共通サンプル
+
 - [標準サンプル原稿](examples/standard/document.md)：Space発表とDoc配布の両立を実証する公式サンプル（[解説](examples/standard/README.md)）
 
 ### モジュール
+
 - [Mono Space（空間プレゼンテーション）](modules/space/README.md)
   - [記法ガイド](modules/space/docs/SYNTAX.md)
   - [設計仕様](modules/space/docs/DESIGN.md)
@@ -30,7 +33,6 @@
 - [Mono Doc（ドキュメント・PDF組版）](modules/doc/README.md)
   - [Doc仕様書](modules/doc/doc/SPECIFICATION.md)
   - [日本語PDFコード組版仕様](modules/doc/doc/JAPANESE_PDF_CODE_TYPOGRAPHY.md)
-
 
 ## 試す
 
