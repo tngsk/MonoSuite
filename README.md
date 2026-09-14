@@ -15,6 +15,9 @@
 - [環境セットアップガイド](docs/guides/ENVIRONMENT-SETUP.md)：Python・Node依存同期とテスト実行手順
 - [調査対象の訂正記録](docs/planning/INVESTIGATION-CORRECTION.md)：以前の調査誤認に関する経緯記録
 
+### 共通サンプル
+- [標準サンプル原稿](examples/standard/document.md)：Space発表とDoc配布の両立を実証する公式サンプル（[解説](examples/standard/README.md)）
+
 ### モジュール
 - [Mono Space（空間プレゼンテーション）](modules/space/README.md)
   - [記法ガイド](modules/space/docs/SYNTAX.md)
@@ -30,17 +33,30 @@
 
 初回環境セットアップは [環境セットアップガイド](docs/guides/ENVIRONMENT-SETUP.md) を参照してください。
 
-### Mono Space（プレゼンテーションHTML生成）
+### Suite共通サンプル（Space・Doc両対応）
+
+同じMarkdown原稿 [examples/standard/document.md](examples/standard/document.md) から、プレゼンテーション用HTML、閲覧用HTML、配布用PDFを生成できます。
 
 ```sh
-uv run mono-space modules/space/examples/standard/document.md -o dist/presentation.html --offline
+# Mono Space（空間プレゼンテーションHTML生成）
+uv run mono-space examples/standard/document.md -o dist/examples/standard/presentation.html --offline
+
+# Mono Doc（ドキュメントHTMLおよびPDF生成）
+uv run mono-doc examples/standard/document.md -o dist/examples/standard/document.html --pdf dist/examples/standard/document.pdf
 ```
 
-### Mono Doc（ドキュメントHTMLおよびPDF生成）
+### モジュール個別実行（内部仕様・フィクスチャ）
+
+各モジュール内部の独自フィクスチャや仕様書も独立して処理できます。
 
 ```sh
-uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/spec.html --pdf dist/spec.pdf
+# Mono Space 開発用フィクスチャ
+uv run mono-space modules/space/examples/standard/document.md -o dist/space-fixture.html --offline
+
+# Mono Doc 内部仕様書
+uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/doc-spec.html --pdf dist/doc-spec.pdf
 ```
 
 生成されたHTMLやPDFはブラウザやPDFビューアで直接開いて確認できます。
+
 
