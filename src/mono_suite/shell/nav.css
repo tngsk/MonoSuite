@@ -18,9 +18,9 @@
   background: rgba(13, 13, 16, 0.9) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border: none !important;
   border-radius: 9999px !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: none !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
   font-size: 11px !important;
   color: #f4f4f5 !important;
@@ -62,8 +62,8 @@
 
 .mono-nav-group {
   display: inline-flex;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
   border-radius: 9999px;
   padding: 2px;
   gap: 2px;
@@ -99,11 +99,11 @@
 }
 
 .mono-nav-export-btn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
   border-radius: 9999px;
   color: #a1a1aa;
-  padding: 3px 9px;
+  padding: 3px 10px;
   font-size: 10px;
   font-family: inherit;
   cursor: pointer;
@@ -113,8 +113,7 @@
 
 .mono-nav-export-btn:hover:not(:disabled) {
   color: #f4f4f5;
-  border-color: rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.16);
 }
 
 .mono-nav-export-btn:disabled {
