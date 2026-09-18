@@ -119,6 +119,11 @@ const SpatialAnnotations = (() => {
         class: isArrow ? "annotation-item annotation-arrow" : "annotation-item annotation-draw",
       });
 
+      const camera = getCamera();
+      const baseWidth = isArrow ? 3.5 : 6;
+      const strokeWidth = baseWidth / Math.max(camera.s, 0.1);
+      currentPath.style.strokeWidth = strokeWidth + "px";
+
       if (isArrow) {
         currentPath.setAttribute("marker-end", "url(#annotation-arrow-end)");
         if (mode === "arrow-both") {
