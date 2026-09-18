@@ -2,7 +2,7 @@
 name = "mono-space"
 version = "0.1.0"
 description = "Mono Space - Spatial Markdown Presentation"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dependencies = []
 
 [project.scripts]

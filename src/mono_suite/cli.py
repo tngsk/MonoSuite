@@ -111,20 +111,32 @@ def run_dev(args: argparse.Namespace) -> int:
 
     broadcaster = SSEBroadcaster()
     build_lock = threading.Lock()
+    rebuild_pending = threading.Event()
+
+    def _execute_preview_build():
+        print(f"\n原稿の変更を検知しました: {input_path.name}")
+        pipeline.run()
+        broadcaster.broadcast("reload", {"build_id": pipeline.build_id})
+        print("✓ プレビューを更新しました")
 
     def on_change():
         acquired = build_lock.acquire(blocking=False)
         if not acquired:
-            print("⚠️ ビルド実行中のため、原稿保存検知をスキップしました")
+            rebuild_pending.set()
+            print("⏳ ビルド実行中のため、完了後に最新原稿の再ビルドを予約しました")
             return
 
         try:
-            print(f"\n原稿の変更を検知しました: {input_path.name}")
-            pipeline.run()
-            broadcaster.broadcast("reload", {"build_id": pipeline.build_id})
-            print("✓ プレビューを更新しました")
-        except Exception as e:
-            print(f"❌ 更新エラー: {e}")
+            while True:
+                rebuild_pending.clear()
+                try:
+                    _execute_preview_build()
+                except Exception as e:
+                    print(f"❌ 更新エラー: {e}")
+
+                if not rebuild_pending.is_set():
+                    break
+                print("\n予約されていた最新原稿の再ビルドを実行します")
         finally:
             build_lock.release()
 
@@ -141,6 +153,16 @@ def run_dev(args: argparse.Namespace) -> int:
             full_pipeline.run()
             broadcaster.broadcast("reload", {"build_id": full_pipeline.build_id})
             print("✅ 完全配布セットの生成が完了しました")
+
+            # 完全ビルド中に原稿変更が予約されていた場合、最新プレビューを自動再構築
+            while rebuild_pending.is_set():
+                rebuild_pending.clear()
+                print("\n完全ビルド中に検知された最新原稿の再ビルドを実行します")
+                try:
+                    _execute_preview_build()
+                except Exception as e:
+                    print(f"❌ 更新エラー: {e}")
+
             return True
         except Exception as e:
             print(f"❌ 完全ビルドエラー: {e}")

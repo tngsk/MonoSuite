@@ -27,7 +27,7 @@ Markdown文書を広いキャンバスへ配置し、話題に近づいて説明
 
 ## 生成
 
-Python 3.9以降の標準ライブラリで生成します。このフォルダーで実行してください。
+Python 3.11以降の標準ライブラリで生成します。このフォルダーで実行してください。
 
 ```sh
 python3 build.py examples/standard/document.md -o dist/presentation.html --offline

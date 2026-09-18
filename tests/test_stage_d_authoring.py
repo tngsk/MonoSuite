@@ -178,32 +178,49 @@ def test_dev_server_auto_port_fallback(tmp_path: Path):
         conflict_sock.close()
 
 
-def test_build_lock_skips_concurrent_watcher_save():
-    """完全ビルド実行中のロック排他により、保存検知処理がスキップされることを検証"""
+def test_build_lock_schedules_pending_watcher_save():
+    """完全ビルド実行中の保存検知が破棄されず、完了後に最新原稿の再ビルドが実行されることを検証"""
     build_lock = threading.Lock()
-    skipped = False
-    rebuilt = False
+    rebuild_pending = threading.Event()
+    rebuild_count = 0
 
     def simulated_on_change():
-        nonlocal skipped, rebuilt
+        nonlocal rebuild_count
         if not build_lock.acquire(blocking=False):
-            skipped = True
+            rebuild_pending.set()
             return
         try:
-            rebuilt = True
+            while True:
+                rebuild_pending.clear()
+                rebuild_count += 1
+                if not rebuild_pending.is_set():
+                    break
         finally:
             build_lock.release()
 
-    # 完全ビルドがロックを保持中
-    with build_lock:
-        simulated_on_change()
+    def simulated_on_full_build():
+        nonlocal rebuild_count
+        with build_lock:
+            # 完全ビルド中に複数回の保存が発生
+            simulated_on_change()
+            simulated_on_change()
 
-    assert skipped is True
-    assert rebuilt is False
+            # 完全ビルド完了直後の予約処理
+            while rebuild_pending.is_set():
+                rebuild_pending.clear()
+                rebuild_count += 1
 
-    # ロック解放後
+    assert rebuild_count == 0
+    # 完全ビルドを実行し、その最中に保存イベントを発生させる
+    simulated_on_full_build()
+
+    # 完全ビルド終了時点で、予約されていた最新保存が自動再実行されている
+    assert rebuild_count == 1
+    assert rebuild_pending.is_set() is False
+
+    # その後の通常保存も正常に実行される
     simulated_on_change()
-    assert rebuilt is True
+    assert rebuild_count == 2
 
 
 def test_dev_server_threading_concurrent_sse_and_requests(tmp_path: Path):
