@@ -56,6 +56,9 @@ class BuildPipeline:
 
     def run(self) -> Path:
         """パイプラインを実行し、公開されたターゲットディレクトリを返す"""
+        # 実行ごとに一意なビルド識別子を生成し、一時作業領域を更新
+        self.build_id = uuid.uuid4().hex[:12]
+        self.publisher.set_build_id(self.build_id)
         print(f"Mono Suite ビルド開始: {self.input_path.name} (Build ID: {self.build_id})")
 
         # 1. 共通入力診断

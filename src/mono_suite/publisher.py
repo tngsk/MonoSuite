@@ -17,6 +17,11 @@ class Publisher:
         self.parent_dir = self.target_dir.parent
         self.temp_dir = self.parent_dir / f".tmp-{self.build_id}"
 
+    def set_build_id(self, build_id: str) -> None:
+        """ビルド識別子を更新し、一時作業領域パスを同期する"""
+        self.build_id = build_id
+        self.temp_dir = self.parent_dir / f".tmp-{self.build_id}"
+
     def prepare_temp_dir(self) -> Path:
         """一時作業領域をクリーンに準備する"""
         if self.temp_dir.exists():

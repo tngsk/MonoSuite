@@ -203,3 +203,26 @@ def test_stage_e_dev_server_error_recovery(tmp_path: Path):
     manifest_rec = json.loads((rec_target / "build-manifest.json").read_text(encoding="utf-8"))
     assert manifest_rec["headings"][0]["id"] == "recovered"
     assert manifest_rec["headings"][0]["title"] == "復帰原稿"
+
+
+def test_stage_e_build_id_regeneration_per_run(tmp_path: Path):
+    """同一BuildPipelineインスタンスでrun()を再実行した際にBuild IDが更新されることを検証"""
+    test_doc = tmp_path / "doc.md"
+    test_doc.write_text("# 初期版 {#v1}\n\n初期内容\n", encoding="utf-8")
+
+    out_dir = tmp_path / "out"
+    pipeline = BuildPipeline(test_doc, out_dir, generate_pdf=False, offline=True)
+
+    # 1回目の実行
+    target_1 = pipeline.run()
+    manifest_1 = json.loads((target_1 / "build-manifest.json").read_text(encoding="utf-8"))
+    build_id_1 = manifest_1["build_id"]
+
+    # 2回目の実行（原稿更新）
+    test_doc.write_text("# 更新版 {#v2}\n\n更新内容\n", encoding="utf-8")
+    target_2 = pipeline.run()
+    manifest_2 = json.loads((target_2 / "build-manifest.json").read_text(encoding="utf-8"))
+    build_id_2 = manifest_2["build_id"]
+
+    assert build_id_1 != build_id_2, "run()実行ごとに異なる一意なBuild IDが生成されること"
+    assert pipeline.build_id == build_id_2

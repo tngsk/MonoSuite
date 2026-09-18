@@ -17,6 +17,30 @@ class Preprocessor:
     DOC_CONTAINER_END = re.compile(r'^[ \t]*:::[ \t]*$', re.MULTILINE)
     SPACE_DIRECTIVE_PATTERN = re.compile(r'^[ \t]*::(layout|tone|focus|marker|style)\s+(\w+)[ \t]*$', re.MULTILINE)
 
+    FENCE_OPEN_REGEX = re.compile(r'^[ \t]{0,3}(`{3,}|~{3,})(.*)$')
+
+    @classmethod
+    def match_fence_open(cls, line: str) -> tuple[str, int] | None:
+        """コードフェンス開始行（```または~~~が3個以上）にマッチし、(記号文字, 長さ)を返す"""
+        m = cls.FENCE_OPEN_REGEX.match(line)
+        if not m:
+            return None
+        fence_chars = m.group(1)
+        info = m.group(2)
+        # バッククォートフェンスの場合、情報文字列内にバッククォートを含んではならない
+        if fence_chars[0] == '`' and '`' in info:
+            return None
+        return (fence_chars[0], len(fence_chars))
+
+    @classmethod
+    def match_fence_close(cls, line: str, open_char: str, open_len: int) -> bool:
+        """開いたフェンス記号と文字数以上の閉じフェンス行にマッチするか判定する"""
+        stripped = line.strip()
+        if not stripped:
+            return False
+        # 空白を除く全文字がopen_charであり、かつ長さがopen_len以上であること
+        return set(stripped) == {open_char} and len(stripped) >= open_len
+
     @classmethod
     def inject_heading_ids(cls, content: str) -> tuple[str, list[HeadingInfo]]:
         """コードブロック外の見出しを検出し、明示IDのない見出しに自動IDを付与する"""
@@ -25,43 +49,43 @@ class Preprocessor:
         lines = content.splitlines(keepends=True)
         result_lines: list[str] = []
         in_code_fence = False
-        fence_marker = ""
+        active_fence: tuple[str, int] | None = None
 
         for raw_line in lines:
             line_str = raw_line.rstrip("\r\n")
-            # コードフェンスの開始・終了判定（``` または ~~~）
-            stripped = line_str.strip()
-            if stripped.startswith("```") or stripped.startswith("~~~"):
-                current_fence = stripped[:3]
-                if not in_code_fence:
+
+            if not in_code_fence:
+                fence_info = cls.match_fence_open(line_str)
+                if fence_info:
                     in_code_fence = True
-                    fence_marker = current_fence
-                elif current_fence == fence_marker:
+                    active_fence = fence_info
+                    result_lines.append(raw_line)
+                    continue
+            else:
+                if active_fence and cls.match_fence_close(line_str, active_fence[0], active_fence[1]):
                     in_code_fence = False
-                    fence_marker = ""
+                    active_fence = None
                 result_lines.append(raw_line)
                 continue
 
-            if not in_code_fence:
-                match = cls.HEADING_REGEX.match(line_str)
-                if match:
-                    counter += 1
-                    hashes = match.group(1)
-                    title = match.group(2).strip()
-                    explicit_id = match.group(3)
+            match = cls.HEADING_REGEX.match(line_str)
+            if match:
+                counter += 1
+                hashes = match.group(1)
+                title = match.group(2).strip()
+                explicit_id = match.group(3)
 
-                    if explicit_id:
-                        h_id = explicit_id
-                        is_explicit = True
-                    else:
-                        h_id = f"sec-{counter}"
-                        is_explicit = False
+                if explicit_id:
+                    h_id = explicit_id
+                    is_explicit = True
+                else:
+                    h_id = f"sec-{counter}"
+                    is_explicit = False
 
-                    headings.append(HeadingInfo(id=h_id, title=title, level=len(hashes), is_explicit=is_explicit))
-                    # 改行文字を保持して置換
-                    ending = raw_line[len(line_str):]
-                    result_lines.append(f"{hashes} {title} {{#{h_id}}}{ending}")
-                    continue
+                headings.append(HeadingInfo(id=h_id, title=title, level=len(hashes), is_explicit=is_explicit))
+                ending = raw_line[len(line_str):]
+                result_lines.append(f"{hashes} {title} {{#{h_id}}}{ending}")
+                continue
 
             result_lines.append(raw_line)
 
@@ -73,12 +97,29 @@ class Preprocessor:
         lines = content.splitlines(keepends=True)
         preamble_lines: list[str] = []
         heading_index = -1
+        in_code_fence = False
+        active_fence: tuple[str, int] | None = None
 
         for i, raw_line in enumerate(lines):
             line = raw_line.rstrip("\r\n")
-            if cls.HEADING_REGEX.match(line):
-                heading_index = i
-                break
+
+            if not in_code_fence:
+                fence_info = cls.match_fence_open(line)
+                if fence_info:
+                    in_code_fence = True
+                    active_fence = fence_info
+                    preamble_lines.append(raw_line)
+                    continue
+                if cls.HEADING_REGEX.match(line):
+                    heading_index = i
+                    break
+            else:
+                if active_fence and cls.match_fence_close(line, active_fence[0], active_fence[1]):
+                    in_code_fence = False
+                    active_fence = None
+                preamble_lines.append(raw_line)
+                continue
+
             preamble_lines.append(raw_line)
 
         # 見出しが見つからない、またはプリアンブルが実質空（空白行のみ）の場合はそのまま返す
