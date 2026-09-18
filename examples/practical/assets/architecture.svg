@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="100%" height="100%">
+  <rect width="800" height="400" fill="#f8fafc" rx="16"/>
+  <rect x="40" y="40" width="720" height="320" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" rx="12"/>
+  <text x="400" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="24" font-weight="bold" fill="#0f172a" text-anchor="middle">Mono Suite 統合アーキテクチャ概要</text>
+  
+  <rect x="80" y="140" width="180" height="160" fill="#eff6ff" stroke="#3b82f6" stroke-width="2" rx="8"/>
+  <text x="170" y="180" font-family="sans-serif" font-size="18" font-weight="bold" fill="#1e40af" text-anchor="middle">Markdown 原稿</text>
+  <text x="170" y="215" font-family="sans-serif" font-size="13" fill="#3b82f6" text-anchor="middle">単一の記述ソース</text>
+  <text x="170" y="240" font-family="sans-serif" font-size="13" fill="#3b82f6" text-anchor="middle">数式・表・図版・工程</text>
+  <text x="170" y="265" font-family="sans-serif" font-size="13" fill="#3b82f6" text-anchor="middle">共通要素対応規準</text>
+
+  <path d="M 270 220 L 330 220" stroke="#64748b" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  
+  <rect x="340" y="140" width="140" height="160" fill="#f1f5f9" stroke="#64748b" stroke-width="2" rx="8"/>
+  <text x="410" y="190" font-family="sans-serif" font-size="16" font-weight="bold" fill="#334155" text-anchor="middle">共通診断</text>
+  <text x="410" y="220" font-family="sans-serif" font-size="16" font-weight="bold" fill="#334155" text-anchor="middle">前処理層</text>
+  <text x="410" y="250" font-family="sans-serif" font-size="12" fill="#64748b" text-anchor="middle">ID補完 / 検証</text>
+
+  <path d="M 490 180 L 540 160" stroke="#64748b" stroke-width="3" fill="none"/>
+  <path d="M 490 260 L 540 280" stroke="#64748b" stroke-width="3" fill="none"/>
+
+  <rect x="550" y="120" width="170" height="70" fill="#fdf4ff" stroke="#d946ef" stroke-width="2" rx="8"/>
+  <text x="635" y="150" font-family="sans-serif" font-size="15" font-weight="bold" fill="#86198f" text-anchor="middle">Space (発表)</text>
+  <text x="635" y="172" font-family="sans-serif" font-size="12" fill="#a21caf" text-anchor="middle">空間無限キャンバス</text>
+
+  <rect x="550" y="230" width="170" height="70" fill="#f0fdf4" stroke="#22c55e" stroke-width="2" rx="8"/>
+  <text x="635" y="260" font-family="sans-serif" font-size="15" font-weight="bold" fill="#14532d" text-anchor="middle">Doc (配布)</text>
+  <text x="635" y="282" font-family="sans-serif" font-size="12" fill="#15803d" text-anchor="middle">線形通読・PDF印刷</text>
+</svg>

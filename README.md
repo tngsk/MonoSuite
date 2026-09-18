@@ -8,7 +8,8 @@
 
 ### Suite統合・設計（正本）
 
-- [Suite開発計画](docs/planning/DEVELOPMENT-PLAN.md)：段階B〜Fのロードマップと完了条件
+- [Suite開発計画](docs/planning/DEVELOPMENT-PLAN.md)：段階B〜Gのロードマップと完了条件
+- [段階Eリリース受入記録](docs/planning/STAGE-E-RELEASE-REPORT.md)：代表作例の整備、日本語PDF品質検証、連続保存復帰、パッケージングの実証結果
 - [段階Dリリース受入記録](docs/planning/STAGE-D-RELEASE-REPORT.md)：制作環境UI、保存監視、直接切り替えとフローティングナビ、静的配信の実証結果
 - [段階Cリリース受入記録](docs/planning/STAGE-C-RELEASE-REPORT.md)：共通CLI、アトミック配布セット、マニフェストの実証結果
 - [段階B3契約検証レポート](docs/planning/STAGE-B3-VERIFICATION-REPORT.md)：位置マッピング、診断差分、互換性の実証結果と合格判定
@@ -21,7 +22,8 @@
 
 ### 共通サンプル
 
-- [標準サンプル原稿](examples/standard/document.md)：Space発表とDoc配布の両立を実証する公式サンプル（[解説](examples/standard/README.md)）
+- [標準サンプル原稿](examples/standard/document.md)：Space発表とDoc配布の両立を実証する公式標準サンプル（[解説](examples/standard/README.md)）
+- [実践的技術作例原稿](examples/practical/document.md)：数式・表・図版・工程・コードを含む実務向け作例（[解説](examples/practical/README.md)）
 
 ### モジュール
 
@@ -104,6 +106,9 @@ uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/doc-spec.html --pdf dis
 ## テスト・契約検証
 
 ```sh
+# 段階E 実務品質検証テストスイート（全4件）
+uv run pytest tests/test_stage_e_quality.py -v
+
 # 段階D 制作環境統合テストスイート（全8件）
 uv run pytest tests/test_stage_d_authoring.py -v
 
@@ -112,6 +117,9 @@ uv run pytest tests/test_stage_c_pipeline.py -v
 
 # 段階B3 統合契約検証テストスイート（全8件）
 uv run pytest tests/test_stage_b3_contract.py -v
+
+# 全統合テスト一括実行（全27件）
+uv run pytest tests/ -v
 
 # モジュール個別テストの実行手順は 環境セットアップガイド を参照してください。
 ```

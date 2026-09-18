@@ -41,13 +41,30 @@ class Diagnostics:
 
     @classmethod
     def validate_heading_ids(cls, content: str) -> None:
-        """明示IDの重複を検知する"""
+        """コードブロック外の明示IDの重複を検知する"""
         seen_ids = set()
-        for match in cls.HEADING_ID_PATTERN.finditer(content):
-            h_id = match.group(2)
-            if h_id in seen_ids:
-                raise DiagnosticsError(f"見出し明示IDが重複しています: {h_id}")
-            seen_ids.add(h_id)
+        in_code_fence = False
+        fence_marker = ""
+
+        for line in content.splitlines():
+            stripped = line.strip()
+            if stripped.startswith("```") or stripped.startswith("~~~"):
+                current_fence = stripped[:3]
+                if not in_code_fence:
+                    in_code_fence = True
+                    fence_marker = current_fence
+                elif current_fence == fence_marker:
+                    in_code_fence = False
+                    fence_marker = ""
+                continue
+
+            if not in_code_fence:
+                match = cls.HEADING_ID_PATTERN.match(line)
+                if match:
+                    h_id = match.group(2)
+                    if h_id in seen_ids:
+                        raise DiagnosticsError(f"見出し明示IDが重複しています: {h_id}")
+                    seen_ids.add(h_id)
 
     @classmethod
     def run_all(cls, input_path: Path) -> str:

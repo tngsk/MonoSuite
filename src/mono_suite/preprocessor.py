@@ -19,29 +19,53 @@ class Preprocessor:
 
     @classmethod
     def inject_heading_ids(cls, content: str) -> tuple[str, list[HeadingInfo]]:
-        """明示IDのない見出しに自動ID（sec-1, sec-2...）を付与し、見出し一覧を抽出する"""
+        """コードブロック外の見出しを検出し、明示IDのない見出しに自動IDを付与する"""
         headings: list[HeadingInfo] = []
         counter = 0
+        lines = content.splitlines(keepends=True)
+        result_lines: list[str] = []
+        in_code_fence = False
+        fence_marker = ""
 
-        def replacer(match: re.Match) -> str:
-            nonlocal counter
-            counter += 1
-            hashes = match.group(1)
-            title = match.group(2).strip()
-            explicit_id = match.group(3)
+        for raw_line in lines:
+            line_str = raw_line.rstrip("\r\n")
+            # コードフェンスの開始・終了判定（``` または ~~~）
+            stripped = line_str.strip()
+            if stripped.startswith("```") or stripped.startswith("~~~"):
+                current_fence = stripped[:3]
+                if not in_code_fence:
+                    in_code_fence = True
+                    fence_marker = current_fence
+                elif current_fence == fence_marker:
+                    in_code_fence = False
+                    fence_marker = ""
+                result_lines.append(raw_line)
+                continue
 
-            if explicit_id:
-                h_id = explicit_id
-                is_explicit = True
-            else:
-                h_id = f"sec-{counter}"
-                is_explicit = False
+            if not in_code_fence:
+                match = cls.HEADING_REGEX.match(line_str)
+                if match:
+                    counter += 1
+                    hashes = match.group(1)
+                    title = match.group(2).strip()
+                    explicit_id = match.group(3)
 
-            headings.append(HeadingInfo(id=h_id, title=title, level=len(hashes), is_explicit=is_explicit))
-            return f"{hashes} {title} {{#{h_id}}}"
+                    if explicit_id:
+                        h_id = explicit_id
+                        is_explicit = True
+                    else:
+                        h_id = f"sec-{counter}"
+                        is_explicit = False
 
-        processed = cls.HEADING_REGEX.sub(replacer, content)
-        return processed, headings
+                    headings.append(HeadingInfo(id=h_id, title=title, level=len(hashes), is_explicit=is_explicit))
+                    # 改行文字を保持して置換
+                    ending = raw_line[len(line_str):]
+                    result_lines.append(f"{hashes} {title} {{#{h_id}}}{ending}")
+                    continue
+
+            result_lines.append(raw_line)
+
+        return "".join(result_lines), headings
 
     @classmethod
     def merge_preamble_for_space(cls, content: str) -> str:
