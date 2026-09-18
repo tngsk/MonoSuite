@@ -9,6 +9,7 @@
 ### Suite統合・設計（正本）
 
 - [Suite開発計画](docs/planning/DEVELOPMENT-PLAN.md)：段階B〜Gのロードマップと完了条件
+- [段階Fリリース受入記録](docs/planning/STAGE-F-RELEASE-REPORT.md)：空間連動アノテーション（ドロー・アロー）、Doc側旧ブラシ整理の実証結果
 - [段階Eリリース受入記録](docs/planning/STAGE-E-RELEASE-REPORT.md)：代表作例の整備、日本語PDF品質検証、連続保存復帰、パッケージングの実証結果
 - [段階Dリリース受入記録](docs/planning/STAGE-D-RELEASE-REPORT.md)：制作環境UI、保存監視、直接切り替えとフローティングナビ、静的配信の実証結果
 - [段階Cリリース受入記録](docs/planning/STAGE-C-RELEASE-REPORT.md)：共通CLI、アトミック配布セット、マニフェストの実証結果
