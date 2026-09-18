@@ -1,7 +1,7 @@
 {
   "name": "mono-brush",
-  "description": "画面上への蛍光手書き描画・アノテーション（Bキーでトグル、Escで解除）",
-  "status": "active",
+  "description": "【非推奨】画面上への手書き描画（Mono Spaceの空間アノテーションへの移行を推奨）",
+  "status": "deprecated",
   "category": "presentation",
   "is_web_component": true,
   "interactive": false,

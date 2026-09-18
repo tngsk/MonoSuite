@@ -37,7 +37,7 @@ def build(source, output, refresh=False, offline=False):
     template = (base / 'engine.html').read_text(encoding='utf-8')
     css = (base / 'styles.css').read_text(encoding='utf-8')
     validate_styles(css)
-    js = '\n'.join((base / name).read_text(encoding='utf-8') for name in ('core.js', 'layout.js', 'motion.js', 'input.js', 'stickies.js', 'app.js'))
+    js = '\n'.join((base / name).read_text(encoding='utf-8') for name in ('core.js', 'layout.js', 'motion.js', 'input.js', 'stickies.js', 'annotations.js', 'app.js'))
     template = template.replace('__SPATIAL_CSS__', css).replace('__SPATIAL_JS__', js)
     payload = json.dumps(data, ensure_ascii=False).replace('<', '\\u003c')
     output.parent.mkdir(parents=True, exist_ok=True)

@@ -259,6 +259,34 @@ button svg {
   stroke-width: 7px;
   stroke-linejoin: round;
 }
+#annotations-layer {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 4;
+}
+.annotation-item {
+  pointer-events: none;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.annotation-draw {
+  stroke: var(--mono-highlight-pink, rgba(244, 63, 94, 0.75));
+  stroke-width: 6px;
+  opacity: 0.85;
+}
+.annotation-arrow {
+  stroke: var(--ai, #a26de4);
+  stroke-width: 3.5px;
+  color: var(--ai, #a26de4);
+}
+#viewport[data-annotation-mode="draw"],
+#viewport[data-annotation-mode="arrow"],
+#viewport[data-annotation-mode="arrow-both"] {
+  cursor: crosshair;
+}
 .hud {
   position: fixed;
   z-index: 5;

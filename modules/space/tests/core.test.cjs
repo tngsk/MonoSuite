@@ -104,3 +104,11 @@ test('standard navigation skips empty chapters but keeps them selectable',()=>{
  assert.equal(nav.adjacent(1),'topic');
  assert.equal(nav.adjacent(-1),'title');
 });
+
+test('spatial annotations format drawing and arrow paths accurately',()=>{
+ const annotations=require('../src/mono_space/web/annotations.js');
+ assert.equal(annotations.formatPath([]),'');
+ assert.equal(annotations.formatPath([{x:10,y:20}]),'M 10 20 L 10.1 20.1');
+ assert.equal(annotations.formatPath([{x:10,y:20},{x:30,y:40},{x:50,y:60}]),'M 10 20 L 30 40 L 50 60');
+ assert.equal(annotations.formatArrow({x:0,y:0},{x:100,y:200}),'M 0 0 L 100 200');
+});

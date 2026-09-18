@@ -605,6 +605,7 @@
     }
   });
   SpatialStickies.attach(viewport, world, () => state.camera);
+  SpatialAnnotations.attach(viewport, world, () => state.camera);
   const gestures = SpatialInput.attach(
     viewport,
     () => state.camera,
