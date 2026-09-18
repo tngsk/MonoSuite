@@ -1,6 +1,6 @@
 [project]
 name = "monosuite"
-version = "0.1.0"
+version = "1.0.0b1"
 description = "Mono Suite - Integrated authoring environment for presentation and handout"
 readme = "README.md"
 requires-python = ">=3.11"

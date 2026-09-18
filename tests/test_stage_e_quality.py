@@ -47,7 +47,7 @@ def test_stage_e_practical_document_full_build(tmp_path: Path):
     assert manifest_file.exists() and manifest_file.stat().st_size > 0
 
     manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
-    assert manifest["suite_version"] == "0.1.0"
+    assert manifest["suite_version"] == "1.0.0b1"
     assert "presentation_html" in manifest["artifacts"]
     assert "document_html" in manifest["artifacts"]
     assert "document_pdf" in manifest["artifacts"]

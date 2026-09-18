@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from .preprocessor import HeadingInfo
+from . import __version__
 
 
 class Manifest:
@@ -53,7 +54,7 @@ class Manifest:
         ]
 
         return {
-            "suite_version": "0.1.0",
+            "suite_version": __version__,
             "build_id": build_id,
             "created_at": created_at,
             "input": {

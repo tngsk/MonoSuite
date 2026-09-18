@@ -562,7 +562,7 @@ source = { editable = "modules/space" }
 
 [[package]]
 name = "monosuite"
-version = "0.1.0"
+version = "1.0.0b1"
 source = { editable = "." }
 dependencies = [
     { name = "mono" },

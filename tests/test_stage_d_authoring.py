@@ -74,7 +74,8 @@ def test_server_endpoints_and_shell_ui(tmp_path: Path):
         with urllib.request.urlopen(f"{base_url}/manifest") as res:
             assert res.status == 200
             manifest = json.loads(res.read().decode("utf-8"))
-            assert manifest["suite_version"] == "0.1.0"
+            assert manifest["suite_version"] == "1.0.0b1"
+            assert "presentation_html" in manifest["artifacts"]
             assert len(manifest["headings"]) > 0
 
     finally:

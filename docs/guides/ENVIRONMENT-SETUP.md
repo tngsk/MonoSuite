@@ -30,14 +30,11 @@ uv run playwright install chromium
 ### 3.1 Mono Space テストスイート
 
 ```sh
-# Python単体テスト（全54件）
-PYTHONPATH=modules/space/src python3 -m unittest discover -s modules/space/tests
+# Python単体テスト（全57件）
+uv run --project modules/space pytest modules/space/tests/
 
-# Node幾何計算テスト（全13件）
+# Node幾何計算・アノテーションテスト（全14件）
 node --test modules/space/tests/core.test.cjs
-
-# ブラウザテスト用HTML生成
-python3 modules/space/tests/build_browser_test.py
 ```
 
 ### 3.2 Mono Doc テストスイート
@@ -49,25 +46,11 @@ uv run --directory modules/doc pytest
 
 注記：`tests/components/test_mono_topic_rail.py` の5件は、トピックライン機能が開発中のため意図的にスキップされています。
 
-### 3.3 Suite 統合契約検証テストスイート
+### 3.3 Suite 統合テストスイート
 
 ```sh
-# 段階B3 統合契約検証テスト（全7件通過）
-uv run pytest tests/test_stage_b3_contract.py -v
-```
-
-### 3.4 Suite 配布パイプライン回帰テストスイート
- 
-```sh
-# 段階C 配布パイプラインテスト（全5件通過）
-uv run pytest tests/test_stage_c_pipeline.py -v
-```
-
-### 3.5 Suite 制作環境テストスイート
-
-```sh
-# 段階D 制作環境統合テスト（全4件通過）
-uv run pytest tests/test_stage_d_authoring.py -v
+# Suite統合テスト一括実行（全30件通過）
+uv run pytest tests/
 ```
 
 ## 4. CLI変換およびプレビューサーバーの確認

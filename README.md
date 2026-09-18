@@ -107,6 +107,9 @@ uv run mono-doc modules/doc/doc/SPECIFICATION.md -o dist/doc-spec.html --pdf dis
 ## テスト・契約検証
 
 ```sh
+# 段階F 空間アノテーション統合テストスイート（全2件）
+uv run pytest tests/test_stage_f_annotations.py -v
+
 # 段階E 実務品質検証テストスイート（全5件）
 uv run pytest tests/test_stage_e_quality.py -v
 
@@ -119,7 +122,7 @@ uv run pytest tests/test_stage_c_pipeline.py -v
 # 段階B3 統合契約検証テストスイート（全8件）
 uv run pytest tests/test_stage_b3_contract.py -v
 
-# 全統合テスト一括実行（全28件）
+# 全統合テスト一括実行（全30件）
 uv run pytest tests/ -v
 
 # モジュール個別テストの実行手順は 環境セットアップガイド を参照してください。
