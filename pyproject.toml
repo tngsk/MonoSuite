@@ -30,3 +30,8 @@ Mono = { workspace = true }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pypdf>=6.19.0",
+]
