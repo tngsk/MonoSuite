@@ -408,10 +408,6 @@ header {
   padding: 3px 6px;
   font: 11px monospace;
 }
-.quiet .hud {
-  opacity: 1;
-  pointer-events: auto;
-}
 
 .hint {
   position: fixed;
@@ -421,9 +417,6 @@ header {
   color: #969692;
   pointer-events: none;
   z-index: 3;
-}
-.quiet .hint {
-  display: none;
 }
 @media (max-width: 850px) {
   #map-panel,
@@ -684,9 +677,6 @@ header {
 .content a,.content code,.codeblock pre { overflow-wrap:anywhere; }
 
 
-/* A single explicit control remains accessible when presentation chrome is folded. */
-#menu-toggle { position:fixed; top:18px; right:20px; z-index:6; width:36px; height:36px; padding:0; }
-.top-actions { right:64px; }
 
 /* Document blocks preserve semantic nesting without adding canvas nodes. */
 .markdown-list { margin:24px 0; padding-inline-start:1.5em; font-size:20px; line-height:1.85; }
@@ -707,8 +697,6 @@ header {
 .node[data-level="1"] > .content > h2 { font-size:var(--title-size); line-height:var(--title-leading); }
 .node[data-level="2"] > .content > h2 { font-size:var(--chapter-size); }
 .node p { font-size:var(--body-size); line-height:var(--body-leading); }
-.top-actions { right:64px; }
-.quiet .hud,.quiet .hud:focus-within { opacity:1; pointer-events:auto; }
 .node > .content > h2,.node > .content > div > :not(.markdown-table) { width:100%; max-width:100%; box-sizing:border-box; }
 .node > .content > div > p,.node > .content > div > .markdown-list,.node > .content > div > .markdown-quote { max-width:var(--node-width,512px); }
 .image-gallery { display:grid; grid-template-columns:repeat(var(--columns),minmax(0,1fr)); gap:32px; margin:24px 0; }

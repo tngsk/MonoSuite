@@ -7,6 +7,17 @@
     viewport = document.querySelector("#viewport"),
     svg = document.querySelector("#connections"),
     els = new Map();
+  viewport.addEventListener("scroll", () => {
+    if (viewport.scrollLeft !== 0 || viewport.scrollTop !== 0) {
+      viewport.scrollLeft = 0;
+      viewport.scrollTop = 0;
+    }
+  });
+  window.addEventListener("scroll", () => {
+    if (window.scrollX !== 0 || window.scrollY !== 0) {
+      window.scrollTo(0, 0);
+    }
+  });
   const nodeById = new Map(data.nodes.map((n) => [n.id, n]));
   const nav = new Navigation(
     data.route,
@@ -82,7 +93,7 @@
       items[next].focus({ preventScroll: true });
       items[next].scrollIntoView({ block: "nearest", behavior: "instant" });
     }
-    if (!/^[0-9]$/.test(e.key) && e.key.toLowerCase() !== "h") e.stopPropagation();
+    if (!/^[0-9]$/.test(e.key) && e.key.toLowerCase() !== "h" && e.key !== "?") e.stopPropagation();
   });
   for (const [i, n] of data.nodes.entries()) {
     const el = document.createElement("section");
@@ -90,7 +101,6 @@
     el.dataset.level = n.level;
     el.dataset.id = n.id;
     if (!n.parent) el.classList.add("atlas");
-    el.tabIndex = 0;
     el.setAttribute("aria-label", n.title);
     const eyebrow = document.createElement("div");
     eyebrow.className = "eyebrow";
@@ -183,14 +193,6 @@
       if (!gestures.moved) show(n.id, e.target.closest("img,.markdown-table"));
     });
     el.addEventListener("keydown", (e) => {
-      if (e.target.closest("code,.codeblock")) {
-        e.stopPropagation();
-        return;
-      }
-      if (e.target.closest("a")) {
-        e.stopPropagation();
-        return;
-      }
       if (e.key === "Enter") {
         e.stopPropagation();
         focusId(n.id);
@@ -473,18 +475,6 @@
           : "最後のセクション";
     }
   }
-  const menuToggle = document.querySelector('#menu-toggle');
-  function setMenuCollapsed(collapsed) {
-    closeToc();
-    document.querySelector('#help').hidden = true;
-    document.querySelector('#help-toggle').setAttribute('aria-expanded', 'false');
-    if (collapsed && document.activeElement.closest?.('.hud')) document.activeElement.blur();
-    document.body.classList.toggle('quiet', collapsed);
-    for (const panel of document.querySelectorAll('.hud')) panel.inert = collapsed;
-    menuToggle.setAttribute('aria-expanded', String(!collapsed));
-    menuToggle.setAttribute('aria-label', collapsed ? 'メニューを展開' : 'メニューを収納');
-  }
-  menuToggle.onclick = () => setMenuCollapsed(!document.body.classList.contains('quiet'));
   function focusCamera(id) {
     const box = bounds(focusElement(id));
     if (nodeById.get(id).focus === 'image' || focusedElement?.tagName === 'IMG') {
@@ -540,13 +530,13 @@
       ? "ミニマップを表示"
       : "ミニマップを非表示";
   };
-  document.querySelector("#help-toggle").onclick = () => {
+  function toggleHelp() {
     const help = document.querySelector("#help");
+    const toggle = document.querySelector("#help-toggle");
     help.hidden = !help.hidden;
-    document
-      .querySelector("#help-toggle")
-      .setAttribute("aria-expanded", String(!help.hidden));
-  };
+    toggle.setAttribute("aria-expanded", String(!help.hidden));
+  }
+  document.querySelector("#help-toggle").onclick = toggleHelp;
   document.querySelector("#fullscreen").onclick = async () => {
     try {
       if (document.fullscreenElement) await document.exitFullscreen();
@@ -587,17 +577,20 @@
     } else if (e.key.toLowerCase() === "o") {
       toggleOverview();
     } else if (e.key === "Escape") {
-
-      document.querySelector("#help").hidden = true;
-      document
-        .querySelector("#help-toggle")
-        .setAttribute("aria-expanded", "false");
+      const help = document.querySelector("#help");
+      if (!help.hidden) {
+        help.hidden = true;
+        document
+          .querySelector("#help-toggle")
+          .setAttribute("aria-expanded", "false");
+        return;
+      }
       all();
     } else if (e.key === "Home") {
       all();
-    } else if (e.key.toLowerCase() === "h") {
+    } else if (e.key.toLowerCase() === "h" || e.key === "?" || (e.key === "/" && e.shiftKey)) {
       e.preventDefault();
-      setMenuCollapsed(!document.body.classList.contains("quiet"));
+      toggleHelp();
     } else if (e.key === "+" || e.key === "=") {
       zoomAt(CONFIG.zoomStep);
     } else if (e.key === "-") {
