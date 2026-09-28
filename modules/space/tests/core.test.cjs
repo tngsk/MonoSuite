@@ -17,8 +17,8 @@ test('focus fits width regardless of height; overview still fits both axes',()=>
   const short={x:20,y:30,w:512,h:200},tall={...short,h:4000};
   const c=fitCamera(tall,view,true);
   assert.deepEqual(c,fitCamera(short,view,true));
-  assert(c.s<=2.024);
-  assert(c.x+(tall.x+tall.w)*c.s<=view.w*1.01+1e-8);
+  assert(c.s<=1.84);
+  assert(c.x+(tall.x+tall.w)*c.s<=view.w*.92+1e-8);
   assert.equal(c.y+tall.y*c.s,view.h*.15);
   assert(c.y+(tall.y+tall.h)*c.s>view.h);
   const overview=fitCamera(tall,view,false);

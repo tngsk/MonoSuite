@@ -1,8 +1,8 @@
 /* Geometry and navigation are pure, DOM-independent and shared with tests. */
 const SpatialCore = (() => {
   const CONFIG = Object.freeze({
-    focusScale: 2.024,
-    overviewScale: 1.54,
+    focusScale: 1.84,
+    overviewScale: 1.4,
     minScale: 0.025,
     maxScale: 4,
     desktopBreakpoint: 850,
@@ -35,9 +35,8 @@ const SpatialCore = (() => {
           : CONFIG.mobileLeft;
       const s = Math.min(
         CONFIG.focusScale,
-        (Math.max(1, view.w * (1 - left - CONFIG.rightMargin)) /
-          Math.max(1, box.w)) *
-          1.1,
+        Math.max(1, view.w * (1 - left - CONFIG.rightMargin)) /
+          Math.max(1, box.w),
       );
       return {
         s,
@@ -47,8 +46,8 @@ const SpatialCore = (() => {
     }
     const s = Math.min(
       CONFIG.overviewScale,
-      (Math.max(1, view.w - CONFIG.overviewPadding) / Math.max(1, box.w)) * 1.1,
-      (Math.max(1, view.h - CONFIG.overviewPadding) / Math.max(1, box.h)) * 1.1,
+      Math.max(1, view.w - CONFIG.overviewPadding) / Math.max(1, box.w),
+      Math.max(1, view.h - CONFIG.overviewPadding) / Math.max(1, box.h),
     );
     return {
       s,
