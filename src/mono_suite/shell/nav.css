@@ -168,3 +168,8 @@
   50% { opacity: 1; }
   100% { opacity: 0.3; }
 }
+
+body.quiet #mono-floating-nav {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

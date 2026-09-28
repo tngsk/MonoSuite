@@ -537,6 +537,18 @@
     toggle.setAttribute("aria-expanded", String(!help.hidden));
   }
   document.querySelector("#help-toggle").onclick = toggleHelp;
+  function setUiCollapsed(collapsed) {
+    closeToc();
+    document.querySelector("#help").hidden = true;
+    document.querySelector("#help-toggle").setAttribute("aria-expanded", "false");
+    document.body.classList.toggle("quiet", collapsed);
+    for (const panel of document.querySelectorAll(".hud")) panel.inert = collapsed;
+    const floatingNav = document.querySelector("#mono-floating-nav");
+    if (floatingNav) floatingNav.inert = collapsed;
+    if (collapsed && document.activeElement?.closest?.(".hud, #mono-floating-nav")) {
+      document.activeElement.blur();
+    }
+  }
   document.querySelector("#fullscreen").onclick = async () => {
     try {
       if (document.fullscreenElement) await document.exitFullscreen();
@@ -585,10 +597,17 @@
           .setAttribute("aria-expanded", "false");
         return;
       }
+      if (document.body.classList.contains("quiet")) {
+        setUiCollapsed(false);
+        return;
+      }
       all();
     } else if (e.key === "Home") {
       all();
-    } else if (e.key.toLowerCase() === "h" || e.key === "?" || (e.key === "/" && e.shiftKey)) {
+    } else if (e.key.toLowerCase() === "h") {
+      e.preventDefault();
+      setUiCollapsed(!document.body.classList.contains("quiet"));
+    } else if (e.key === "?" || (e.key === "/" && e.shiftKey)) {
       e.preventDefault();
       toggleHelp();
     } else if (e.key === "+" || e.key === "=") {
