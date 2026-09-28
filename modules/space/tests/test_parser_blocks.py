@@ -23,3 +23,29 @@ class BlockTests(unittest.TestCase):
         self.assertEqual(document['nodes'][0]['blocks'][0]['kind'], 'images')
         with self.assertRaises(OSError):
             render_document(document, Path('.'))
+
+    def test_html_comment_removal(self):
+        source = """# Section
+<!-- 単一行コメント -->
+段落本文 <!-- インラインコメント --> つづき
+
+<!--
+複数行
+コメント
+-->
+
+```html
+<!-- コードブロック内コメント -->
+<div>保留</div>
+```
+`<!-- インラインコード内コメント -->`
+"""
+        document = parse_document(source)
+        rendered = render_document(document, Path('.'))
+        html_str = rendered['nodes'][0]['html']
+        self.assertNotIn("単一行コメント", html_str)
+        self.assertNotIn("インラインコメント", html_str)
+        self.assertNotIn("複数行", html_str)
+        self.assertIn("&lt;!-- コードブロック内コメント --&gt;", html_str)
+        self.assertIn("&lt;!-- インラインコード内コメント --&gt;", html_str)
+

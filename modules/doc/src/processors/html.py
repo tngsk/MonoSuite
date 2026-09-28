@@ -318,8 +318,7 @@ class HTMLDocumentBuilder:
                     self.output.append(f"&#{name};")
 
             def handle_comment(self, data):
-                if not self.exclude_stack:
-                    self.output.append(f"<!--{data}-->")
+                pass
 
             def handle_decl(self, decl):
                 if not self.exclude_stack:
@@ -489,6 +488,7 @@ class HTMLDocumentBuilder:
             if template_file.exists():
                 try:
                     template_content = template_file.read_text(encoding="utf-8")
+                    template_content = re.sub(r"<!--.*?-->", "", template_content, flags=re.DOTALL)
                     css_content = ""
                     if css_file.exists():
                         try:

@@ -38,3 +38,7 @@ def test_presentation_profile_injects_zoom_and_brush(tmp_path):
     # 削除されたプレゼンターコンポーネントおよびスピーカーノートタグが存在しないこと
     assert "mono-presenter" not in html_content
     assert "mono-speaker-notes" not in html_content
+    # HTMLコメントが出力HTMLに含まれないこと
+    assert "ここはコメントです" not in html_content
+    assert "<!--" not in html_content
+

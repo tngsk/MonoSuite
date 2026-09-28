@@ -130,7 +130,40 @@ def normalize_headings(nodes, layouts, directives):
     return kept
 
 
+def strip_html_comments(source: str) -> str:
+    blocks = {}
+    counter = 0
+
+    def replace_block(match: re.Match) -> str:
+        nonlocal counter
+        placeholder = f"@@SPACE_CODE_BLOCK_{counter}@@"
+        blocks[placeholder] = match.group(0)
+        counter += 1
+        return placeholder
+
+    fenced_pattern = re.compile(
+        r"(?s)(^[ \t]*(?P<f>`{3,}|~{3,})[^\n]*.*?\n[ \t]*(?P=f)[ \t]*(?=\n|$))",
+        re.MULTILINE,
+    )
+    processed = fenced_pattern.sub(replace_block, source)
+
+    inline_pattern = re.compile(r"(?<!`)(`+)(?!`)(.*?)(?<!`)\1(?!`)", re.DOTALL)
+    processed = inline_pattern.sub(replace_block, processed)
+
+    def comment_replacer(match: re.Match) -> str:
+        return "\n" * match.group(0).count("\n")
+
+    processed = re.sub(r"<!--.*?-->", comment_replacer, processed, flags=re.DOTALL)
+
+    if blocks:
+        pattern = re.compile(r"@@SPACE_CODE_BLOCK_\d+@@")
+        processed = pattern.sub(lambda m: blocks.get(m.group(0), m.group(0)), processed)
+
+    return processed
+
+
 def parse_document(source):
+    source = strip_html_comments(source)
     nodes, stack, edges, route = [], [], [], []
     layouts = set()
     directives = {}

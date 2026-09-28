@@ -148,3 +148,30 @@ Inline `@[icon: inside_inline]` testing.
         self.assertIn("<li>子項目1</li>", html_output)
         self.assertIn("<li>子項目2</li>", html_output)
 
+    def test_html_comment_removal(self):
+        """本文中のHTMLコメントが除去され、コードブロック内のコメントは保持されることをテスト"""
+        md_content = """# 見出し
+<!-- 単一行コメント -->
+本文前 <!-- インラインコメント --> 本文後
+
+<!--
+複数行
+コメント
+-->
+
+```html
+<!-- コードブロック内のコメント -->
+<div>保留</div>
+```
+
+`<!-- インラインコード内のコメント -->`
+"""
+        html_output = self.processor.convert_markdown_to_html(md_content)
+        self.assertNotIn("単一行コメント", html_output)
+        self.assertNotIn("インラインコメント", html_output)
+        self.assertNotIn("複数行", html_output)
+        self.assertNotIn("コメント", html_output.split("<pre>")[0])
+        self.assertIn("&lt;!-- コードブロック内のコメント --&gt;", html_output)
+        self.assertIn("&lt;!-- インラインコード内のコメント --&gt;", html_output)
+
+

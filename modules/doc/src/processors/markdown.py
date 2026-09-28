@@ -119,6 +119,11 @@ class MarkdownProcessor:
 
         return pattern.sub(replacer, processed_content)
 
+    @staticmethod
+    def _remove_html_comments(content: str) -> str:
+        """HTMLコメント（<!-- ... -->）を削除する"""
+        return re.sub(r"<!--.*?-->", "", content, flags=re.DOTALL)
+
     def convert_markdown_to_html(self, markdown_content: str) -> str:
         """
         MarkdownをHTMLに変換
@@ -135,6 +140,9 @@ class MarkdownProcessor:
         try:
             # コンポーネントパース前にコードブロックを保護
             protected_content, blocks = self._protect_code_blocks(markdown_content)
+
+            # HTMLコメント（コードブロック外）を除去
+            protected_content = self._remove_html_comments(protected_content)
 
             # Fast path: If the document doesn't contain any potential component markers,
             # we can safely skip running the 20+ regex component parsers over the entire document.
