@@ -2,7 +2,7 @@
 const SpatialLayout = (() => {
   const settings = Object.freeze({
     grid: 32,
-    bodyWidth: 512,
+    bodyWidth: 576,
     sectionWidth: 768,
     density: "standard",
   });
