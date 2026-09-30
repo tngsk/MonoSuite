@@ -4,11 +4,23 @@ import argparse
 import json
 import re
 from pathlib import Path
+import html
 from .math_render import MathError, error_line
 from .links import Previews
 from .importers import IMPORTERS
 from .markdown_parser import parse_document
 from .markdown_renderer import render_document
+
+
+def extract_title(data):
+    for node in data.get('nodes', []):
+        if node.get('level') == 1:
+            raw = re.sub(r'<[^>]+>', '', node.get('title', ''))
+            clean = html.unescape(raw).strip()
+            clean = re.sub(r'\s+', ' ', clean)
+            if clean:
+                return clean[:60]
+    return "Document"
 
 
 def parse(source, root=Path('.'), previews=None, cache_root=None):
@@ -39,6 +51,9 @@ def build(source, output, refresh=False, offline=False):
     validate_styles(css)
     js = '\n'.join((base / name).read_text(encoding='utf-8') for name in ('core.js', 'layout.js', 'motion.js', 'input.js', 'stickies.js', 'annotations.js', 'app.js'))
     template = template.replace('__SPATIAL_CSS__', css).replace('__SPATIAL_JS__', js)
+    title = extract_title(data)
+    safe_title = html.escape(title, quote=True).replace("&#x27;", "&#39;")
+    template = re.sub(r'<title>.*?</title>', f'<title>{safe_title}</title>', template, count=1)
     payload = json.dumps(data, ensure_ascii=False).replace('<', '\\u003c')
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(template.replace('__SPATIAL_DATA__', payload), encoding='utf-8')

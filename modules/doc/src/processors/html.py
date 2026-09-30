@@ -226,11 +226,14 @@ class HTMLDocumentBuilder:
         Returns:
             抽出されたタイトル（デフォルト: "Document"）
         """
-        match = re.search(r"<h1[^>]*>(.+?)</h1>", html_content)
+        match = re.search(r"<h1[^>]*>(.+?)</h1>", html_content, flags=re.DOTALL)
         if match:
             # HTMLタグを削除
             title = re.sub(r"<[^>]+>", "", match.group(1))
-            return title[:60]  # 最大60文字
+            title = html.unescape(title).strip()
+            title = re.sub(r"\s+", " ", title)
+            if title:
+                return title[:60]  # 最大60文字
         return "Document"
 
     @staticmethod
