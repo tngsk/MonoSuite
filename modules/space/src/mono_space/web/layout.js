@@ -112,8 +112,14 @@ const SpatialLayout = (() => {
     }
     // Width depends only on the element's role, never its text or column count.
     for (const entry of entries) {
-      entry.w = m.section;
-      entry.content.style.width = entry.w + "px";
+      // Atlas (intro + children) nodes use the body reading width for their content area.
+      entry.w = entry.el.classList.contains("atlas") ? m.body : m.section;
+      // Allow a 'slide' node to opt into a narrower intro column via CSS variable.
+      if (entry.el.classList.contains("slide")) {
+        entry.content.style.width = "var(--slide-content-width)";
+      } else {
+        entry.content.style.width = entry.w + "px";
+      }
       entry.content.style.maxWidth = "none";
     }
     // Heights must be measured after the final text wrapping widths are applied.

@@ -780,3 +780,63 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
 .mono-underline-ai      { --underline-bg: var(--mono-highlight-ai); }
 .mono-underline-warning { --underline-bg: var(--mono-highlight-warning); }
 
+/* Slide layout: Mono — very simple, delicate styling.
+   Left: short intro. Right: 2–3 photos presented with soft edges and subtle shadow. */
+.node.slide.atlas {
+  --slide-content-width: 340px;
+  --slide-image-height: 420px;
+  --slide-gap: 40px;
+  --slide-image-radius: 6px;
+  --slide-image-shadow: 0 6px 12px rgba(24,25,26,0.06);
+}
+.node.slide > .content {
+  width: var(--slide-content-width);
+  padding-top: 24px;
+  padding-right: 20px;
+}
+.node.slide > .content h2 {
+  font-size: 30px;
+  line-height: 1.35;
+  margin: 0 0 8px 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+.node.slide > .content p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.6;
+}
+.node.slide > .children {
+  gap: var(--slide-gap);
+  margin: 0;
+  align-items: center;
+  display: flex;
+}
+.node.slide > .children > .node {
+  min-width: 260px;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+}
+.node.slide img {
+  width: 100%;
+  height: var(--slide-image-height);
+  object-fit: cover;
+  border-radius: var(--slide-image-radius);
+  border: 1px solid rgba(0,0,0,0.03);
+  box-shadow: var(--slide-image-shadow);
+  display: block;
+  background: linear-gradient(180deg, var(--paper), #fff);
+  transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms;
+}
+.node.slide img:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(24,25,26,0.08);
+}
+@media (max-width: 850px) {
+  .node.slide > .content { width: 100%; padding-top: 20px; padding-right: 0; }
+  .node.slide > .children { flex-direction: column; gap: 20px; }
+  .node.slide img { height: auto; max-height: 520px; }
+}
+

@@ -261,7 +261,7 @@ def parse_document(source):
             m = re.fullmatch(r'::(layout|tone|focus|marker|style) (\w+)', line)
             if not m or not stack:
                 raise ValueError(f'{number}行: 不明なディレクティブ')
-            allowed = dict(layout=('row', 'stack', 'compare', 'flow'), tone=('neutral', 'primary', 'secondary', 'accent', 'info', 'success', 'warning', 'error', 'normal', 'ai', 'note'), style=('plain', 'note'), focus=('content', 'subtree', 'image'), marker=('on', 'off'))
+            allowed = dict(layout=('row', 'stack', 'compare', 'flow', 'slide'), tone=('neutral', 'primary', 'secondary', 'accent', 'info', 'success', 'warning', 'error', 'normal', 'ai', 'note'), style=('plain', 'note'), focus=('content', 'subtree', 'image'), marker=('on', 'off'))
             if m[2] not in allowed[m[1]]:
                 raise ValueError(f'{number}行: 未対応の値 {m[2]}')
             directives.setdefault(stack[-1]['id'], []).append((number, m[1]))
