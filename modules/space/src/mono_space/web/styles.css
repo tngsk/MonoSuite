@@ -761,12 +761,11 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
 
 /* Slide layout: Mono — very simple, delicate styling.
    Left: short intro. Right: 2–3 photos presented with soft edges and subtle shadow. */
-.node.slide.atlas {
+.node.slide {
   --slide-content-width: 340px;
   --slide-image-height: 420px;
   --slide-gap: 40px;
   --slide-image-radius: 6px;
-  --slide-image-shadow: 0 6px 12px rgba(24,25,26,0.06);
 }
 .node.slide > .content {
   width: var(--slide-content-width);

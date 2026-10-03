@@ -100,8 +100,7 @@
     el.className = `node ${n.layout} tone-${n.tone} ${n.style === "note" ? "note" : ""}`;
     el.dataset.level = n.level;
     el.dataset.id = n.id;
-    // Treat explicit 'slide' layout as an atlas so it gets an intro/content split.
-    if (!n.parent || n.layout === "slide") el.classList.add("atlas");
+    if (!n.parent) el.classList.add("atlas");
     el.setAttribute("aria-label", n.title);
     const eyebrow = document.createElement("div");
     eyebrow.className = "eyebrow";
