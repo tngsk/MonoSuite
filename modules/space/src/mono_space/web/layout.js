@@ -112,8 +112,10 @@ const SpatialLayout = (() => {
     }
     // Width depends only on the element's role, never its text or column count.
     for (const entry of entries) {
-      // Atlas (intro + children) nodes use the body reading width for their content area.
-      entry.w = entry.el.classList.contains("atlas") ? m.body : m.section;
+      // Width is governed by the section role (section width); keep this value
+      // so child container positions remain stable. Do not change node.w for atlas
+      // nodes — intro column width can be controlled via CSS variables instead.
+      entry.w = m.section;
       // Allow a 'slide' node to opt into a narrower intro column via CSS variable.
       if (entry.el.classList.contains("slide")) {
         entry.content.style.width = "var(--slide-content-width)";
