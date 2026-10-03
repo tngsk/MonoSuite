@@ -759,64 +759,62 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
 .mono-marker-cyan    { --marker-bg: var(--mono-highlight-cyan); }
 .mono-marker-orange  { --marker-bg: var(--mono-highlight-orange); }
 
-/* Slide layout: Mono — very simple, delicate styling.
-   Left: short intro. Right: 2–3 photos presented with soft edges and subtle shadow. */
+/* Slide layout: Mono Approach A — 1 section with intro text and 2-3 photos.
+   The section has fixed slide width (e.g. 1120px) and splits text on the left,
+   photo gallery on the right. */
 .node.slide {
-  --slide-content-width: 340px;
-  --slide-image-height: 420px;
-  --slide-gap: 40px;
+  --slide-width: 1120px;
+  --slide-text-width: 320px;
+  --slide-gap: 48px;
+  --slide-image-height: 380px;
   --slide-image-radius: 6px;
 }
-.node.slide > .content {
-  width: var(--slide-content-width);
-  padding-top: 24px;
-  padding-right: 20px;
-}
-.node.slide > .content h2 {
-  font-size: 30px;
+.node.slide > .content > h2 {
+  font-size: 32px;
   line-height: 1.35;
-  margin: 0 0 8px 0;
+  margin: 0 0 24px 0;
   color: var(--ink);
   font-weight: 700;
 }
-.node.slide > .content p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 18px;
-  line-height: 1.6;
-}
-.node.slide > .children {
+.node.slide > .content > div {
+  display: grid;
+  grid-template-columns: var(--slide-text-width) 1fr;
   gap: var(--slide-gap);
-  margin: 0;
-  align-items: center;
-  display: flex;
+  align-items: start;
 }
-.node.slide > .children > .node {
-  min-width: 260px;
-  padding: 0;
-  margin: 0;
-  background: transparent;
+.node.slide > .content > div > p {
+  max-width: 100%;
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  line-height: 1.75;
+  color: var(--muted);
 }
-	.node.slide img {
-	  width: 100%;
-	  height: var(--slide-image-height);
-	  object-fit: cover;
-	  border-radius: var(--slide-image-radius);
-	  /* Preserve the page dot background; do not add additional image background or shadow. */
-	  display: block;
-	  transition: transform 220ms cubic-bezier(.2,.8,.2,1);
-	}
-	.node.slide img:hover {
-	  transform: translateY(-3px);
-	}
+.node.slide > .content > div > .image-gallery {
+  margin: 0;
+  gap: 24px;
+}
+.node.slide > .content > div > .image-gallery img {
+  width: 100%;
+  height: var(--slide-image-height);
+  object-fit: cover;
+  border-radius: var(--slide-image-radius);
+  display: block;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
 @media (max-width: 850px) {
-  .node.slide > .content { width: 100%; padding-top: 20px; padding-right: 0; }
-  .node.slide > .children { flex-direction: column; gap: 20px; }
-  .node.slide img { height: auto; max-height: 520px; }
+  .node.slide > .content > div {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .node.slide > .content > div > .image-gallery img {
+    height: auto;
+    max-height: 480px;
+  }
 }
 
-/* Force removal of any background, border or shadow on slide images.
-   Use high specificity and !important to ensure no upstream rule reintroduces them. */
+/* Force removal of any background, border or shadow on slide images. */
 .node.slide img,
 .node.slide figure img,
 .node.slide .image-gallery img {

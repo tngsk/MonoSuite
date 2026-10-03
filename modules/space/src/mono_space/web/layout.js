@@ -47,9 +47,8 @@ const SpatialLayout = (() => {
     };
     if (node.children.length) {
       const sizes = node.children.map((child) => plan(child, m));
-      const isSlide = node.layout === "slide";
-      const vertical = !node.atlas && !isSlide && node.layout === "stack";
-      const gap = node.atlas ? m.chapterGap : isSlide ? 40 : m.gap;
+      const vertical = !node.atlas && node.layout === "stack";
+      const gap = node.atlas ? m.chapterGap : m.gap;
       const maxH = Math.max(...sizes.map((b) => b.h));
       let x = 0,
         y = 0;
@@ -68,8 +67,8 @@ const SpatialLayout = (() => {
       });
       const w = vertical ? Math.max(...sizes.map((b) => b.w)) : x - gap;
       const h = vertical ? y - gap : maxH;
-      const cx = node.atlas ? round(node.w + m.gap) : isSlide ? round(node.w + 40) : inset;
-      const cy = node.atlas || isSlide ? 0 : round(top + node.h + m.gap);
+      const cx = node.atlas ? round(node.w + m.gap) : inset;
+      const cy = node.atlas ? 0 : round(top + node.h + m.gap);
       result.container = { x: cx, y: cy, w, h };
       result.w = Math.max(result.w, cx + w);
       result.h = Math.max(result.h, cy + h + bottom);
@@ -114,7 +113,7 @@ const SpatialLayout = (() => {
     // Width depends only on the element's role, never its text or column count.
     for (const entry of entries) {
       if (entry.el.classList.contains("slide")) {
-        entry.w = 340;
+        entry.w = snap(1120, m.grid);
         entry.content.style.width = entry.w + "px";
       } else {
         entry.w = m.section;
@@ -136,9 +135,7 @@ const SpatialLayout = (() => {
           ? "stack"
           : el.classList.contains("compare")
             ? "compare"
-            : el.classList.contains("slide")
-              ? "slide"
-              : "row",
+            : "row",
         children: entry.children.map(describe),
       };
     }
