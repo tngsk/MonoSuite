@@ -758,27 +758,6 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
 .mono-marker-green   { --marker-bg: var(--mono-highlight-green); }
 .mono-marker-cyan    { --marker-bg: var(--mono-highlight-cyan); }
 .mono-marker-orange  { --marker-bg: var(--mono-highlight-orange); }
-.mono-marker-ai      { --marker-bg: var(--mono-highlight-ai); }
-.mono-marker-warning { --marker-bg: var(--mono-highlight-warning); }
-
-.mono-underline {
-  background: transparent;
-  box-shadow: inset 0 -0.28em 0 0 var(--underline-bg, var(--mono-highlight-yellow));
-  padding: 0 0.15em;
-  margin: 0 0.04em;
-  border-radius: 0.25rem;
-  color: inherit;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-}
-
-.mono-underline-yellow  { --underline-bg: var(--mono-highlight-yellow); }
-.mono-underline-pink    { --underline-bg: var(--mono-highlight-pink); }
-.mono-underline-green   { --underline-bg: var(--mono-highlight-green); }
-.mono-underline-cyan    { --underline-bg: var(--mono-highlight-cyan); }
-.mono-underline-orange  { --underline-bg: var(--mono-highlight-orange); }
-.mono-underline-ai      { --underline-bg: var(--mono-highlight-ai); }
-.mono-underline-warning { --underline-bg: var(--mono-highlight-warning); }
 
 /* Slide layout: Mono — very simple, delicate styling.
    Left: short intro. Right: 2–3 photos presented with soft edges and subtle shadow. */
@@ -825,18 +804,37 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
   object-fit: cover;
   border-radius: var(--slide-image-radius);
   border: 1px solid rgba(0,0,0,0.03);
-  box-shadow: var(--slide-image-shadow);
+  /* Preserve the page dot background; do not add additional image background or shadow. */
   display: block;
-  background: linear-gradient(180deg, var(--paper), #fff);
-  transition: transform 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms;
+  transition: transform 220ms cubic-bezier(.2,.8,.2,1);
 }
 .node.slide img:hover {
   transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(24,25,26,0.08);
 }
 @media (max-width: 850px) {
   .node.slide > .content { width: 100%; padding-top: 20px; padding-right: 0; }
   .node.slide > .children { flex-direction: column; gap: 20px; }
   .node.slide img { height: auto; max-height: 520px; }
 }
+.mono-marker-ai      { --marker-bg: var(--mono-highlight-ai); }
+.mono-marker-warning { --marker-bg: var(--mono-highlight-warning); }
+
+.mono-underline {
+  background: transparent;
+  box-shadow: inset 0 -0.28em 0 0 var(--underline-bg, var(--mono-highlight-yellow));
+  padding: 0 0.15em;
+  margin: 0 0.04em;
+  border-radius: 0.25rem;
+  color: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.mono-underline-yellow  { --underline-bg: var(--mono-highlight-yellow); }
+.mono-underline-pink    { --underline-bg: var(--mono-highlight-pink); }
+.mono-underline-green   { --underline-bg: var(--mono-highlight-green); }
+.mono-underline-cyan    { --underline-bg: var(--mono-highlight-cyan); }
+.mono-underline-orange  { --underline-bg: var(--mono-highlight-orange); }
+.mono-underline-ai      { --underline-bg: var(--mono-highlight-ai); }
+.mono-underline-warning { --underline-bg: var(--mono-highlight-warning); }
 
