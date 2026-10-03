@@ -799,9 +799,6 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
   object-fit: cover;
   border-radius: var(--slide-image-radius);
   display: block;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
 }
 @media (max-width: 850px) {
   .node.slide > .content > div {
@@ -812,15 +809,6 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
     height: auto;
     max-height: 480px;
   }
-}
-
-/* Force removal of any background, border or shadow on slide images. */
-.node.slide img,
-.node.slide figure img,
-.node.slide .image-gallery img {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
 }
 
 .mono-marker-ai      { --marker-bg: var(--mono-highlight-ai); }
