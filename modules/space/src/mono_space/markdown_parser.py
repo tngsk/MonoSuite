@@ -130,6 +130,14 @@ def normalize_headings(nodes, layouts, directives):
     return kept
 
 
+def _format_comment_preview(comment: str, max_length: int = 80) -> str:
+    """HTMLコメントを標準出力向けに1行に正規化し、長すぎる場合は省略する"""
+    normalized = " ".join(comment.strip().split())
+    if len(normalized) > max_length:
+        return f"{normalized[:max_length]}..."
+    return normalized
+
+
 def strip_html_comments(source: str) -> str:
     blocks = {}
     counter = 0
@@ -151,6 +159,8 @@ def strip_html_comments(source: str) -> str:
     processed = inline_pattern.sub(replace_block, processed)
 
     def comment_replacer(match: re.Match) -> str:
+        preview = _format_comment_preview(match.group(0))
+        print(f"HTMLコメント無視: {preview}")
         return "\n" * match.group(0).count("\n")
 
     processed = re.sub(r"<!--.*?-->", comment_replacer, processed, flags=re.DOTALL)

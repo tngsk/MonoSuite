@@ -120,9 +120,22 @@ class MarkdownProcessor:
         return pattern.sub(replacer, processed_content)
 
     @staticmethod
-    def _remove_html_comments(content: str) -> str:
-        """HTMLコメント（<!-- ... -->）を削除する"""
-        return re.sub(r"<!--.*?-->", "", content, flags=re.DOTALL)
+    def _format_comment_preview(comment: str, max_length: int = 80) -> str:
+        """HTMLコメントを標準出力向けに1行に正規化し、長すぎる場合は省略する"""
+        normalized = " ".join(comment.strip().split())
+        if len(normalized) > max_length:
+            return f"{normalized[:max_length]}..."
+        return normalized
+
+    @classmethod
+    def _remove_html_comments(cls, content: str) -> str:
+        """HTMLコメント（<!-- ... -->）を削除し標準出力へ通知する"""
+        def replacer(match: re.Match) -> str:
+            preview = cls._format_comment_preview(match.group(0))
+            print(f"HTMLコメント無視: {preview}")
+            return ""
+
+        return re.sub(r"<!--.*?-->", replacer, content, flags=re.DOTALL)
 
     def convert_markdown_to_html(self, markdown_content: str) -> str:
         """
