@@ -815,6 +815,17 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
   .node.slide > .children { flex-direction: column; gap: 20px; }
   .node.slide img { height: auto; max-height: 520px; }
 }
+
+/* Force removal of any background, border or shadow on slide images.
+   Use high specificity and !important to ensure no upstream rule reintroduces them. */
+.node.slide img,
+.node.slide figure img,
+.node.slide .image-gallery img {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
 .mono-marker-ai      { --marker-bg: var(--mono-highlight-ai); }
 .mono-marker-warning { --marker-bg: var(--mono-highlight-warning); }
 
