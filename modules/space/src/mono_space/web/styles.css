@@ -798,19 +798,18 @@ ol.markdown-list:not(.markdown-list ol) > li > .list-number { display:flex; alig
   margin: 0;
   background: transparent;
 }
-.node.slide img {
-  width: 100%;
-  height: var(--slide-image-height);
-  object-fit: cover;
-  border-radius: var(--slide-image-radius);
-  border: 1px solid rgba(0,0,0,0.03);
-  /* Preserve the page dot background; do not add additional image background or shadow. */
-  display: block;
-  transition: transform 220ms cubic-bezier(.2,.8,.2,1);
-}
-.node.slide img:hover {
-  transform: translateY(-3px);
-}
+	.node.slide img {
+	  width: 100%;
+	  height: var(--slide-image-height);
+	  object-fit: cover;
+	  border-radius: var(--slide-image-radius);
+	  /* Preserve the page dot background; do not add additional image background or shadow. */
+	  display: block;
+	  transition: transform 220ms cubic-bezier(.2,.8,.2,1);
+	}
+	.node.slide img:hover {
+	  transform: translateY(-3px);
+	}
 @media (max-width: 850px) {
   .node.slide > .content { width: 100%; padding-top: 20px; padding-right: 0; }
   .node.slide > .children { flex-direction: column; gap: 20px; }
