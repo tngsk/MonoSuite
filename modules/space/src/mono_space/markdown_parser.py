@@ -155,7 +155,10 @@ def strip_html_comments(source: str) -> str:
     )
     processed = fenced_pattern.sub(replace_block, source)
 
-    inline_pattern = re.compile(r"(?<!`)(`+)(?!`)(.*?)(?<!`)\1(?!`)", re.DOTALL)
+    # CommonMark仕様に準拠し、空行を跨ぐマッチはインラインコードとみなさない
+    inline_pattern = re.compile(
+        r"(?s)(?<!`)(?P<ticks>`+)(?!`)(?:(?!\n[ \t]*\n).)*?(?<!`)(?P=ticks)(?!`)"
+    )
     processed = inline_pattern.sub(replace_block, processed)
 
     def comment_replacer(match: re.Match) -> str:
