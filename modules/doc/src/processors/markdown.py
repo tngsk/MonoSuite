@@ -92,8 +92,12 @@ class MarkdownProcessor:
                 return placeholder
 
             # インラインのコードブロックを保護
-            # バックティックの数に厳密に一致させ、前後のバックティックとの混同を避ける
-            inline_pattern = re.compile(r"(?<!`)(`+)(?!`)(.*?)(?<!`)\1(?!`)", re.DOTALL)
+            # バックティックの数に厳密に一致させ、前後のバックティックとの混同を避ける。
+            # CommonMark仕様に準拠し、空行（\n[ \t]*\n）を跨ぐマッチはインラインコードとみなさない
+            # （閉じられていないバックティックが後続のブロック要素やFENCEDコードブロックを巻き込むのを防止する）。
+            inline_pattern = re.compile(
+                r"(?s)(?<!`)(?P<ticks>`+)(?!`)(?:(?!\n[ \t]*\n).)*?(?<!`)(?P=ticks)(?!`)"
+            )
             processed = inline_pattern.sub(replace_inline, processed)
 
         return processed, blocks

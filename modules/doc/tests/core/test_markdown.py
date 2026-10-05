@@ -100,6 +100,23 @@ Inline `@[icon: inside_inline]` testing.
         assert '<mono-icon name="inside_inline">' not in html_output
         assert '@[icon: inside_inline]' in html_output
 
+    def test_unclosed_backtick_does_not_swallow_fenced_blocks(self):
+        """閉じられていないバックティックが後続のフェンスコードブロックを巻き込まないことをテスト"""
+        markdown_content = """
+Item with stray backtick:
+`
+Another paragraph.
+
+```python
+def foo():
+    return 42
+```
+"""
+        html_output = self.processor.convert_markdown_to_html(markdown_content)
+        assert "@@FENCED_CODE_BLOCK" not in html_output
+        assert '<mono-code-block language="python">' in html_output
+        assert "def foo():" in html_output
+
     @patch('src.processors.markdown.markdown')
     def test_convert_markdown_to_html_error(self, mock_markdown):
         mock_markdown.markdown.side_effect = Exception("Markdown parsing failed")
